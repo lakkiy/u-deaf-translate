@@ -1,0 +1,158 @@
+// Chrome 内置 Translator / LanguageDetector 的封装。
+// 这两个 API 在 Chrome 138+ 桌面端默认可用，不需要任何 manifest 权限。
+//   - 首次使用某个语言对时会下载语言模型（几十 MB），后续可离线使用
+//   - 不支持移动端、不支持 Web Worker
+
+// 这些 API 还很新，TypeScript 的内置 lib 和 @types/chrome 都还没有完整类型，
+// 这里手动声明最小可用的类型。
+declare global {
+  const Translator: TranslatorFactory;
+  const LanguageDetector: LanguageDetectorFactory;
+
+  interface TranslatorFactory {
+    create(options: TranslatorCreateOptions): Promise<TranslatorInstance>;
+  }
+  interface TranslatorCreateOptions {
+    sourceLanguage: string;
+    targetLanguage: string;
+    monitor?: (m: EventTarget) => void;
+  }
+  interface TranslatorInstance {
+    translate(text: string): Promise<string>;
+    destroy(): void;
+  }
+
+  interface LanguageDetectorFactory {
+    create(): Promise<LanguageDetectorInstance>;
+  }
+  interface LanguageDetectorInstance {
+    detect(text: string): Promise<DetectionResult[]>;
+    destroy(): void;
+  }
+  interface DetectionResult {
+    detectedLanguage: string;
+    confidence: number;
+  }
+  interface DownloadProgressEvent extends Event {
+    loaded: number; // 0..1
+  }
+}
+
+export const TARGET_LANGUAGE = 'zh-Hans';
+const TRANSLATE_TIMEOUT_MS = 60_000;
+const CONFIDENCE_THRESHOLD = 0.5;
+
+export interface DetectResult {
+  language: string;
+  confidence: number;
+  /** 语言检测置信度低或返回 "und" 时为 true（此时按英语兜底） */
+  uncertain: boolean;
+}
+
+export type DownloadProgressHandler = (progress: number) => void;
+
+export function isApiAvailable(): boolean {
+  return typeof Translator !== 'undefined' && typeof LanguageDetector !== 'undefined';
+}
+
+// 单例 LanguageDetector，整个页面共用
+let detectorPromise: Promise<LanguageDetectorInstance> | null = null;
+
+// 每个 "源语言 → zh-Hans" 对应一个 Translator。
+// 存的是 Promise（而不是已解析的实例），这样并发请求会共享同一次模型下载。
+const translatorPromises = new Map<string, Promise<TranslatorInstance>>();
+
+function getDetector(): Promise<LanguageDetectorInstance> {
+  if (!detectorPromise) {
+    detectorPromise = LanguageDetector.create();
+  }
+  return detectorPromise;
+}
+
+export async function detectLanguage(text: string): Promise<DetectResult> {
+  const detector = await getDetector();
+  const results = await detector.detect(text);
+  const top = results[0];
+  if (!top || top.detectedLanguage === 'und' || top.confidence < CONFIDENCE_THRESHOLD) {
+    return { language: 'en', confidence: top?.confidence ?? 0, uncertain: true };
+  }
+  return { language: top.detectedLanguage, confidence: top.confidence, uncertain: false };
+}
+
+function getTranslator(
+  sourceLanguage: string,
+  onProgress?: DownloadProgressHandler,
+): Promise<TranslatorInstance> {
+  const key = `${sourceLanguage}:${TARGET_LANGUAGE}`;
+  const cached = translatorPromises.get(key);
+  if (cached) return cached;
+
+  const promise = createTranslator(sourceLanguage, onProgress);
+  // 失败时移出缓存，允许下次重试
+  promise.catch(() => translatorPromises.delete(key));
+  translatorPromises.set(key, promise);
+  return promise;
+}
+
+/** 把 BCP 47 语言代码转成中文名（如 'is' → '冰岛语'）。 */
+function getLanguageName(code: string): string {
+  try {
+    return new Intl.DisplayNames(['zh-Hans'], { type: 'language' }).of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
+
+const TIMEOUT_SENTINEL = '__tnyl_timeout__';
+
+async function createTranslator(
+  sourceLanguage: string,
+  onProgress?: DownloadProgressHandler,
+): Promise<TranslatorInstance> {
+  const createPromise = Translator.create({
+    sourceLanguage,
+    targetLanguage: TARGET_LANGUAGE,
+    monitor(m) {
+      m.addEventListener('downloadprogress', (event) => {
+        onProgress?.((event as DownloadProgressEvent).loaded);
+      });
+    },
+  });
+
+  // 某些不支持的语言对可能让 create() 永远卡住，加一个 60s 兜底
+  const timeoutPromise = new Promise<TranslatorInstance>((_, reject) => {
+    setTimeout(() => reject(new Error(TIMEOUT_SENTINEL)), TRANSLATE_TIMEOUT_MS);
+  });
+
+  try {
+    return await Promise.race([createPromise, timeoutPromise]);
+  } catch (err) {
+    const langName = getLanguageName(sourceLanguage);
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg === TIMEOUT_SENTINEL) {
+      throw new Error(`翻译模型加载超时（60s）：${langName} → 简体中文`);
+    }
+    // Chrome 不支持该语言对时会抛 "Unable to create translator for the given source and target language."
+    // 其他冷门错误（内存不足等）也归到这里——99% 的用户感知是"不支持"
+    console.error('[叫你翻译你聋吗] Translator.create 失败:', err);
+    throw new Error(`暂不支持「${langName}」翻译为简体中文`);
+  }
+}
+
+export async function translate(
+  text: string,
+  sourceLanguage: string,
+  onProgress?: DownloadProgressHandler,
+): Promise<string> {
+  if (sourceLanguage === TARGET_LANGUAGE) return text;
+  const translator = await getTranslator(sourceLanguage, onProgress);
+
+  // 按换行符切分，逐段翻译再拼回去。整段直接传给 Translator 会让段落被压平成一行。
+  // split 用 capturing group，分隔符（\n+）也会被保留在结果数组里，方便原样拼回。
+  const parts = text.split(/(\n+)/);
+  const out: string[] = [];
+  for (const part of parts) {
+    out.push(part.trim() ? await translator.translate(part) : part);
+  }
+  return out.join('');
+}
