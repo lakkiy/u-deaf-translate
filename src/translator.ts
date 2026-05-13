@@ -62,6 +62,12 @@ let detectorPromise: Promise<LanguageDetectorInstance> | null = null;
 // 存的是 Promise（而不是已解析的实例），这样并发请求会共享同一次模型下载。
 const translatorPromises = new Map<string, Promise<TranslatorInstance>>();
 
+// 创建成功过的语言对。Chrome Translator API 在触发"service count exceeded"
+// 速率限制时会抛 NotSupportedError，跟"真不支持"用同一个错误。靠这个集合
+// 区分：如果此 pair 之前成功过、现在失败，大概率是被限速而不是不支持。
+// 仅内存，刷新页面会丢——能容忍。
+const successfulPairs = new Set<string>();
+
 function getDetector(): Promise<LanguageDetectorInstance> {
   if (!detectorPromise) {
     detectorPromise = LanguageDetector.create();
@@ -124,17 +130,24 @@ async function createTranslator(
     setTimeout(() => reject(new Error(TIMEOUT_SENTINEL)), TRANSLATE_TIMEOUT_MS);
   });
 
+  const key = `${sourceLanguage}:${TARGET_LANGUAGE}`;
+
   try {
-    return await Promise.race([createPromise, timeoutPromise]);
+    const instance = await Promise.race([createPromise, timeoutPromise]);
+    successfulPairs.add(key);
+    return instance;
   } catch (err) {
     const langName = getLanguageName(sourceLanguage);
     const msg = err instanceof Error ? err.message : String(err);
+    console.error('[叫你翻译你聋吗] Translator.create 失败:', err);
     if (msg === TIMEOUT_SENTINEL) {
       throw new Error(`翻译模型加载超时（60s）：${langName} → 简体中文`);
     }
-    // Chrome 不支持该语言对时会抛 "Unable to create translator for the given source and target language."
-    // 其他冷门错误（内存不足等）也归到这里——99% 的用户感知是"不支持"
-    console.error('[叫你翻译你聋吗] Translator.create 失败:', err);
+    // 这个 pair 之前成功过 → 大概率是 Chrome 触发了速率限制（service count exceeded）
+    if (successfulPairs.has(key)) {
+      throw new Error(`Chrome 翻译次数超限，稍等几分钟或重启浏览器再试`);
+    }
+    // 否则是真不支持
     throw new Error(`暂不支持「${langName}」翻译为简体中文`);
   }
 }

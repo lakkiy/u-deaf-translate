@@ -33,6 +33,11 @@
 - **现象：** 不支持的语言对返回 "Unable to create translator for the given source and target language."
 - **修复：** 捕获后用 `Intl.DisplayNames(['zh-Hans'], { type: 'language' })` 把 BCP 47 代码转成中文名，抛"暂不支持「冰岛语」翻译为简体中文"。原始错误用 `console.error` 保留。
 
+### Chrome 触发速率限制后伪装成 `NotSupportedError`
+- **现象：** 之前一直能翻的英文，连续翻多次后突然全部报"暂不支持「英语」翻译"。控制台同时出现 Chrome 的黄色 warning `The translation service count exceeded the limitation.`，紧跟着 `NotSupportedError: Unable to create translator for the given source and target language.`
+- **真相：** Chrome Translator API 内部有 service count 速率限制。短时间翻译过多后会拒绝新的 `Translator.create()`，且复用 `NotSupportedError`——错误对象上看不出是"真不支持"还是"被限速"。
+- **修复：** 维护 `successfulPairs: Set<string>` 记录每个 `源语言:目标语言` pair 是否成功创建过。捕获 create 失败时，如果 pair 在集合里 → 抛"Chrome 翻译次数超限，稍等几分钟或重启浏览器再试"；不在集合里 → 抛"暂不支持..."。仅内存维护，刷页面会丢但能容忍。
+
 ## DOM / CSS
 
 ### CSS `background: rgba(...)` 替换而非叠加
