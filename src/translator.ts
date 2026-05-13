@@ -11,12 +11,19 @@ declare global {
 
   interface TranslatorFactory {
     create(options: TranslatorCreateOptions): Promise<TranslatorInstance>;
+    /** 探查某语言对是否可用——比 create 失败时反向推断更可靠 */
+    availability?(options: TranslatorAvailabilityOptions): Promise<TranslatorAvailability>;
   }
   interface TranslatorCreateOptions {
     sourceLanguage: string;
     targetLanguage: string;
     monitor?: (m: EventTarget) => void;
   }
+  interface TranslatorAvailabilityOptions {
+    sourceLanguage: string;
+    targetLanguage: string;
+  }
+  type TranslatorAvailability = 'available' | 'downloadable' | 'downloading' | 'unavailable';
   interface TranslatorInstance {
     translate(text: string): Promise<string>;
     destroy(): void;
@@ -143,12 +150,42 @@ async function createTranslator(
     if (msg === TIMEOUT_SENTINEL) {
       throw new Error(`翻译模型加载超时（60s）：${langName} → 简体中文`);
     }
-    // 这个 pair 之前成功过 → 大概率是 Chrome 触发了速率限制（service count exceeded）
+    // 同一 content script 实例里之前成功过 → 必然是被限速
     if (successfulPairs.has(key)) {
       throw new Error(`Chrome 翻译次数超限，稍等几分钟或重启浏览器再试`);
     }
-    // 否则是真不支持
-    throw new Error(`暂不支持「${langName}」翻译为简体中文`);
+    // 否则可能是"真不支持"或"跨页累积限速"（新页面的 successfulPairs 是空的）。
+    // 探查 availability() 区分：明确 'unavailable' = 真不支持；其他状态 = 支持但 create 失败
+    const supported = await checkPairAvailability(sourceLanguage, TARGET_LANGUAGE);
+    if (supported === false) {
+      throw new Error(`暂不支持「${langName}」翻译为简体中文`);
+    }
+    // supported === true（语言对存在）或 null（availability 方法不可用 / 自身也被限速）
+    throw new Error(
+      `「${langName}」翻译失败：可能 Chrome 限制了使用次数，或该语言对不支持。稍后重试或重启浏览器。`,
+    );
+  }
+}
+
+/**
+ * 查询某语言对的可用性。
+ * - 返回 true：明确支持（available/downloadable/downloading 任一）
+ * - 返回 false：明确不支持（unavailable）
+ * - 返回 null：方法不存在或调用失败（无法判断）
+ */
+async function checkPairAvailability(
+  source: string,
+  target: string,
+): Promise<boolean | null> {
+  if (typeof Translator.availability !== 'function') return null;
+  try {
+    const status = await Translator.availability({
+      sourceLanguage: source,
+      targetLanguage: target,
+    });
+    return status === 'unavailable' ? false : true;
+  } catch {
+    return null;
   }
 }
 

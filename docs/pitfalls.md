@@ -35,8 +35,13 @@
 
 ### Chrome 触发速率限制后伪装成 `NotSupportedError`
 - **现象：** 之前一直能翻的英文，连续翻多次后突然全部报"暂不支持「英语」翻译"。控制台同时出现 Chrome 的黄色 warning `The translation service count exceeded the limitation.`，紧跟着 `NotSupportedError: Unable to create translator for the given source and target language.`
-- **真相：** Chrome Translator API 内部有 service count 速率限制。短时间翻译过多后会拒绝新的 `Translator.create()`，且复用 `NotSupportedError`——错误对象上看不出是"真不支持"还是"被限速"。
-- **修复：** 维护 `successfulPairs: Set<string>` 记录每个 `源语言:目标语言` pair 是否成功创建过。捕获 create 失败时，如果 pair 在集合里 → 抛"Chrome 翻译次数超限，稍等几分钟或重启浏览器再试"；不在集合里 → 抛"暂不支持..."。仅内存维护，刷页面会丢但能容忍。
+- **真相：** Chrome Translator API 内部有 service count 速率限制（即使是本地推理，Chrome 也按 origin 计数防滥用）。短时间翻译过多后会拒绝新的 `Translator.create()`，且复用 `NotSupportedError`——错误对象上看不出是"真不支持"还是"被限速"。
+- **修复：** 三层判断在 `createTranslator` 的 catch 里：
+  1. `successfulPairs` Set 记录本 content script 实例里成功过的 pair——如果命中，必然是页内连续翻译触发限速，抛"Chrome 翻译次数超限"
+  2. 否则调 `Translator.availability({ sourceLanguage, targetLanguage })` 探查。返回 `'unavailable'` 才是真不支持
+  3. availability 返回支持或方法不可用 → 抛模糊但诚实的"可能限速或不支持"消息
+
+  `successfulPairs` 仅内存维护，跨页面会丢，所以需要 availability() 作为二次判定。早期只靠 successfulPairs 时，新页面的第一次失败会被误判成"不支持"。
 
 ## DOM / CSS
 
