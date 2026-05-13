@@ -62,15 +62,22 @@ let detectorPromise: Promise<LanguageDetectorInstance> | null = null;
 // 存的是 Promise（而不是已解析的实例），这样并发请求会共享同一次模型下载。
 const translatorPromises = new Map<string, Promise<TranslatorInstance>>();
 
-// 创建成功过的语言对。Chrome Translator API 在触发"service count exceeded"
-// 速率限制时会抛 NotSupportedError，跟"真不支持"用同一个错误。靠这个集合
-// 区分：如果此 pair 之前成功过、现在失败，大概率是被限速而不是不支持。
-// 仅内存，刷新页面会丢——能容忍。
+// 创建成功过的语言对。Chrome Translator API 在 service count 超限时
+// 抛 NotSupportedError，跟"真不支持"用同一个错误。靠这个集合区分：
+// 此 pair 之前成功过、现在失败 → 是限速而不是不支持。
 const successfulPairs = new Set<string>();
+
+// Chrome 的 service count 配额按 alive 实例数算，不是按调用次数。JS 端的引用
+// 被 GC 掉不会自动减少 Chrome 内部计数——必须显式调 destroy()。这两个变量
+// 保存当前 alive 的实例引用，便于 pagehide 时同步 destroy。
+const liveTranslators = new Set<TranslatorInstance>();
+let liveDetector: LanguageDetectorInstance | null = null;
 
 function getDetector(): Promise<LanguageDetectorInstance> {
   if (!detectorPromise) {
-    detectorPromise = LanguageDetector.create();
+    const p = LanguageDetector.create();
+    p.then((d) => { liveDetector = d; }, () => {});
+    detectorPromise = p;
   }
   return detectorPromise;
 }
@@ -135,6 +142,7 @@ async function createTranslator(
   try {
     const instance = await Promise.race([createPromise, timeoutPromise]);
     successfulPairs.add(key);
+    liveTranslators.add(instance);
     return instance;
   } catch (err) {
     const langName = getLanguageName(sourceLanguage);
@@ -172,3 +180,29 @@ export async function translate(
   }
   return out.join('');
 }
+
+/**
+ * 页面卸载时同步销毁所有 alive 的 Translator / LanguageDetector 实例，
+ * 释放 Chrome 内部的 service count 配额。
+ *
+ * 关键：JS 引用被 GC 不会自动减少 Chrome 计数器——必须显式 destroy()。
+ * 不这么做的话，用户连续浏览多个页面后 Chrome 会累积到上限，所有翻译失败。
+ */
+function destroyAll(): void {
+  for (const t of liveTranslators) {
+    try { t.destroy(); } catch { /* ignore */ }
+  }
+  liveTranslators.clear();
+  translatorPromises.clear();
+  successfulPairs.clear();
+
+  if (liveDetector) {
+    try { liveDetector.destroy(); } catch { /* ignore */ }
+    liveDetector = null;
+  }
+  detectorPromise = null;
+}
+
+// pagehide 在页面真正卸载/导航前最后一次回调，是销毁实例的最佳时机。
+// 不用 beforeunload：现代浏览器对它态度暧昧，且在 BFCache 场景会被跳过。
+window.addEventListener('pagehide', destroyAll);

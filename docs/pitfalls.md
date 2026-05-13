@@ -33,14 +33,15 @@
 - **现象：** 不支持的语言对返回 "Unable to create translator for the given source and target language."
 - **修复：** 捕获后用 `Intl.DisplayNames(['zh-Hans'], { type: 'language' })` 把 BCP 47 代码转成中文名，抛"暂不支持「冰岛语」翻译为简体中文"。原始错误用 `console.error` 保留。
 
-### Chrome 触发速率限制后伪装成 `NotSupportedError`
-- **现象：** 之前一直能翻的英文，连续翻多次后突然全部报"暂不支持「英语」翻译"。控制台同时出现 Chrome 的黄色 warning `The translation service count exceeded the limitation.`，紧跟着 `NotSupportedError: Unable to create translator for the given source and target language.`
-- **真相：** Chrome Translator API 内部有 service count 速率限制（即使是本地推理，Chrome 也按 origin 计数防滥用）。短时间翻译过多后会拒绝新的 `Translator.create()`，且复用 `NotSupportedError`——错误对象上看不出是"真不支持"还是"被限速"。
-- **修复（两层）：**
-  1. `successfulPairs: Set<string>` 记录本 content script 实例里成功过的 pair。命中即必然是页内连续翻译触发限速，抛"Chrome 翻译次数超限，稍等几分钟或重启浏览器再试"
-  2. 否则抛"可能限速或不支持"的模糊但诚实的消息——没法准确分辨
+### Chrome service count 限制按"alive 实例数"算，不是按调用次数
+- **现象：** 翻几个网页之后，新页面所有翻译都失败。控制台出现 Chrome 黄色 warning `The translation service count exceeded the limitation.`，紧跟着 `NotSupportedError: Unable to create translator for the given source and target language.` 重启 Chrome 后又恢复。
+- **真相：** Chrome Translator API 的 service count 配额计的是 **当前 alive 的 `Translator` 实例数**，不是调用次数。JS 端引用被 GC 不会自动减少 Chrome 内部计数器——**必须显式调 `translator.destroy()`**。否则每个页面 create 一次永不释放，浏览几个页面后就累计到上限。
+- **修复（三层）：**
+  1. 维护 `liveTranslators: Set<TranslatorInstance>` 和 `liveDetector` 引用，create 成功后写入
+  2. `window.addEventListener('pagehide', destroyAll)`，页面卸载/导航前同步调 destroy() 释放 Chrome 内部 slot
+  3. 仍保留 `successfulPairs` 做友好错误信息的依据：本 session 内成功过的 pair 现在失败，必然是页内连续翻译耗尽配额，抛"Chrome 翻译次数超限"；否则抛"可能限速或不支持"的模糊但诚实消息
 
-  `successfulPairs` 仅内存维护，跨页面会丢——所以新页面遇到限速时只能走模糊消息。可接受。
+  教训：Chrome 内置 AI 的实例必须显式 destroy，不能依赖 GC。
 
 ### `Translator.availability()` 在限速时也"撒谎"
 - **现象：** 尝试用 `Translator.availability(...)` 作为"真不支持"的可靠判定（限速时 create 失败，availability 总该返回真相吧？）。结果速率限制触发后，控制台出现 `The on-device translation is not available.`——availability 对所有语言对一律返回 `'unavailable'`，根本不能区分"真不支持"和"被限速"。
