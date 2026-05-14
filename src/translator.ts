@@ -38,13 +38,12 @@ declare global {
   }
 }
 
-export const TARGET_LANGUAGE = 'zh-Hans';
+const TARGET_LANGUAGE = 'zh-Hans';
 const TRANSLATE_TIMEOUT_MS = 60_000;
 const CONFIDENCE_THRESHOLD = 0.5;
 
 export interface DetectResult {
   language: string;
-  confidence: number;
   /** 语言检测置信度低或返回 "und" 时为 true（此时按英语兜底） */
   uncertain: boolean;
 }
@@ -87,9 +86,9 @@ export async function detectLanguage(text: string): Promise<DetectResult> {
   const results = await detector.detect(text);
   const top = results[0];
   if (!top || top.detectedLanguage === 'und' || top.confidence < CONFIDENCE_THRESHOLD) {
-    return { language: 'en', confidence: top?.confidence ?? 0, uncertain: true };
+    return { language: 'en', uncertain: true };
   }
-  return { language: top.detectedLanguage, confidence: top.confidence, uncertain: false };
+  return { language: top.detectedLanguage, uncertain: false };
 }
 
 function getTranslator(

@@ -21,7 +21,6 @@ let currentSessionId = 0;
 
 // mouseup → 防抖延迟 150ms 才显示触发器，避免快速选/取消造成闪烁
 let pendingShowTimer: ReturnType<typeof setTimeout> | null = null;
-let pendingMouseAnchor: Anchor | null = null;
 
 interface SelectionInfo {
   text: string;
@@ -59,14 +58,13 @@ function clearPendingShow(): void {
 
 function scheduleShowTrigger(mouseAnchor: Anchor | null): void {
   clearPendingShow();
-  pendingMouseAnchor = mouseAnchor;
   pendingShowTimer = setTimeout(() => {
     pendingShowTimer = null;
-    handleSelection();
+    handleSelection(mouseAnchor);
   }, SHOW_TRIGGER_DELAY_MS);
 }
 
-function handleSelection(): void {
+function handleSelection(mouseAnchor: Anchor | null): void {
   const sel = getCurrentSelection();
   if (!sel) return;
 
@@ -75,7 +73,7 @@ function handleSelection(): void {
 
   const session = ++currentSessionId;
   // 优先用鼠标释放点；键盘选择（没有鼠标位置）退回选区右下角
-  const anchor: Anchor = pendingMouseAnchor ?? {
+  const anchor: Anchor = mouseAnchor ?? {
     x: sel.rect.right,
     y: sel.rect.bottom,
   };
