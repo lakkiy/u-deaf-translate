@@ -36,12 +36,22 @@
 ### Chrome service count 限制按"alive 实例数"算，不是按调用次数
 - **现象：** 翻几个网页之后，新页面所有翻译都失败。控制台出现 Chrome 黄色 warning `The translation service count exceeded the limitation.`，紧跟着 `NotSupportedError: Unable to create translator for the given source and target language.` 重启 Chrome 后又恢复。
 - **真相：** Chrome Translator API 的 service count 配额计的是 **当前 alive 的 `Translator` 实例数**，不是调用次数。JS 端引用被 GC 不会自动减少 Chrome 内部计数器——**必须显式调 `translator.destroy()`**。否则每个页面 create 一次永不释放，浏览几个页面后就累计到上限。
-- **修复（三层）：**
+- **修复：**
   1. 维护 `liveTranslators: Set<TranslatorInstance>` 和 `liveDetector` 引用，create 成功后写入
-  2. `window.addEventListener('pagehide', destroyAll)`，页面卸载/导航前同步调 destroy() 释放 Chrome 内部 slot
-  3. 仍保留 `successfulPairs` 做友好错误信息的依据：本 session 内成功过的 pair 现在失败，必然是页内连续翻译耗尽配额，抛"Chrome 翻译次数超限"；否则抛"可能限速或不支持"的模糊但诚实消息
+  2. `pagehide` → `destroyAll`：页面卸载/导航释放
+  3. 仍保留 `successfulPairs` 做友好错误信息的依据：本 session 内成功过的 pair 现在失败，必然是页内连续翻译耗尽配额
 
   教训：Chrome 内置 AI 的实例必须显式 destroy，不能依赖 GC。
+
+### `pagehide` 不够：多 tab 时切走 tab 不会触发
+- **现象：** 修了 destroy on pagehide 之后，仍然在某个 tab 里看到 `service count exceeded`。
+- **真相：** `pagehide` 只在页面真的卸载或导航时触发。**用户切到别的 tab 时 pagehide 不会发**——其他 tab 持有的 Translator 实例依然 alive，占着 Chrome 全局 service count 配额，新 tab 的 create 就被卡住。
+- **修复：** 同时监听 `document.visibilitychange`，`visibilityState === 'hidden'` 时也 `destroyAll`。代价是切回来时第一次翻译要重新 create（~100ms），但比"翻不动"好得多。
+
+### 限速时连点重试反而把 count 推得更高
+- **现象：** 翻译失败后用户连点 4-5 次，每次都出新的 `Translator.create 失败`，控制台堆了 4-5 条。
+- **真相：** `getTranslator` 缓存的失败 promise 在 `.catch` 里被立即 `delete`。下一次点击 cache miss，立即又 `Translator.create()`——而失败的 create 本身可能也消耗配额。
+- **修复：** 失败后延迟 3 秒（`FAILED_RETRY_COOLDOWN_MS`）才从 `translatorPromises` 删除。3 秒内的所有重试共享同一个被拒 promise，错误立即返回，不再触发新 create。
 
 ### `Translator.availability()` 在限速时也"撒谎"
 - **现象：** 尝试用 `Translator.availability(...)` 作为"真不支持"的可靠判定（限速时 create 失败，availability 总该返回真相吧？）。结果速率限制触发后，控制台出现 `The on-device translation is not available.`——availability 对所有语言对一律返回 `'unavailable'`，根本不能区分"真不支持"和"被限速"。

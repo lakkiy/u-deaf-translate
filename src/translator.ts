@@ -91,6 +91,8 @@ export async function detectLanguage(text: string): Promise<DetectResult> {
   return { language: top.detectedLanguage, uncertain: false };
 }
 
+const FAILED_RETRY_COOLDOWN_MS = 3_000;
+
 function getTranslator(
   sourceLanguage: string,
   onProgress?: DownloadProgressHandler,
@@ -100,8 +102,11 @@ function getTranslator(
   if (cached) return cached;
 
   const promise = createTranslator(sourceLanguage, onProgress);
-  // 失败时移出缓存，允许下次重试
-  promise.catch(() => translatorPromises.delete(key));
+  // 失败时延迟 3 秒再清出缓存。这 3 秒内的重试共享同一个被拒 promise，
+  // 不会反复触发 Translator.create()——避免限速状态下连点把 count 推得更高。
+  promise.catch(() => {
+    setTimeout(() => translatorPromises.delete(key), FAILED_RETRY_COOLDOWN_MS);
+  });
   translatorPromises.set(key, promise);
   return promise;
 }
@@ -205,3 +210,10 @@ function destroyAll(): void {
 // pagehide 在页面真正卸载/导航前最后一次回调，是销毁实例的最佳时机。
 // 不用 beforeunload：现代浏览器对它态度暧昧，且在 BFCache 场景会被跳过。
 window.addEventListener('pagehide', destroyAll);
+
+// 多 tab 场景下，切走 tab 时 pagehide 不会触发，但本 tab 持有的实例
+// 仍然占 Chrome 全局 service count 配额——会卡住别的 tab 的翻译。
+// visibilitychange 切到 hidden 时也释放；切回来时下一次翻译会重新 create。
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') destroyAll();
+});
