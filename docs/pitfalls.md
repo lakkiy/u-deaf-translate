@@ -33,6 +33,21 @@
 - **现象：** 不支持的语言对返回 "Unable to create translator for the given source and target language."
 - **修复：** 捕获后用 `Intl.DisplayNames(['zh-Hans'], { type: 'language' })` 把 BCP 47 代码转成中文名，抛"暂不支持「冰岛语」翻译为简体中文"。原始错误用 `console.error` 保留。
 
+### DeepSeek 当前 endpoint 是 `/chat/completions`（无 `/v1`），翻译要主动 disable thinking
+- **现象：** 之前按 OpenAI 惯例填 `https://api.deepseek.com/v1/chat/completions`；模型名也凭印象用 `deepseek-chat` / `deepseek-reasoner`。
+- **真相：** 官方文档（api-docs.deepseek.com/zh-cn/api/create-chat-completion）当前路径是 POST `/chat/completions`（无 `/v1`），且 model 可选值只列了 `deepseek-v4-flash` / `deepseek-v4-pro`。文档同时定义了 `thinking: { type: "enabled" | "disabled" }`，默认 enabled——pro 模型默认开思考会显著拖慢响应、且响应里可能混入 reasoning 内容污染译文。
+- **修复：** `DEEPSEEK_ENDPOINT` 改成 `https://api.deepseek.com/chat/completions`；`DEEPSEEK_EXTRA_PARAMS` 加 `"thinking": {"type": "disabled"}`。教训：第三方 API 不要按 OpenAI 惯例脑补 endpoint，去文档确认。
+
+### `mlx_lm.server` 收到不匹配的 `model` 字段会尝试 download 然后 404
+- **现象：** 配了本地 mlx_lm endpoint，翻译报 `HTTP 404: {"error": "[Errno 2] No such file or directory: 'config.json'"}`。启动参数：`mlx_lm.server --model mlx-community/Hy-MT2-1.8B-4bit`。
+- **真相：** mlx_lm.server 每个请求都检查 `model` 字段，跟当前加载的不一致就尝试重新 load——若 model 名不存在（或 placeholder 误导用户填错）就找不到 `config.json` → 404。问题不在 max_tokens 之类的生成参数，纯粹是 model 名问题。
+- **修复：** llm-backend 改成"model 留空就不发该字段"，让 server 直接用当前加载的；options 页面 placeholder 改成完整 model 名 `mlx-community/Hy-MT2-1.8B-4bit` 避免误导。
+
+### `Translator.translate()` 对极短/无效输入抛 "Other generic failures occurred."
+- **现象：** 划词选了 "Thu"（星期缩写）/ 时间戳 / 单符号，气泡里直接显示原始英文 "Other generic failures occurred."。
+- **真相：** Chrome Translator API 的兜底错误信息。原本错误处理只包了 `Translator.create()` 的 catch，`translate()` 本身的异常直接 propagate 到气泡。
+- **修复：** `translate()` 内的循环加 try/catch，调 `friendlyTranslateError(rawMessage, sourceLanguage)` 把已知英文模式映射成中文（"无法翻译这段文本（可能太短或不是有效的英语内容）"），原始错误保留在 `console.error`。同时映射了 "not available / unavailable" → "翻译服务暂不可用"。
+
 ### Chrome service count 限制按"alive 实例数"算，不是按调用次数
 - **现象：** 翻几个网页之后，新页面所有翻译都失败。控制台出现 Chrome 黄色 warning `The translation service count exceeded the limitation.`，紧跟着 `NotSupportedError: Unable to create translator for the given source and target language.` 重启 Chrome 后又恢复。
 - **真相：** Chrome Translator API 的 service count 配额计的是 **当前 alive 的 `Translator` 实例数**，不是调用次数。JS 端引用被 GC 不会自动减少 Chrome 内部计数器——**必须显式调 `translator.destroy()`**。否则每个页面 create 一次永不释放，浏览几个页面后就累计到上限。
@@ -58,7 +73,51 @@
 - **真相：** Chrome 内置 AI 的所有 API（create / availability）共享同一个速率配额，被限速时一并失活。
 - **修复：** 撤掉 availability 判定。只靠 `successfulPairs` 作为精确信号，其他情况走"双因"模糊消息。教训：Chrome 内置 AI 的状态查询 API 在限速场景下不可信。
 
+## 整页翻译 — 正文识别
+
+### Web app 页面的 `<main>` 把侧栏也囊括了
+- **现象：** HuggingFace model 卡右键整页翻译，右侧 sidebar 里的 "Files info"、"Safetensors"、"Model tree for ..." 也被翻了。
+- **真相：** HF 把 README 左栏和元数据右栏放在同一个 `<main>` 下，且把 `<article>` 用在右栏（`overview-card-wrapper`）而不是 README——简单的 `<main>` / `<article>` 优先级判断都选错。
+- **修复：** `findRoot()` 选完 seed 后用所有 `<p>` 的 LCA 收敛。HF sidebar 几乎没 `<p>`，LCA 自然落到 README。**但很快又踩了下一条坑（GitHub）：LCA 只要侧栏有 1 个 `<p>` 就会被拉宽。**最终改成"80% 覆盖最深子树"策略，见下条。
+
+### GitHub Discussion 把 metadata 包在 `<h3>` 里，候选直接被吃进去
+- **现象：** GitHub Discussion 页（`https://github.com/orgs/community/discussions/...`）整页翻译后，每条评论顶部的 "spenserblack May 21, 2025" 被翻成 "斯宾塞·布莱克 2025年5月21日"，"Replies: 5 comments" 被翻成 "5条评论" 之类。
+- **真相：** GitHub 把评论头的"用户名 + 时间戳"放进 `<h3>` 标签（用户名是一个 `<a>`、时间戳是另一个 `<a>`，整个 h3 几乎全是 link 文字）。`<h3>` 是我们的候选段落标签，自然被收。
+- **修复：** `collectParagraphs` 加 `isMostlyLinks(el)` 过滤——候选元素的 textContent 有 ≥70% 来自 `<a>` 子节点就跳过。正常正文段落里 inline link 不会到 70%，metadata 行近 100%。同时在 console.log 里打出 root 信息（tag/id/class），方便下次有页面识别异常时反查。
+
+### LCA 被侧栏里一个 `<p>` 拉宽到 main
+- **现象：** GitHub repo 页（`https://github.com/earendil-works/pi`）右键整页翻译，右侧 About sidebar 里的 "Resources / Readme / MIT license / Contributing / 55.1k stars / 198 watching / 6.5k forks" 全被翻成"资源 / 执照 / 星星 / 观察者 / 叉子"。
+- **真相：** GitHub About sidebar 里有 1 个 `<p>`（项目描述那段长文本）。LCA 算法对所有 `<p>` 取最小公共祖先——sidebar 一个 + README 18 个 = 19 个 `<p>` 的 LCA = 包含两者的 `<main>`，等于没收敛。
+- **修复：** 弃 LCA，改成"**最深的子树包含 ≥ 80% 有效 `<p>`**"。GitHub: README article 占 18/19 = 94% ≥ 80%，被选中；sidebar 1/19 = 5% 远不够。HF: README section 占绝大多数 `<p>`，同样命中。"最深"保证最窄。代价是当真正的正文被拆到两个并列容器（每个都 < 80%）时会回退到 seed——目前没遇到这种页面。
+
+### `<table>` 单元格 `textContent` 把 `<code>` 子节点的代码也吞了
+- **现象：** corrode.dev 一个对比表，"Go tool / Rust equivalent" 列里 `<td>` 含 `<code>go build</code>`，整段翻译得到"去建造"、"货物建造"。
+- **真相：** `<td>` 是候选段落，`isExcluded` 只查祖先标签——`<td>` 内的 `<code>` 是子节点不是祖先，`textContent` 把代码字符也提走了。
+- **修复：** PARAGRAPH_TAGS 删 `td`，EXCLUDE_TAGS 加 `TABLE`。代价是表格里的英文长说明也不翻——按用户反馈整张表跳过更可控。
+
+## 整页翻译 — 运行时
+
+### 源语言检测的 rejected promise 被永久缓存，毒化整页
+- **现象：** 整页翻译某次检测失败后，该页之后每一段、每次重新 toggle 都显示"[翻译失败]"，刷新前不恢复。
+- **真相：** `getSourceLanguage` 把 `detectLanguage()` 的结果存成单例 `detectedLanguagePromise` 供全页复用；失败时存进去的是 rejected promise，之后每段 `await` 的都是同一个被拒 promise。
+- **修复：** `detectedLanguagePromise.catch(() => { detectedLanguagePromise = null; })`——失败不缓存、下次重新检测；成功结果仍按设计全页复用。
+
+### stop/start 竞态残留"翻译中…"孤儿节点
+- **现象：** 取消整页翻译后，偶尔有段落下方永久留着"翻译中…"占位。
+- **真相：** `translateParagraph` 先插入 pending 节点再 `await` 检测/翻译。若某任务恰在 `stopPageTranslation()` 扫除节点之后才插入、随后 `sessionId` 失配直接 `return`，这个 pending 节点就没人清。
+- **修复：** 三处 `mySession !== sessionId` 的 return 前都补 `node.remove()`。
+
+### SPA 站内跳转后 `started` 残留，新页面第一次右键不翻译
+- **现象：** 在一个页面右键"翻译整页"，然后跳到同站另一页再右键，第一次没反应，点第二次才翻译。
+- **真相：** ghostty.org 等 Next.js 站点站内跳转是客户端路由，**不重载 content script**，`page-translator.ts` 模块级的 `started` 从上个页面残留成 `true`。新页面第一次 `togglePageTranslation()` 因此走的是 `stopPageTranslation()`（清残留状态，新页面没译文可清，看不到效果），第二次才 `startPageTranslation()`。整页全量加载到别的站点时 content script 会重载、`started=false`，所以问题只在 SPA 站内跳转出现。
+- **修复：** 启动时记下 `startedHref = location.href`，`togglePageTranslation()` 里若 `started && location.href !== startedHref` 就先 `stopPageTranslation()` 清掉旧 session，再当未启动重新开始。（注：未监听导航事件——content script 在隔离世界 patch `history.pushState` 收不到页面自身的调用，故改成 toggle 时惰性比对 URL。代价是 A→B→A 回到同一 URL 的罕见情形仍会残留。）
+
 ## DOM / CSS
+
+### 父容器是 flex/grid 时，译文 `afterend` 兄弟节点被挤到原文右边
+- **现象：** ghostty.org/docs/config 的标题"Syntax"整页翻译后，译文"语法"出现在标题**右侧**而非下方，中间还有一条竖线（其实是译文节点的 `border-left`）。
+- **真相：** 该站标题结构是 `<div display:flex><h3>Syntax</h3><a>锚点复制按钮</a></div>`。译文默认用 `insertAdjacentElement('afterend')` 插在 `<h3>` 后做兄弟节点，于是它变成那个 flex 容器里的**另一个 flex item**，被排进同一行。译文节点的 `display:block` 在 flex 格式化上下文里不起换行作用。
+- **修复：** `page-translator.ts` 新增 `insertTranslationNode()`，检测原文父容器的 computed `display` 为 `flex/inline-flex/grid/inline-grid` 时，改用 `el.appendChild` 把译文塞进原文元素内部当末尾块级子节点，靠原文自身的块级布局换行到下方；其余情况维持 `afterend`。这同时更贴合 `font: inherit`「译文字号跟原文一致」的本意——标题译文会跟标题同样大小。
 
 ### CSS `background: rgba(...)` 替换而非叠加
 - **现象：** trigger 的 hover 状态用 `--hover-bg: rgba(0, 0, 0, 0.06)`，鼠标悬停时气泡看起来"消失"。
@@ -78,6 +137,11 @@
 - **现象：** 长译文在气泡里上下滚，气泡一滚就消失。
 - **真相：** 没设 overflow 时滚轮事件透传到 window，触发我们的 scroll → hide 监听。
 - **修复：** 气泡加 `max-height: 60vh` + `overflow-y: auto` + `overscroll-behavior: contain`。
+
+### 内部可滚动容器的滚动收不到，气泡不关
+- **现象：** 在页面内 `overflow:auto` 的子容器里滚动，划词气泡不消失（只有滚动整个 window 才关）。
+- **真相：** `scroll` 事件不冒泡，`window` 上不带 capture 的监听只能收到 document 滚动，收不到内部容器的滚动。
+- **修复：** `window` 的 scroll 监听加 `capture: true`（捕获阶段会经过 window）。但这会顺带收到气泡自身滚长译文的 scroll——必须在 handler 里 `if (isEventInsideBubble(event)) return;` 排除，否则滚译文会把气泡自己关掉（与上一条 `overscroll-behavior` 防的是不同传播路径）。
 
 ### `<input>` / `<textarea>` 里的选区不在 `window.getSelection()` 中
 - **现象：** 输入框里选中的文字无法触发翻译。

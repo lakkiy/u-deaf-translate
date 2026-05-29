@@ -2,6 +2,7 @@
 // 整个扩展只有这一个 content script，没有 service worker、没有消息传递。
 
 import { type Anchor, hide, isEventInsideBubble, show } from './bubble';
+import { togglePageTranslation } from './page-translator';
 import { detectLanguage, isApiAvailable, translate } from './translator';
 
 const MIN_TEXT_LENGTH = 2;
@@ -121,9 +122,10 @@ document.addEventListener('mouseup', (event) => {
   scheduleShowTrigger({ x: event.clientX, y: event.clientY });
 });
 
-// 键盘选择（shift + 方向键），没有鼠标位置可用
+// 键盘选择：按住 Shift 配合方向键 / Home / End 改变选区，没有鼠标位置可用。
+// 只看 shiftKey——纯方向键是移动光标、不产生选区，触发也只是白排一个定时器。
 document.addEventListener('keyup', (event) => {
-  if (event.shiftKey || event.key.startsWith('Arrow')) {
+  if (event.shiftKey) {
     scheduleShowTrigger(null);
   }
 });
@@ -140,8 +142,18 @@ document.addEventListener(
   true,
 );
 
-// 滚动 → 关闭气泡（系统词典弹窗也是这种行为）
-window.addEventListener('scroll', () => {
+// 滚动 → 关闭气泡（系统词典弹窗也是这种行为）。
+// capture:true 让内部可滚动容器的 scroll 也能收到（scroll 不冒泡，但捕获阶段会经过 window）；
+// 气泡自身滚长译文时 target 在气泡内，composedPath 命中 host 就跳过，否则会把气泡自己滚没。
+window.addEventListener('scroll', (event) => {
+  if (isEventInsideBubble(event)) return;
   clearPendingShow();
   hide();
-}, { passive: true });
+}, { passive: true, capture: true });
+
+// 右键菜单"翻译整页"由 background service worker 发来；再次触发即取消
+chrome.runtime.onMessage.addListener((message) => {
+  if (message?.type === 'tnyl:translate-page') {
+    togglePageTranslation();
+  }
+});
