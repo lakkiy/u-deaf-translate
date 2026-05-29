@@ -10,8 +10,28 @@ Chrome Translator API 不能在 Worker 上下文调用，而 MV3 service worker 
 ### 右键菜单触发整页翻译，用消息转发到 content
 `contextMenus.onClicked` → `chrome.tabs.sendMessage(tabId, { type: 'tnyl:translate-page' })` → content script 的 `chrome.runtime.onMessage` → `startPageTranslation()`。在 `chrome://`、商店页等没注入 content 的页面右键，sendMessage 会 reject——background 端 `catch` 后 `console.warn` 静默，跟划词翻译的限制一致。
 
-### 整页翻译用手写启发式识别正文（不引入 Readability.js）
-`findRoot()` 先选 seed（`<main>` → `<article>` → `<body>`），再用"**最大段落覆盖子树**"收敛：找 seed 内最深的子树，其包含的 `<p>` 数 ≥ 全部有效 `<p>` 的 80%。web app 页（HF model 卡、GitHub repo）的 `<main>` 常含正文+侧栏，侧栏里可能有零星 `<p>`（About 描述）；最小公共祖先会被那一个 `<p>` 拉宽到整个 main，"80% 覆盖" 则只挑出 README/article 这种 `<p>` 占绝对多数的容器，余下少数 `<p>` 视为噪声。候选段落标签 `p/li/h1-h6/blockquote/dd`；排除元素或祖先在 `pre/code/script/style/noscript/nav/header/footer/aside/menu/button/select/form/textarea/input/table` 内的。嵌套时只翻最内层：`el.querySelector(候选)` 返回非空则跳过该 el（避免 `<li><p>` 双翻）。Readability.js 70KB+ 太重。
+### 整页翻译的正文选取算法（`findRoot` + `collectParagraphs`，不引入 Readability.js）
+**这套算法是沉浸式翻译的核心，下面写全到能脱离代码复现。** 不引入 Readability.js（70KB+ 太重），手写两步启发式：先 `findRoot()` 圈出正文容器，再 `collectParagraphs()` 在容器内挑要翻的段落。两个标签集是算法的基础：
+
+- **PARAGRAPH_TAGS（候选段落标签）**：`p / li / h1 / h2 / h3 / h4 / h5 / h6 / blockquote / dd`。
+- **EXCLUDE_TAGS（自身或任一祖先命中即整体排除）**：
+  - `PRE / CODE / SCRIPT / STYLE / NOSCRIPT` —— 代码与脚本不翻，且 `textContent` 会把 `<code>` 子节点的代码字符一并吞进去翻乱；
+  - `NAV / HEADER / FOOTER / ASIDE / MENU` —— 导航 / 页眉页脚 / 侧栏，非正文；
+  - `BUTTON / SELECT / FORM / TEXTAREA / INPUT` —— 交互控件；
+  - `TABLE` —— 整表跳过（理由见下一条独立决策）。
+
+**第一步 `findRoot()` —— "最深的、覆盖 ≥80% `<p>` 的子树" 即正文容器：**
+1. seed 取 `<main>` → `<article>` → `<body>`（依次兜底）。
+2. 统计 seed 内所有 `<p>`（排除落在 EXCLUDE_TAGS 内的）得 `validPs`。**若 `validPs.length < 3` 直接返回 seed**——样本太少做不了统计，整个 seed 当正文。
+3. 否则 `target = ceil(validPs.length * 0.8)`，遍历 seed 整棵子树，对每个元素算它子树内含多少个 `validPs`，记下"含量 ≥ target 的**最深**元素"作为正文容器返回。
+- 为什么拿 `<p>` 数量当信号、且要"最深"：正文容器（README、文章主体）的 `<p>` 占绝对多数，侧栏 / 元数据区即使有零星 `<p>` 也凑不到 80%；"最深"保证收敛到最窄的合适容器。代价：当真正的正文被拆进两个并列容器（各自 < 80%）时会回退到 seed——目前没遇到。演化史见 pitfalls："正文识别"几条记录了从「所有 `<p>` 的 LCA」（被侧栏一个 `<p>` 拉宽到整个 `<main>`）改到「80% 覆盖最深子树」的过程。
+
+**第二步 `collectParagraphs(root)` —— 容器内逐个筛候选，全部通过才翻：**
+- 已带 `data-tnyl-translated` 标记 → 跳过（防重入）；
+- 自身或任一祖先在 EXCLUDE_TAGS 内 → 跳过；
+- `hasMeaningfulText` 不过 → 跳过：`trim()` 后**少于 4 字符**（`MIN_TEXT_LENGTH`），或**不含任何字母**（`/\p{L}/u` 不匹配）。滤掉页码、序号、纯标点；
+- `isMostlyLinks` 命中 → 跳过：去空白后的文本**≥ 70% 来自 `<a>` 子节点**。滤掉"用户名 + 时间戳"这类几乎全是链接的元数据行（正常正文的 inline link 占比远不到 70%）；
+- 内部还含其它候选（`el.querySelector(PARAGRAPH_TAGS)` 非空）→ 跳过，**只翻最内层**，避免 `<li><p>…</p></li>` 把 `<li>` 和 `<p>` 双翻。
 
 ### `<table>` 整张跳过，不把 `<td>` 当段落
 表格里常混代码标识符（`go build` / `cargo build`）和短英文说明（"Compile the project"），但 `textContent` 会把 `<code>` 子节点的代码字符也一并取出来送去翻译，得到"去建造"、"货物建造"这种荒谬结果。逐 cell 判断"是不是主要内容是 code"启发式很脆，按用户反馈整张表跳过最稳。代价是表格里的英文说明不翻——可接受。
