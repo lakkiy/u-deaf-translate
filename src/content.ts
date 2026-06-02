@@ -3,7 +3,7 @@
 
 import { type Anchor, hide, isEventInsideBubble, show } from './bubble';
 import { togglePageTranslation } from './page-translator';
-import { detectLanguage, isApiAvailable, translate } from './translator';
+import { isApiAvailable, resolveSourceLanguage, translate } from './translator';
 
 const MIN_TEXT_LENGTH = 2;
 const SHOW_TRIGGER_DELAY_MS = 150;
@@ -96,7 +96,7 @@ async function runTranslation(text: string, anchor: Anchor, session: number): Pr
   }, SHOW_SPINNER_DELAY_MS);
 
   try {
-    const detected = await detectLanguage(text);
+    const detected = await resolveSourceLanguage(text);
     if (session !== currentSessionId) return;
 
     const result = await translate(text, detected.language, (progress) => {

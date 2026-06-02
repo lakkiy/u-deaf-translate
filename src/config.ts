@@ -14,10 +14,25 @@ export const DEFAULT_PROMPT_TEMPLATE =
 export const DEFAULT_EXTRA_PARAMS =
   '{"max_tokens": 1024, "temperature": 0.7, "top_p": 0.6, "top_k": 20}';
 
+// 源/目标语言默认值。源 'auto' = 自动检测（保持原有行为）；目标 'zh-Hans' = 简体中文。
+// 二者都可在 options / popup 修改。pickTargetLanguage 仍保留「源与目标同族 → 翻向另一边」的智能反向。
+export const DEFAULT_SOURCE_LANGUAGE = 'auto';
+export const DEFAULT_TARGET_LANGUAGE = 'zh-Hans';
+
+// DeepSeek 的默认 system / prompt / 生成参数。原先写死在 deepseek.ts，现做成可在 options 编辑的字段，
+// 这些常量只作首次默认值与「恢复默认」。system 默认空字符串 = 保持原先只发 user 单条消息的行为。
+// extraParams 里 thinking.type=disabled 不能丢：开思考模式会让 v4-pro 延迟暴涨且响应混入 reasoning。
+export const DEEPSEEK_DEFAULT_SYSTEM = '';
+export const DEEPSEEK_DEFAULT_PROMPT_TEMPLATE = DEFAULT_PROMPT_TEMPLATE;
+export const DEEPSEEK_DEFAULT_EXTRA_PARAMS =
+  '{"temperature": 1.3, "max_tokens": 1024, "thinking": {"type": "disabled"}}';
+
 export interface CustomBackendFields {
   endpoint: string;
   apiKey: string;
   model: string;
+  /** System / 角色设定（可选）；空则不发 system 消息 */
+  system: string;
   promptTemplate: string;
   extraParams: string;
 }
@@ -25,10 +40,18 @@ export interface CustomBackendFields {
 export interface BackendConfig {
   /** 当前生效的后端 */
   active: BackendKind;
-  /** DeepSeek API Key（必填）；endpoint/参数固定在 deepseek.ts */
+  /** 源语言；'auto' = 自动检测 */
+  sourceLanguage: string;
+  /** 目标语言（主目标）；BCP-47，如 'zh-Hans'。同族文本走智能反向 */
+  targetLanguage: string;
+  /** DeepSeek API Key（必填）；endpoint 固定在 deepseek.ts */
   deepseekApiKey: string;
   /** DeepSeek 模型选项；值来自 DEEPSEEK_MODELS（'deepseek-v4-flash' / 'deepseek-v4-pro'） */
   deepseekModel: string;
+  /** DeepSeek 的 system / prompt / 生成参数（可编辑；默认取上面 DEEPSEEK_DEFAULT_* 常量） */
+  deepseekSystem: string;
+  deepseekPromptTemplate: string;
+  deepseekExtraParams: string;
   /** 自定义后端的完整字段 */
   custom: CustomBackendFields;
 }
@@ -37,6 +60,7 @@ export const DEFAULT_CUSTOM: CustomBackendFields = {
   endpoint: '',
   apiKey: '',
   model: '',
+  system: '',
   promptTemplate: DEFAULT_PROMPT_TEMPLATE,
   extraParams: DEFAULT_EXTRA_PARAMS,
 };
@@ -45,8 +69,13 @@ export const DEFAULT_CUSTOM: CustomBackendFields = {
 // 用字符串字面量；DEEPSEEK_MODELS 数组里要保持 'deepseek-v4-flash' 是第一个。
 export const DEFAULT_CONFIG: BackendConfig = {
   active: 'chrome',
+  sourceLanguage: DEFAULT_SOURCE_LANGUAGE,
+  targetLanguage: DEFAULT_TARGET_LANGUAGE,
   deepseekApiKey: '',
   deepseekModel: 'deepseek-v4-flash',
+  deepseekSystem: DEEPSEEK_DEFAULT_SYSTEM,
+  deepseekPromptTemplate: DEEPSEEK_DEFAULT_PROMPT_TEMPLATE,
+  deepseekExtraParams: DEEPSEEK_DEFAULT_EXTRA_PARAMS,
   custom: { ...DEFAULT_CUSTOM },
 };
 
@@ -74,12 +103,18 @@ async function migrateLegacyIfNeeded(stored: Record<string, unknown>): Promise<B
 
   const migrated: BackendConfig = {
     active: 'custom',
+    sourceLanguage: DEFAULT_SOURCE_LANGUAGE,
+    targetLanguage: DEFAULT_TARGET_LANGUAGE,
     deepseekApiKey: '',
     deepseekModel: DEFAULT_CONFIG.deepseekModel,
+    deepseekSystem: DEEPSEEK_DEFAULT_SYSTEM,
+    deepseekPromptTemplate: DEEPSEEK_DEFAULT_PROMPT_TEMPLATE,
+    deepseekExtraParams: DEEPSEEK_DEFAULT_EXTRA_PARAMS,
     custom: {
       endpoint: legacy.endpoint ?? '',
       apiKey: legacy.apiKey ?? '',
       model: legacy.model ?? '',
+      system: '',
       promptTemplate: legacy.promptTemplate ?? DEFAULT_PROMPT_TEMPLATE,
       extraParams: legacy.extraParams ?? DEFAULT_EXTRA_PARAMS,
     },
@@ -98,11 +133,16 @@ export async function getConfig(): Promise<BackendConfig> {
     cached = migrated;
     return cached;
   }
-  // merge：缺字段的用默认值兜底
+  // merge：缺字段的用默认值兜底（新增字段对老用户透明升级，不破坏已存配置）
   cached = {
     active: (stored.active as BackendKind) ?? DEFAULT_CONFIG.active,
+    sourceLanguage: (stored.sourceLanguage as string) ?? DEFAULT_SOURCE_LANGUAGE,
+    targetLanguage: (stored.targetLanguage as string) ?? DEFAULT_TARGET_LANGUAGE,
     deepseekApiKey: (stored.deepseekApiKey as string) ?? '',
     deepseekModel: (stored.deepseekModel as string) ?? DEFAULT_CONFIG.deepseekModel,
+    deepseekSystem: (stored.deepseekSystem as string) ?? DEEPSEEK_DEFAULT_SYSTEM,
+    deepseekPromptTemplate: (stored.deepseekPromptTemplate as string) ?? DEEPSEEK_DEFAULT_PROMPT_TEMPLATE,
+    deepseekExtraParams: (stored.deepseekExtraParams as string) ?? DEEPSEEK_DEFAULT_EXTRA_PARAMS,
     custom: { ...DEFAULT_CUSTOM, ...(stored.custom as Partial<CustomBackendFields> | undefined) },
   };
   return cached;

@@ -8,11 +8,7 @@
 // 这些 API 还很新，TypeScript 的内置 lib 和 @types/chrome 都还没有完整类型，
 // 这里手动声明最小可用的类型。
 import { getConfig } from './config';
-import {
-  DEEPSEEK_ENDPOINT,
-  DEEPSEEK_EXTRA_PARAMS,
-  DEEPSEEK_PROMPT_TEMPLATE,
-} from './deepseek';
+import { DEEPSEEK_ENDPOINT } from './deepseek';
 import { translateViaLlm } from './llm-backend';
 
 declare global {
@@ -51,21 +47,22 @@ declare global {
 const TRANSLATE_TIMEOUT_MS = 60_000;
 const CONFIDENCE_THRESHOLD = 0.5;
 
-// 互译配对：默认目标语言（PRIMARY）和回译语言（SECONDARY）。
-// 选中文本属于 PRIMARY 语族 → 译为 SECONDARY；否则 → 译为 PRIMARY。
-// 将来要支持用户配置就只改这两个常量。
-const PRIMARY_TARGET_LANGUAGE = 'zh-Hans';
-const SECONDARY_TARGET_LANGUAGE = 'en';
-
 /** BCP-47 主子标签比较：`zh-Hans` / `zh-CN` / `zh-TW` 都算同一语族。 */
 function sameLanguageFamily(a: string, b: string): boolean {
   return a.split('-')[0] === b.split('-')[0];
 }
 
-function pickTargetLanguage(sourceLanguage: string): string {
-  return sameLanguageFamily(sourceLanguage, PRIMARY_TARGET_LANGUAGE)
-    ? SECONDARY_TARGET_LANGUAGE
-    : PRIMARY_TARGET_LANGUAGE;
+// 智能反向：源与目标同族时翻向「另一边」。回译语言取英语；若目标本身就是英语族，则回译中文。
+// 保留这套行为（用户反馈：选中文要能得到英文、选英文要能得到中文），目标语言改由 config 配置。
+function reverseTarget(primaryTarget: string): string {
+  return sameLanguageFamily(primaryTarget, 'en') ? 'zh-Hans' : 'en';
+}
+
+// 选中文本与配置的目标语言同族 → 翻向回译语言；否则 → 翻向配置的目标语言。
+function pickTargetLanguage(sourceLanguage: string, primaryTarget: string): string {
+  return sameLanguageFamily(sourceLanguage, primaryTarget)
+    ? reverseTarget(primaryTarget)
+    : primaryTarget;
 }
 
 export interface DetectResult {
@@ -125,6 +122,18 @@ export async function detectLanguage(text: string): Promise<DetectResult> {
     return { language: 'en', uncertain: true };
   }
   return { language: top.detectedLanguage, uncertain: false };
+}
+
+/**
+ * 解析源语言：config.sourceLanguage 非 'auto' 时直接用用户指定的源语言（跳过检测）；
+ * 否则走 detectLanguage 自动检测。划词与整页两条路径共用，保证手动指定源语言能生效。
+ */
+export async function resolveSourceLanguage(text: string): Promise<DetectResult> {
+  const cfg = await getConfig();
+  if (cfg.sourceLanguage && cfg.sourceLanguage !== 'auto') {
+    return { language: cfg.sourceLanguage, uncertain: false };
+  }
+  return detectLanguage(text);
 }
 
 const FAILED_RETRY_COOLDOWN_MS = 3_000;
@@ -256,21 +265,22 @@ export async function translate(
   sourceLanguage: string,
   onProgress?: DownloadProgressHandler,
 ): Promise<string> {
-  // pickTargetLanguage 保证目标与源不同族（zh 族 → en，否则 → zh-Hans），无需再判同族跳过。
-  const targetLanguage = pickTargetLanguage(sourceLanguage);
-
   const cfg = await getConfig();
+  // 目标语言取配置值；pickTargetLanguage 保证源与目标不同族（同族走智能反向），无需再判同族跳过。
+  const targetLanguage = pickTargetLanguage(sourceLanguage, cfg.targetLanguage);
+
   switch (cfg.active) {
     case 'chrome':
       return translateViaChrome(text, sourceLanguage, targetLanguage, onProgress);
     case 'deepseek':
-      // DeepSeek endpoint/参数固定；apiKey 和 model 来自用户选择
+      // DeepSeek endpoint 内置；apiKey/model/system/prompt/参数来自用户配置
       return translateViaLlm(text, targetLanguage, {
         endpoint: DEEPSEEK_ENDPOINT,
         apiKey: cfg.deepseekApiKey,
         model: cfg.deepseekModel,
-        promptTemplate: DEEPSEEK_PROMPT_TEMPLATE,
-        extraParams: DEEPSEEK_EXTRA_PARAMS,
+        system: cfg.deepseekSystem,
+        promptTemplate: cfg.deepseekPromptTemplate,
+        extraParams: cfg.deepseekExtraParams,
       });
     case 'custom':
       return translateViaLlm(text, targetLanguage, cfg.custom);

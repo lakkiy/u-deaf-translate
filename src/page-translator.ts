@@ -2,7 +2,7 @@
 // 与划词翻译共存：复用 translator.ts 的实例缓存、语言检测。
 // 一次 startPageTranslation() 只识别一次正文，IntersectionObserver 注册到所有候选段落。
 
-import { detectLanguage, translate } from './translator';
+import { resolveSourceLanguage, translate } from './translator';
 
 const MARKER_ATTR = 'data-tnyl-translated';
 const TRANSLATION_CLASS = 'tnyl-translation';
@@ -181,7 +181,7 @@ function enqueue(task: () => Promise<void>): void {
 
 async function getSourceLanguage(sampleText: string): Promise<string> {
   if (!detectedLanguagePromise) {
-    detectedLanguagePromise = detectLanguage(sampleText).then((r) => r.language);
+    detectedLanguagePromise = resolveSourceLanguage(sampleText).then((r) => r.language);
     // 检测失败不缓存被拒 promise，否则本页之后每段都复用同一个失败结果、永不恢复
     detectedLanguagePromise.catch(() => { detectedLanguagePromise = null; });
   }

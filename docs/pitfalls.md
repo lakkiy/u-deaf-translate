@@ -186,6 +186,11 @@
 - **现象：** 缓存命中的短翻译先闪一下 spinner 再变译文，视觉抖动。
 - **修复：** spinner 显示加 200ms 延迟 + `finally { clearTimeout }`。<200ms 完成的翻译根本看不到 spinner。
 
+### 源/目标语言「交换」按钮在源为 auto 时造出 source===target 自译退化态
+- **现象：** options 默认源「自动识别」、目标「简体中文」，点一下交换 ⇄ 按钮，保存后选任何文字都翻译方向错乱（英文也被当中文）。
+- **真相：** swapLang 把旧目标写进源、但「源是 auto」分支跳过了更新目标，结果 `source === target`。保存后 `resolveSourceLanguage()`（translator.ts）因源非 auto 而锁死源、对所有文本返回该语言，`pickTargetLanguage()` 判同族后强行 `reverseTarget`，于是源语言解析全错。审查时我一度判它「无害」，实际会悄无声息固化坏配置。
+- **修复：** `src/options.ts` 的 `swapLang()`：源为 auto 时交换取「从当前目标翻向它的反向」（`reverseLang(t)`，本地复制 translator 的 reverseTarget 逻辑，避免 import translator.ts 触发它顶层的 window 监听器）；并加兜底 `if (newSource === newTarget) newTarget = reverseLang(newSource)`，绝不产出自译态。
+
 ## AI 模型行为
 
 ### LanguageDetector 对短文本置信度低 / 返回 `und`

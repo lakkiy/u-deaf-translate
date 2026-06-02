@@ -110,23 +110,42 @@ function ensure(): { host: HTMLDivElement; bubble: HTMLDivElement } {
       border-radius: 8px;
       box-shadow: var(--shadow);
     }
-    /* translated / error 才用气泡式样的卡片 */
+    /* translated / error 才用气泡式样的卡片 —— 朴素白/暗底、留白足、行距宽（设计稿 ②）。
+       卡片本身 overflow: visible，让尾巴（::before）能探出边缘不被裁；长译文的滚动放到内层 .scroll。 */
     .bubble.info {
+      position: relative;
       background: var(--bg);
       color: var(--color);
       border: var(--border);
-      border-radius: 8px;
+      border-radius: 14px;
       box-shadow: var(--shadow);
       min-width: 180px;
       max-width: ${BUBBLE_MAX_WIDTH}px;
-      max-height: 60vh;
-      padding: 10px 12px;
-      overflow-y: auto;
-      /* 滚到顶/底不要把滚动传给页面，否则会触发 window scroll 把气泡关掉 */
-      overscroll-behavior: contain;
+      padding: 13px 16px;
       word-break: break-word;
       user-select: text;
     }
+    .bubble.info .scroll {
+      max-height: 56vh;
+      overflow-y: auto;
+      /* 滚到顶/底不要把滚动传给页面，否则会触发 window scroll 把气泡关掉 */
+      overscroll-behavior: contain;
+    }
+    /* 指向选区的小尾巴：旋转 45° 的方块只露朝外两条边的描边，贴在靠近 anchor 的那条边。
+       方向类（tail-top/bottom + tail-left/right）由 positionHost 按翻转情况加。 */
+    .bubble.info.tail-top::before,
+    .bubble.info.tail-bottom::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--bg);
+      transform: rotate(45deg);
+    }
+    .bubble.info.tail-top::before { top: -7px; border-left: var(--border); border-top: var(--border); }
+    .bubble.info.tail-bottom::before { bottom: -7px; border-right: var(--border); border-bottom: var(--border); }
+    .bubble.info.tail-left::before { left: 22px; }
+    .bubble.info.tail-right::before { right: 22px; }
     .spinner {
       width: 14px;
       height: 14px;
@@ -140,12 +159,14 @@ function ensure(): { host: HTMLDivElement; bubble: HTMLDivElement } {
       to { transform: rotate(360deg); }
     }
     .translation {
-      /* 保留译文里的换行，让多段输入分段显示 */
+      /* 保留译文里的换行，让多段输入分段显示；行距放宽，贴合设计稿"行距宽"。 */
       white-space: pre-wrap;
+      line-height: 1.7;
     }
     .hint {
-      margin-top: 6px;
+      margin-top: 8px;
       font-size: 12px;
+      line-height: 1.5;
       color: var(--hint);
     }
     .error { color: var(--error); }
@@ -202,13 +223,13 @@ function renderState(bubble: HTMLDivElement, state: BubbleState): void {
         : '';
       bubble.removeAttribute('role');
       bubble.removeAttribute('aria-label');
-      bubble.innerHTML = `<div class="translation">${safeText}</div>${hint}`;
+      bubble.innerHTML = `<div class="scroll"><div class="translation">${safeText}</div>${hint}</div>`;
       return;
     }
     case 'error':
       bubble.removeAttribute('role');
       bubble.removeAttribute('aria-label');
-      bubble.innerHTML = `<div class="error">${escapeHtml(state.message)}</div>`;
+      bubble.innerHTML = `<div class="scroll"><div class="error">${escapeHtml(state.message)}</div></div>`;
       return;
   }
 }
@@ -224,11 +245,15 @@ function positionHost(host: HTMLDivElement, anchor: Anchor): void {
   const actualWidth = hostRect.width || 32;
   const actualHeight = hostRect.height || BUBBLE_EST_HEIGHT;
 
+  let flipX = false;
+  let flipY = false;
+
   // 水平：默认放在指针右侧；右边放不下 → 翻到指针左侧（左对齐 anchor 的右边缘）
   let left = anchor.x + GAP_PX;
   const rightLimit = window.innerWidth - VIEWPORT_PADDING;
   if (left + actualWidth > rightLimit) {
     left = anchor.x - actualWidth - GAP_PX;
+    flipX = true;
   }
   // 极端情况（视口极窄）：靠右紧贴边缘
   if (left < VIEWPORT_PADDING) {
@@ -239,11 +264,19 @@ function positionHost(host: HTMLDivElement, anchor: Anchor): void {
   let top = anchor.y + GAP_PX;
   if (top + actualHeight + VIEWPORT_PADDING > window.innerHeight) {
     top = anchor.y - actualHeight - GAP_PX;
+    flipY = true;
   }
   if (top < VIEWPORT_PADDING) top = VIEWPORT_PADDING;
 
   host.style.left = `${left + scrollX}px`;
   host.style.top = `${top + scrollY}px`;
+
+  // 尾巴指向选区：anchor 在气泡哪一侧，尾巴就贴哪条边。
+  // 默认（未翻转）气泡在 anchor 右下 → anchor 在左上 → 尾巴在顶边左侧；翻转时对应切换。
+  // 只有译文/错误气泡（.info）有尾巴；trigger/translating 是小图标，不加。
+  if (bubbleEl?.classList.contains('info')) {
+    bubbleEl.classList.add(flipY ? 'tail-bottom' : 'tail-top', flipX ? 'tail-right' : 'tail-left');
+  }
 }
 
 export function show(state: BubbleState, anchor: Anchor): void {

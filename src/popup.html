@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <title>叫你翻译你聋吗</title>
+  <style>
+    :root {
+      --paper: #f3e9d2;
+      --card: #fbf4de;
+      --ink: #2b2620;
+      --muted: #9b8c6d;
+      --line: #2b2620;
+      --red: #b03a2e;
+      --red-deep: #8f2c22;
+      --serif: "Songti SC", "STSong", "SimSun", serif;
+      --kai: "Kaiti SC", "STKaiti", "KaiTi", serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      width: 360px;
+      padding: 16px 16px 18px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 14px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .brand img { width: 34px; height: 34px; border-radius: 8px; }
+    .brand .name { font-family: var(--kai); font-weight: 700; font-size: 19px; line-height: 1.1; }
+    .brand .sub { font-size: 11px; color: var(--muted); font-style: italic; }
+    .seal {
+      margin-left: auto; width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--red); color: var(--paper);
+      font-family: var(--serif); font-size: 16px;
+      border-radius: 6px; transform: rotate(-4deg);
+      box-shadow: 1px 1px 0 var(--red-deep);
+    }
+
+    .using {
+      background: var(--card); border: 2px solid var(--line); border-radius: 12px;
+      padding: 12px 14px; box-shadow: 3px 3px 0 rgba(43, 38, 32, 0.12);
+      margin-bottom: 6px; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .using .label { font-size: 12px; color: var(--muted); }
+    .using .be-name {
+      font-family: var(--serif); font-weight: 700; font-size: 18px;
+      display: flex; align-items: center; gap: 6px; margin-top: 2px;
+    }
+    .using .badge {
+      font-size: 11px; border: 1px solid var(--line); border-radius: 5px;
+      padding: 0 5px; font-weight: 600; font-family: var(--serif);
+    }
+    .using .meta { font-size: 12px; color: var(--muted); margin-top: 4px; display: flex; align-items: center; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #3a9d4b; display: inline-block; }
+    .swap-be {
+      margin-left: auto; font-family: var(--serif); font-size: 15px; font-weight: 700;
+      background: var(--card); color: var(--ink); border: 2px solid var(--line); border-radius: 9px;
+      padding: 6px 12px; cursor: pointer; box-shadow: 2px 2px 0 var(--line);
+    }
+    .swap-be:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--line); }
+
+    .row { display: flex; align-items: center; gap: 10px; margin: 12px 2px 4px; }
+    .row .k { width: 40px; color: var(--muted); font-size: 13px; }
+    select {
+      flex: 1; font: inherit; padding: 7px 9px;
+      border: 1.5px dashed var(--line); border-radius: 8px;
+      background: transparent; color: var(--ink);
+    }
+    .row .note { font-size: 12px; color: var(--muted); }
+
+    .go-row { display: flex; gap: 10px; margin-top: 20px; }
+    .go {
+      flex: 1; background: var(--red); color: #fff;
+      border: 2px solid var(--line); border-radius: 11px;
+      font-family: var(--serif); font-weight: 700; font-size: 18px; letter-spacing: 2px;
+      padding: 13px 0; cursor: pointer; box-shadow: 3px 3px 0 var(--line);
+    }
+    .go:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+    .gear {
+      width: 50px; background: var(--card); border: 2px solid var(--line); border-radius: 11px;
+      font-size: 18px; cursor: pointer; box-shadow: 3px 3px 0 var(--line);
+    }
+    .gear:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+  </style>
+</head>
+<body>
+  <div class="brand">
+    <img id="logo" alt="" />
+    <div>
+      <div class="name">叫你翻译你聋吗</div>
+      <div class="sub">translate or be deaf</div>
+    </div>
+    <div class="seal">壹</div>
+  </div>
+
+  <div class="using">
+    <div>
+      <div class="label">正在用</div>
+      <div class="be-name" id="beName">—</div>
+      <div class="meta"><span class="dot"></span><span id="beMeta">就绪</span></div>
+    </div>
+    <button class="swap-be" id="swapBe" title="切换翻译服务">换</button>
+  </div>
+
+  <div class="row">
+    <span class="k">翻成</span>
+    <select id="targetLanguage"></select>
+  </div>
+  <div class="row">
+    <span class="k"></span>
+    <span class="note" id="srcNote">· 自动识别源</span>
+  </div>
+
+  <div class="go-row">
+    <button class="go" id="translatePage">翻这一页</button>
+    <button class="gear" id="openOptions" title="设置">⚙</button>
+  </div>
+
+  <script type="module" src="./popup.ts"></script>
+</body>
+</html>

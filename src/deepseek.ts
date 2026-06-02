@@ -1,7 +1,6 @@
-// DeepSeek 后端的固定配置：用户在 options 页面只需要填 API Key，
-// endpoint/model/生成参数都按 DeepSeek 官方推荐写死，对翻译场景已经够好。
-
-import { DEFAULT_PROMPT_TEMPLATE } from './config';
+// DeepSeek 后端的固定配置：endpoint 内置、模型从下拉选。
+// system / prompt / 生成参数的默认值已移到 config.ts 的 DEEPSEEK_DEFAULT_* 常量，
+// 因为它们现在是用户可在 options 编辑的配置字段（首次默认值 + 「恢复默认」用那组常量）。
 
 // 官方文档（api-docs.deepseek.com/zh-cn/api/create-chat-completion）的路径是 /chat/completions，没有 /v1。
 export const DEEPSEEK_ENDPOINT = 'https://api.deepseek.com/chat/completions';
@@ -10,12 +9,6 @@ export const DEEPSEEK_ENDPOINT = 'https://api.deepseek.com/chat/completions';
 export const DEEPSEEK_MODELS = ['deepseek-v4-flash', 'deepseek-v4-pro'] as const;
 export type DeepseekModel = (typeof DEEPSEEK_MODELS)[number];
 export const DEEPSEEK_DEFAULT_MODEL: DeepseekModel = 'deepseek-v4-flash';
-// DeepSeek 官方对翻译/通用对话推荐 temperature=1.3；max_tokens 给 1024 兼顾长段落。
-// thinking.type = "disabled"：关闭思考模式（默认 enabled）——翻译任务不需要推理，
-// 启用 thinking 会让 v4-pro 返回延迟显著变高，且响应里可能混入 reasoning 内容。
-export const DEEPSEEK_EXTRA_PARAMS =
-  '{"temperature": 1.3, "max_tokens": 1024, "thinking": {"type": "disabled"}}';
-export const DEEPSEEK_PROMPT_TEMPLATE = DEFAULT_PROMPT_TEMPLATE;
 
 // 品牌主色 #4D6BFE；图形用一道白色波浪表达 "deep sea"
 export const DEEPSEEK_ICON_SVG = `

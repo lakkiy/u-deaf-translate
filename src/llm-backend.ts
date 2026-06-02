@@ -48,11 +48,19 @@ export async function translateViaLlm(
     headers.Authorization = `Bearer ${config.apiKey.trim()}`;
   }
 
+  // System / 角色设定：非空才发 system 消息（空则维持原先只发 user 单条的行为）。
+  // system 也走 renderPrompt，里面想用 {target_lang} 之类占位符同样生效。
+  const messages: Array<{ role: string; content: string }> = [];
+  if (config.system?.trim()) {
+    messages.push({ role: 'system', content: renderPrompt(config.system, targetName, text) });
+  }
+  messages.push({ role: 'user', content: prompt });
+
   // base body：messages 总要发。model 仅在用户填了才发——
   // mlx_lm.server 收到不匹配的 model 会去重新 download/load，找不到就 HTTP 404。
   // 不发 model 字段时 server 用当前加载的 model，最稳。
   const bodyObj: Record<string, unknown> = {
-    messages: [{ role: 'user', content: prompt }],
+    messages,
     stream: false,
   };
   if (config.model.trim()) {

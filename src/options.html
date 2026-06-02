@@ -6,227 +6,371 @@
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #ffffff;
-      --fg: #1a1a1a;
-      --muted: #666;
-      --border: rgba(0, 0, 0, 0.15);
-      --field-bg: #fafafa;
-      --accent: #c0392b;
-      --success: #27ae60;
+      --paper: #f3e9d2;
+      --card: #fbf4de;
+      --ink: #2b2620;
+      --muted: #9b8c6d;
+      --line: #2b2620;
+      --soft: rgba(43, 38, 32, 0.28);
+      --red: #b03a2e;
+      --red-deep: #8f2c22;
+      --shadow: rgba(43, 38, 32, 0.85);
+      --serif: "Songti SC", "STSong", "SimSun", serif;
+      --kai: "Kaiti SC", "STKaiti", "KaiTi", serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1f1f1f;
-        --fg: #f5f5f5;
-        --muted: #aaa;
-        --border: rgba(255, 255, 255, 0.15);
-        --field-bg: #2a2a2a;
-        --accent: #ff8080;
-        --success: #2ecc71;
+        --paper: #26221b;
+        --card: #2f2a20;
+        --ink: #efe6d0;
+        --muted: #a89a78;
+        --line: #cdc1a3;
+        --soft: rgba(239, 230, 208, 0.25);
+        --red: #e0796c;
+        --red-deep: #c25a4c;
+        --shadow: rgba(0, 0, 0, 0.6);
       }
     }
+
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 32px 24px;
-      background: var(--bg);
-      color: var(--fg);
-      font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      padding: 32px 20px 56px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     }
-    main { max-width: 680px; margin: 0 auto; }
-    h1 { margin: 0 0 24px; font-size: 22px; }
+    main { max-width: 760px; margin: 0 auto; }
 
-    /* Tab 栏 */
-    .tabs {
-      display: flex;
-      gap: 4px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 24px;
-    }
-    .tab {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font: inherit;
-      font-size: 14px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-    }
-    .tab:hover { color: var(--fg); }
-    .tab.active {
-      color: var(--fg);
-      border-bottom-color: var(--accent);
-      font-weight: 600;
-    }
-    .tab svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-      border-radius: 50%;
+    /* 头部 */
+    header { display: flex; align-items: center; gap: 12px; margin-bottom: 36px; }
+    header img { width: 40px; height: 40px; border-radius: 9px; }
+    header .name { font-family: var(--kai); font-weight: 700; font-size: 24px; line-height: 1.05; }
+    header .sub { font-size: 12px; color: var(--muted); font-style: italic; }
+    .version {
+      margin-left: auto; font-size: 12px; color: var(--red); font-family: var(--mono);
+      border: 1.5px solid var(--red); border-radius: 6px; padding: 2px 7px;
     }
 
-    /* Panel */
+    /* 区块标题（壹 / 贰） */
+    .block { margin-bottom: 40px; }
+    .block-head { display: flex; align-items: center; gap: 12px; }
+    .seal {
+      width: 40px; height: 40px; flex: none;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--red); color: var(--paper);
+      font-family: var(--serif); font-size: 22px;
+      border-radius: 7px; transform: rotate(-3deg);
+      box-shadow: 2px 2px 0 var(--red-deep);
+    }
+    .block-head h2 { margin: 0; font-family: var(--serif); font-size: 27px; font-weight: 700; }
+    .block-sub { margin: 6px 0 18px 52px; color: var(--muted); }
+
+    /* 卡片通用 */
+    .card {
+      background: var(--card); border: 2px solid var(--line); border-radius: 12px;
+      padding: 16px 18px; box-shadow: 3px 3px 0 var(--shadow);
+    }
+    .hint { font-weight: normal; color: var(--muted); font-size: 12px; }
+
+    /* 壹 · 翻译 */
+    .grid-2 { display: flex; gap: 16px; flex-wrap: wrap; }
+    .grid-2 > .card { flex: 1 1 320px; }
+    .lang-row { display: flex; align-items: flex-end; gap: 10px; }
+    .lang-field { flex: 1; min-width: 0; }
+    .lang-field label { display: block; margin: 0 0 6px; font-weight: 600; }
+    .swap {
+      flex: none; margin-bottom: 1px;
+      font-size: 18px; background: var(--card); color: var(--red);
+      border: 2px solid var(--line); border-radius: 9px; padding: 6px 10px;
+      cursor: pointer; box-shadow: 2px 2px 0 var(--shadow);
+    }
+    .swap:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--shadow); }
+    .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
+    .chips-label { color: var(--muted); font-size: 12px; }
+    .chip {
+      font: inherit; font-size: 13px; background: var(--card); color: var(--ink);
+      border: 1.5px solid var(--line); border-radius: 999px; padding: 3px 12px; cursor: pointer;
+    }
+    .chip.active { background: var(--ink); color: var(--paper); font-weight: 600; }
+
+    .howto h3 { margin: 0 0 10px; font-family: var(--serif); font-size: 17px; }
+    .howto p { margin: 8px 0; }
+    .tag {
+      display: inline-block; font-size: 12px; color: var(--red);
+      border: 1.3px solid var(--red); border-radius: 5px; padding: 0 6px; margin-right: 6px;
+      font-family: var(--serif);
+    }
+
+    /* 贰 · 模型卡片选择 */
+    .backend-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+    .backend-card {
+      flex: 1 1 200px; text-align: left; cursor: pointer; position: relative;
+      background: var(--card); border: 2px solid var(--line); border-radius: 12px;
+      padding: 14px 16px; box-shadow: 3px 3px 0 var(--shadow); color: var(--ink); font: inherit;
+    }
+    .backend-card.selected { box-shadow: 3px 3px 0 var(--red); }
+    .backend-card .bc-title {
+      font-family: var(--serif); font-weight: 700; font-size: 17px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .backend-card .bc-sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .badge {
+      font-size: 11px; border: 1.3px solid var(--line); border-radius: 5px;
+      padding: 0 5px; font-weight: 600; font-family: var(--serif); margin-left: auto;
+    }
+    .backend-card .check {
+      display: none; position: absolute; top: -9px; right: -9px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--red); color: #fff; align-items: center; justify-content: center;
+      font-size: 13px; box-shadow: 1px 1px 0 var(--red-deep);
+    }
+    .backend-card.selected .check { display: flex; }
+    .deepseek-icon svg { width: 20px; height: 20px; display: block; border-radius: 50%; }
+
+    /* 各后端设置面板 */
     .panel { display: none; }
-    .panel.active { display: block; }
+    .panel.active { display: block; margin-top: 16px; }
+    .settings-card {
+      background: var(--card); border: 2px solid var(--line); border-radius: 12px;
+      padding: 18px 20px; box-shadow: 3px 3px 0 var(--shadow);
+    }
+    .settings-card h3 { margin: 0 0 4px; font-family: var(--serif); font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .settings-card h3 .badge { font-family: var(--serif); }
 
-    /* 字段 */
-    label {
-      display: block;
-      margin: 18px 0 6px;
-      font-weight: 600;
-    }
-    .field-hint {
-      font-weight: normal;
-      color: var(--muted);
-      font-size: 12px;
-      margin-left: 6px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--field-bg);
-      color: var(--fg);
-      font: inherit;
+    label { display: block; margin: 16px 0 6px; font-weight: 600; }
+    input, select, textarea {
+      width: 100%; padding: 8px 10px; color: var(--ink); font: inherit;
+      background: transparent; border: 1.5px dashed var(--line); border-radius: 8px;
     }
     select { appearance: auto; }
-    textarea {
-      min-height: 140px;
-      resize: vertical;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 13px;
-    }
-    input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    textarea { resize: vertical; font-family: var(--mono); font-size: 13px; min-height: 120px; }
+    textarea.short { min-height: 64px; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--red); outline-offset: -1px; }
 
-    .static-info {
-      background: var(--field-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 14px;
-      margin: 12px 0;
-      font-size: 13px;
-      color: var(--muted);
+    .input-eye { position: relative; }
+    .input-eye input { padding-right: 44px; }
+    .eye {
+      position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+      background: var(--card); border: 1.5px solid var(--line); border-radius: 7px;
+      width: 30px; height: 28px; cursor: pointer; font-size: 13px; color: var(--ink);
     }
-    .static-info code {
-      color: var(--fg);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 12px;
-    }
-    .static-info p { margin: 4px 0; }
 
-    /* 底部操作 */
-    .row { margin-top: 28px; display: flex; align-items: center; gap: 12px; }
-    button.action {
-      padding: 8px 18px;
-      border: none;
-      border-radius: 6px;
-      background: var(--accent);
-      color: #fff;
-      font: inherit;
-      font-weight: 600;
-      cursor: pointer;
+    .free-note {
+      display: flex; align-items: center; gap: 14px; margin: 14px 0;
+      border: 1.5px dashed var(--line); border-radius: 9px; padding: 12px 14px;
     }
-    button.action.secondary {
-      background: transparent;
-      color: var(--fg);
-      border: 1px solid var(--border);
-      font-weight: normal;
+    .free-note .big { font-family: var(--serif); font-size: 30px; color: var(--red); }
+    .free-note .t { font-weight: 600; }
+    .free-note p { margin: 4px 0 0; color: var(--muted); font-size: 13px; font-weight: normal; }
+
+    /* 提示词区 */
+    .prompt-block { margin-top: 6px; border-top: 1px dashed var(--soft); padding-top: 14px; }
+    .prompt-head { display: flex; align-items: center; gap: 8px; }
+    .prompt-head .title { font-family: var(--serif); font-size: 16px; font-weight: 700; }
+    .reset-prompt {
+      margin-left: auto; background: transparent; border: none; color: var(--red);
+      cursor: pointer; font: inherit; text-decoration: underline; font-size: 13px;
     }
-    button.action:hover { filter: brightness(1.05); }
-    #status { color: var(--success); font-size: 13px; min-height: 1em; }
-    #status.error { color: var(--accent); }
+    .presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0; }
+    .presets .lead { color: var(--muted); font-size: 13px; }
+    .preset-btn {
+      font: inherit; font-size: 13px; background: var(--card); color: var(--ink);
+      border: 2px solid var(--line); border-radius: 8px; padding: 4px 12px; cursor: pointer;
+      box-shadow: 2px 2px 0 var(--shadow);
+    }
+    .preset-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--shadow); }
+    .preset-btn.active { background: var(--ink); color: var(--paper); }
+    .placeholders { margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .ph-btn {
+      font: inherit; font-size: 12px; background: var(--card); color: var(--ink);
+      border: 1.3px solid var(--line); border-radius: 6px; padding: 1px 7px; cursor: pointer;
+      font-family: var(--mono); margin-right: 6px;
+    }
+
+    /* 底部 */
+    footer {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      border-top: 1.5px dashed var(--soft); margin-top: 8px; padding-top: 18px;
+    }
+    #status { color: var(--muted); font-size: 13px; }
+    #status.error { color: var(--red); }
+    #status.ok { color: #3a9d4b; }
+    .footer-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+    .link { color: var(--red); text-decoration: none; font-size: 13px; }
+    .link:hover { text-decoration: underline; }
+    .btn { font: inherit; cursor: pointer; border-radius: 9px; padding: 8px 18px; }
+    .btn.primary {
+      background: var(--red); color: #fff; border: 2px solid var(--line); font-weight: 700;
+      font-family: var(--serif); box-shadow: 3px 3px 0 var(--shadow);
+    }
+    .btn.primary:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+    .btn.ghost { background: transparent; color: var(--ink); border: 1.5px dashed var(--line); }
   </style>
 </head>
 <body>
   <main>
-    <h1>叫你翻译你聋吗 · 设置</h1>
+    <header>
+      <img id="logo" alt="" />
+      <div>
+        <div class="name">叫你翻译你聋吗</div>
+        <div class="sub">translate or be deaf</div>
+      </div>
+      <span class="version" id="version"></span>
+    </header>
 
-    <div class="tabs" role="tablist">
-      <button class="tab" data-tab="chrome" role="tab">Chrome 内置</button>
-      <button class="tab" data-tab="deepseek" role="tab">
-        <span id="deepseek-icon"></span>
-        <span>DeepSeek</span>
-      </button>
-      <button class="tab" data-tab="custom" role="tab">自定义</button>
-    </div>
-
-    <!-- Chrome panel：无字段，纯说明 -->
-    <section class="panel" data-panel="chrome">
-      <div class="static-info">
-        <p>使用 Chrome 138+ 内置 Translator API，模型本地推理，零联网。</p>
-        <p>首次使用某语言对会下载模型（几十 MB），之后离线可用。</p>
-        <p>无需配置——选中这个 tab 后点保存即可。</p>
+    <!-- 壹 · 翻译 -->
+    <section class="block">
+      <div class="block-head"><span class="seal">壹</span><h2>翻译</h2></div>
+      <p class="block-sub">翻成什么语言，怎么触发。</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="lang-row">
+            <div class="lang-field">
+              <label>源语言 <span class="hint">一般让它自己猜</span></label>
+              <select id="sourceLanguage"></select>
+            </div>
+            <button class="swap" id="swapLang" type="button" title="交换源 / 目标">⇄</button>
+            <div class="lang-field">
+              <label>目标语言 <span class="hint">想翻成什么</span></label>
+              <select id="targetLanguage"></select>
+            </div>
+          </div>
+          <div class="chips" id="commonTargets"><span class="chips-label">常用目标：</span></div>
+        </div>
+        <div class="card howto">
+          <h3>怎么用 <span class="hint">就两招，不用配</span></h3>
+          <p><span class="tag">划词</span>选中一段文字，就地冒小浮窗给你译文 —— 只看不打扰。</p>
+          <p><span class="tag">整页</span>点插件图标，或在网页上右键菜单，一键沉浸式把整页翻了 —— 原文译文并排。</p>
+        </div>
       </div>
     </section>
 
-    <!-- DeepSeek panel：填 API Key + 选 model；其他信息固定展示 -->
-    <section class="panel" data-panel="deepseek">
-      <div class="static-info">
-        <p>Endpoint：<code>https://api.deepseek.com/chat/completions</code></p>
-        <p>生成参数：<code>{"temperature": 1.3, "max_tokens": 1024, "thinking": {"type": "disabled"}}</code></p>
-        <p>已关闭思考模式——翻译任务无需推理，关掉响应更快。</p>
+    <!-- 贰 · 模型 -->
+    <section class="block">
+      <div class="block-head"><span class="seal">贰</span><h2>模型</h2></div>
+      <p class="block-sub">选个翻译服务，配好它的提示词。</p>
+
+      <div class="backend-cards" role="tablist">
+        <button class="backend-card" data-backend="chrome" role="tab" type="button">
+          <span class="check">✓</span>
+          <div class="bc-title">Chrome 自带 <span class="badge">内置</span></div>
+          <div class="bc-sub">浏览器内置 · 离线</div>
+        </button>
+        <button class="backend-card" data-backend="deepseek" role="tab" type="button">
+          <span class="check">✓</span>
+          <div class="bc-title"><span class="deepseek-icon" id="deepseek-icon"></span> DeepSeek <span class="badge">推荐</span></div>
+          <div class="bc-sub">云端 · 质量好</div>
+        </button>
+        <button class="backend-card" data-backend="custom" role="tab" type="button">
+          <span class="check">✓</span>
+          <div class="bc-title">自定义端点 <span class="badge">高级</span></div>
+          <div class="bc-sub">OpenAI 兼容 / Ollama</div>
+        </button>
       </div>
 
-      <label>
-        Model
-        <span class="field-hint">默认 flash，质量优先时选 pro</span>
-      </label>
-      <select id="deepseekModel"></select>
+      <!-- Chrome 自带 -->
+      <section class="panel" data-panel="chrome">
+        <div class="settings-card">
+          <h3>Chrome 自带 的设置 <span class="hint">built-in · Gemini Nano</span> <span class="badge">离线</span></h3>
+          <div class="free-note">
+            <span class="big">免</span>
+            <div>
+              <div class="t">不用 Key、不用端点、不花钱</div>
+              <p>走浏览器自带的本地模型，断网也能翻。质量一般，适合应急。首次使用某语言对会下载几十 MB 模型，之后离线可用。</p>
+            </div>
+          </div>
+          <p class="hint">自带模型没法塞提示词，调教不了。</p>
+        </div>
+      </section>
 
-      <label>
-        API Key
-        <span class="field-hint">在 platform.deepseek.com 注册并创建</span>
-      </label>
-      <input id="deepseekApiKey" type="password" placeholder="sk-..." />
+      <!-- DeepSeek -->
+      <section class="panel" data-panel="deepseek">
+        <div class="settings-card">
+          <h3>DeepSeek 的设置 <span class="hint">端点已内置</span></h3>
+
+          <label>API Key <span class="hint">本地存，不上报 · 在 platform.deepseek.com 创建</span></label>
+          <div class="input-eye">
+            <input id="deepseekApiKey" type="password" placeholder="sk-..." />
+            <button class="eye" type="button" data-eye="deepseekApiKey" title="显示 / 隐藏">👁</button>
+          </div>
+
+          <label>模型 <span class="hint">默认 flash，质量优先选 pro</span></label>
+          <select id="deepseekModel"></select>
+
+          <label>高级生成参数（JSON） <span class="hint">温度 / 最大 tokens 等，合法 JSON 对象 merge 进 body；thinking 已关</span></label>
+          <textarea id="deepseekExtraParams" class="short"></textarea>
+
+          <div class="prompt-block">
+            <div class="prompt-head">
+              <span class="title">提示词</span>
+              <span class="hint">告诉 DeepSeek 怎么翻</span>
+              <button class="reset-prompt" type="button" data-reset="deepseek">恢复默认</button>
+            </div>
+            <div class="presets" data-presets="deepseek"><span class="lead">挑个调调 →</span></div>
+            <label>System / 角色设定 <span class="hint">可选</span></label>
+            <textarea id="deepseek-system" class="short"></textarea>
+            <label>User / 翻译指令 <span class="hint">{ } 是占位符</span></label>
+            <textarea id="deepseek-promptTemplate"></textarea>
+            <div class="placeholders" data-ph-target="deepseek-promptTemplate">
+              能用的占位符（点一下塞进光标）：
+              <button class="ph-btn" type="button" data-ph="{source_text}">{source_text} 原文</button>
+              <button class="ph-btn" type="button" data-ph="{target_lang}">{target_lang} 目标</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 自定义端点 -->
+      <section class="panel" data-panel="custom">
+        <div class="settings-card">
+          <h3>自定义端点 的设置 <span class="hint">OpenAI 兼容 / Ollama</span></h3>
+
+          <label>端点（完整 chat completions URL）<span class="hint">如 Ollama: http://localhost:11434/v1/chat/completions</span></label>
+          <input id="custom-endpoint" type="url" placeholder="http://localhost:8000/v1/chat/completions" />
+
+          <label>API Key <span class="hint">本地存，不上报 · 本地模型可留空</span></label>
+          <div class="input-eye">
+            <input id="custom-apiKey" type="password" placeholder="sk-… 或留空" />
+            <button class="eye" type="button" data-eye="custom-apiKey" title="显示 / 隐藏">👁</button>
+          </div>
+
+          <label>模型 <span class="hint">跟服务端一致；留空则不发该字段</span></label>
+          <input id="custom-model" type="text" placeholder="qwen2.5:7b" />
+
+          <label>高级生成参数（JSON） <span class="hint">合法 JSON 对象 merge 进 body；空则不附加</span></label>
+          <textarea id="custom-extraParams" class="short"></textarea>
+
+          <div class="prompt-block">
+            <div class="prompt-head">
+              <span class="title">提示词</span>
+              <span class="hint">告诉它怎么翻</span>
+              <button class="reset-prompt" type="button" data-reset="custom">恢复默认</button>
+            </div>
+            <div class="presets" data-presets="custom"><span class="lead">挑个调调 →</span></div>
+            <label>System / 角色设定 <span class="hint">可选</span></label>
+            <textarea id="custom-system" class="short"></textarea>
+            <label>User / 翻译指令 <span class="hint">{ } 是占位符</span></label>
+            <textarea id="custom-promptTemplate"></textarea>
+            <div class="placeholders" data-ph-target="custom-promptTemplate">
+              能用的占位符（点一下塞进光标）：
+              <button class="ph-btn" type="button" data-ph="{source_text}">{source_text} 原文</button>
+              <button class="ph-btn" type="button" data-ph="{target_lang}">{target_lang} 目标</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </section>
 
-    <!-- 自定义 panel：完整字段 -->
-    <section class="panel" data-panel="custom">
-      <label>
-        Endpoint
-        <span class="field-hint">完整 chat completions URL</span>
-      </label>
-      <input id="custom-endpoint" type="url" placeholder="http://localhost:8000/v1/chat/completions" />
-
-      <label>
-        API Key
-        <span class="field-hint">可选；本地部署一般不需要</span>
-      </label>
-      <input id="custom-apiKey" type="password" placeholder="留空表示不发 Authorization 头" />
-
-      <label>
-        Model
-        <span class="field-hint">必须跟服务端启动时一致；留空则不发该字段</span>
-      </label>
-      <input id="custom-model" type="text" placeholder="mlx-community/Hy-MT2-1.8B-4bit" />
-
-      <label>
-        Prompt 模板
-        <span class="field-hint">占位符 <code>{target_lang}</code> / <code>{source_text}</code></span>
-      </label>
-      <textarea id="custom-promptTemplate"></textarea>
-
-      <label>
-        额外参数（JSON）
-        <span class="field-hint">合法 JSON 对象，merge 进请求 body；空则不附加</span>
-      </label>
-      <textarea id="custom-extraParams" style="min-height: 80px;"></textarea>
-
-      <div style="margin-top: 14px;">
-        <button class="action secondary" id="reset-custom" type="button">恢复默认 Prompt &amp; 参数</button>
+    <footer>
+      <span id="status">已存 · 改动按「就这么定了」保存</span>
+      <div class="footer-actions">
+        <a class="link" id="about" href="https://github.com/lakkiy/u-deaf-translate" target="_blank" rel="noopener">关于 / 反馈 →</a>
+        <button class="btn ghost" id="reset" type="button">恢复默认</button>
+        <button class="btn primary" id="save" type="button">就这么定了</button>
       </div>
-    </section>
-
-    <div class="row">
-      <button class="action" id="save">保存（设为当前后端）</button>
-      <span id="status"></span>
-    </div>
+    </footer>
   </main>
   <script type="module" src="./options.ts"></script>
 </body>

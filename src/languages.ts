@@ -45,6 +45,37 @@ export const LANGUAGE_NAMES: Record<string, string> = {
 };
 
 /**
+ * options / popup 下拉与 chips 用的常用目标语言。code 是传给 translate() 的 BCP-47，
+ * label 用于显示（用各语言本地写法或中文名，跟设计稿一致）。zh 拆成 zh-Hans / zh-Hant，
+ * Chrome Translator 的目标语言需要这种细分（'zh' 不够明确）。
+ */
+export const TARGET_LANGUAGE_OPTIONS: ReadonlyArray<{ code: string; label: string }> = [
+  { code: 'zh-Hans', label: '简体中文' },
+  { code: 'zh-Hant', label: '繁體中文' },
+  { code: 'en', label: 'English' },
+  { code: 'ja', label: '日本語' },
+  { code: 'ko', label: '한국어' },
+  { code: 'fr', label: '法语' },
+  { code: 'de', label: '德语' },
+  { code: 'es', label: '西班牙语' },
+  { code: 'ru', label: '俄语' },
+  { code: 'it', label: '意大利语' },
+  { code: 'pt', label: '葡萄牙语' },
+  { code: 'vi', label: '越南语' },
+  { code: 'th', label: '泰语' },
+  { code: 'ar', label: '阿拉伯语' },
+];
+
+/** 源语言下拉：「自动识别」+ 同一组语言。'auto' 走自动检测。 */
+export const SOURCE_LANGUAGE_OPTIONS: ReadonlyArray<{ code: string; label: string }> = [
+  { code: 'auto', label: '自动识别' },
+  ...TARGET_LANGUAGE_OPTIONS,
+];
+
+/** 目标语言区下方「常用目标」chips 展示哪几个（设计稿 ③ 那一排）。 */
+export const COMMON_TARGET_CODES: ReadonlyArray<string> = ['zh-Hans', 'en', 'ja', 'ko', 'zh-Hant'];
+
+/**
  * 取语言的人类可读中文名。先查完整 BCP-47 code（保留 zh-Hant 这种细分），
  * 没命中再退到主子标签（zh-CN → zh → 中文）。最后兜底用 Intl.DisplayNames，
  * 还不行就返回 code 本身。
