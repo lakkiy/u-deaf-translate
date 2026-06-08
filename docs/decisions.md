@@ -126,10 +126,13 @@ content script 直接 fetch 用户配置的 endpoint 受页面 CORS 影响（除
 `config.promptTemplate` 默认 Hy-MT2 推荐格式：`将以下文本翻译为 {target_lang}，注意只需要输出翻译后的结果，不要额外解释：\n\n{source_text}`。渲染用 `replaceAll`，不做转义——LLM 自身能处理特殊字符，用户填的模板我们尊重。Options 页面保存时如果模板缺占位符给软警告（仍允许保存）。一份 UI 设计稿把占位符画成 `{{text}}`/`{{target_lang}}`/`{{source_lang}}`（双括号 + 重命名 + 新增），**有意不采纳**：那只是设计稿的「样子」，改渲染会让所有用户已存的单括号模板失效（占位符不再被替换，译文里冒出裸 `{source_text}`），收益不抵破坏。`src/prompts.ts` 的预设文案也沿用单括号。
 
 ### System / User 双段 prompt：system 可选，空则退回单条 user
-`renderPrompt` 之外，`translateViaLlm` 在 `config.system` 非空时多发一条 `{role:'system'}`（同样走 renderPrompt，里面也能用占位符）；空 system 时与改动前逐字节等价（只发一条 user）。DeepSeek 默认 `deepseekSystem=''` 保持原有行为。新增的 config 字段（语言、deepseek 三件套、custom.system）全部走 `getConfig` 的默认值合并，**不做破坏性迁移**——老用户没有这些字段时透明补默认，已存配置和默认翻译行为不变。
+`renderPrompt` 之外，`translateViaLlm` 在 `config.system` 非空时多发一条 `{role:'system'}`（同样走 renderPrompt，里面也能用占位符）；空 system 时只发一条 user。自定义后端默认 `custom.system` = `DEFAULT_SYSTEM_PROMPT`（约束保留专有名词、产品名、人名、代码标识符原文，别强行翻译），新装即带；DeepSeek 默认 `deepseekSystem=''` 维持只发 user。新增的 config 字段（语言、deepseek 三件套、custom.system）走 `getConfig` 的默认值合并：曾存过 5 字段 custom（无 `system` key）的老用户会被补上这条默认 system——属良性增强，其余已存配置不动。
 
-### 自定义后端默认 `max_tokens` 用 1024 而非模型卡的 128
-`config.ts` 的 `DEFAULT_EXTRA_PARAMS` 早期照搬 Hy-MT2 模型卡示例的 `max_tokens: 128`（约 90 汉字）。划词短文本够用，但同一份 config 也供整页翻译用，长段落会被截断。提到 1024，与 DeepSeek 分支（`deepseek.ts` 的 `DEEPSEEK_EXTRA_PARAMS`）一致。
+### 自定义后端默认 `max_tokens` 用 4096
+`config.ts` 的 `DEFAULT_EXTRA_PARAMS` 早期照搬 Hy-MT2 模型卡示例的 `max_tokens: 128`（约 90 汉字），太小：同一份 config 也供整页翻译，长段落会被截断。先提到 1024，仍偏紧，最终定 4096——整页长段落留足额度。DeepSeek 分支（`DEEPSEEK_DEFAULT_EXTRA_PARAMS`）有自己的调优（`max_tokens 1024` + `thinking` 关），不跟随这个值。
+
+### 自定义端点默认指向本地 llama.cpp，UI 去掉 Ollama 字样
+`DEFAULT_CUSTOM.endpoint` 默认 `http://127.0.0.1:8080/v1/chat/completions`（llama.cpp server 默认地址），新装即填好，本地起了服务就能直接用。options 文案与占位符里原先的 "Ollama" 提示、`11434` 端口、`qwen2.5:7b` 这类 ollama tag 写法全部移除（按用户要求弃用 Ollama），示例统一改成 llama.cpp 的 `8080` 与 `Qwen3-8B` 这类裸模型名。
 
 ### 语言中文名手写表 + Intl 兜底
 `src/languages.ts` 手写 37 种 Hy-MT2 支持语言的 BCP-47 → 中文名映射（从模型卡复制）。手写比 `Intl.DisplayNames` 可控——`Intl` 把 `zh` 译为"汉语"而表里固定"中文"；某些少数语言 `Intl` 译名也有差异。`getLanguageDisplayName()` 先查表，没命中退到主子标签（`zh-CN` → `zh`），最后兜底 `Intl.DisplayNames`。

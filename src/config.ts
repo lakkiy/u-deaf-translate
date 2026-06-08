@@ -10,9 +10,14 @@ export const DEFAULT_PROMPT_TEMPLATE =
 {source_text}`;
 
 // 通用生成参数默认值。temperature/top_p/top_k 用 Hy-MT2 模型卡推荐值；
-// max_tokens 用 1024 而非模型卡示例的 128——整页翻译的长段落 128 token（约 90 汉字）会被截断。
+// max_tokens 用 4096——整页翻译的长段落要留足额度，太小会被截断。
 export const DEFAULT_EXTRA_PARAMS =
-  '{"max_tokens": 1024, "temperature": 0.7, "top_p": 0.6, "top_k": 20}';
+  '{"max_tokens": 4096, "temperature": 0.7, "top_p": 0.6, "top_k": 20}';
+
+// 默认 system prompt：约束模型保留专有名词原文，别强行翻译。
+// 走 renderPrompt 发出去（见 llm-backend.ts），非空才会附加 system 消息。
+export const DEFAULT_SYSTEM_PROMPT =
+  '你是专业翻译。专有名词、产品名、品牌名、人名、技术术语、代码标识符等保留原文，不要强行翻译。';
 
 // 源/目标语言默认值。源 'auto' = 自动检测（保持原有行为）；目标 'zh-Hans' = 简体中文。
 // 二者都可在 options / popup 修改。pickTargetLanguage 仍保留「源与目标同族 → 翻向另一边」的智能反向。
@@ -57,10 +62,10 @@ export interface BackendConfig {
 }
 
 export const DEFAULT_CUSTOM: CustomBackendFields = {
-  endpoint: '',
+  endpoint: 'http://127.0.0.1:8080/v1/chat/completions',
   apiKey: '',
   model: '',
-  system: '',
+  system: DEFAULT_SYSTEM_PROMPT,
   promptTemplate: DEFAULT_PROMPT_TEMPLATE,
   extraParams: DEFAULT_EXTRA_PARAMS,
 };

@@ -266,7 +266,7 @@
         <button class="backend-card" data-backend="custom" role="tab" type="button">
           <span class="check">✓</span>
           <div class="bc-title">自定义端点 <span class="badge">高级</span></div>
-          <div class="bc-sub">OpenAI 兼容 / Ollama</div>
+          <div class="bc-sub">OpenAI 兼容</div>
         </button>
       </div>
 
@@ -325,10 +325,10 @@
       <!-- 自定义端点 -->
       <section class="panel" data-panel="custom">
         <div class="settings-card">
-          <h3>自定义端点 的设置 <span class="hint">OpenAI 兼容 / Ollama</span></h3>
+          <h3>自定义端点 的设置 <span class="hint">OpenAI 兼容</span></h3>
 
-          <label>端点（完整 chat completions URL）<span class="hint">如 Ollama: http://localhost:11434/v1/chat/completions</span></label>
-          <input id="custom-endpoint" type="url" placeholder="http://localhost:8000/v1/chat/completions" />
+          <label>端点（完整 chat completions URL）<span class="hint">如 llama.cpp: http://127.0.0.1:8080/v1/chat/completions</span></label>
+          <input id="custom-endpoint" type="url" placeholder="http://127.0.0.1:8080/v1/chat/completions" />
 
           <label>API Key <span class="hint">本地存，不上报 · 本地模型可留空</span></label>
           <div class="input-eye">
@@ -337,7 +337,7 @@
           </div>
 
           <label>模型 <span class="hint">跟服务端一致；留空则不发该字段</span></label>
-          <input id="custom-model" type="text" placeholder="qwen2.5:7b" />
+          <input id="custom-model" type="text" placeholder="Qwen3-8B" />
 
           <label>高级生成参数（JSON） <span class="hint">合法 JSON 对象 merge 进 body；空则不附加</span></label>
           <textarea id="custom-extraParams" class="short"></textarea>
