@@ -1,0 +1,34 @@
+Root descriptor: <main> id="" class=""
+Total candidate paragraph count: 30
+
+--- Paragraphs ---
+1. [p] Wave is a $1.7B company with 70 engineers1 whose product is a CRUD app that adds
+2. [p] Stackoverflow scaled up a monolith to good effect (2013 architecture / 2016 arch
+3. [p] There are some kinds of applications that have demands that would make a simple 
+4. [p] Despite the unreasonable effectiveness of simple architectures, most press goes 
+5. [p] Our architecture is so simple I’m not even going to bother with an architectural
+6. [p] We’re currently using boring, synchronous, Python, which means that our server p
+7. [p] Rather than take on the complexity of making our monolith async we farm out long
+8. [p] A place where we can’t be as boring as we’d like is with our on-prem datacenters
+9. [p] Another area is with software we’ve had to build (instead of buy). When we start
+10. [p] A mistake we made in the first few months of operation that has some cost today 
+11. [p] Some choices that we’re unsure about (in that these are things we’re either thin
+12. [p] Some areas where we’re happy with our choices even though they may not sound lik
+13. [p] As for using GraphQL, we believe the pros outweigh the cons for us:
+14. [p] Pros:
+15. [li] Self-documentation of exact return type
+16. [li] Code generation of exact return type leads to safer clients
+17. [li] GraphiQL interactive explorer is a productivity win
+18. [li] Our various apps (user app, support app, Wave agent app, etc.) can mostly share 
+19. [li] Composable query language allows clients to fetch exactly the data they need in 
+20. [li] Eliminates bikeshedding over what counts as a RESTful API
+21. [p] Cons:
+22. [li] GraphQL libraries weren’t great when we adopted GraphQL (the base Python library
+23. [li] Default GQL encoding is redundant and we care a lot about limiting size because 
+24. [p] As for Kubernetes, we use Kubernetes because knew that, if the business was succ
+25. [p] An area where there’s unavoidable complexity for us is with telecom integrations
+26. [p] By keeping our application architecture as simple as possible, we can spend our 
+27. [p] Thanks to Ben Kuhn, Sierra Rotimi-Williams, June Seif, Kamal Marhubi, Ruthie Bye
+28. [li] If you want to compute a ratio, we had closer to 40 engineers when we last fundr
+29. [li] There are business models for which this wouldn't be true, e.g., if we were an a
+30. [li] Despite the classic advice about how one shouldn’t compete on price, we (among m

@@ -1,0 +1,100 @@
+Root descriptor: <div> id="" class="body.markup"
+Total candidate paragraph count: 96
+
+--- Paragraphs ---
+1. [p] The annual prediction market conference was earlier this month. This was the yea
+2. [p] I met an AI superforecaster startup founder who told me his AI had turned $35 in
+3. [p] In fact, I believe all of these people. The extending-lines-on-graphs community 
+4. [p] But what happens next?
+5. [h3] Using An AI Superforecaster
+6. [p] Before getting into details, what exactly are we talking about?
+7. [p] An AI superforecaster is an AI - usually a frontier model like ChatGPT or Claude
+8. [p] This might make more sense with an example. FutureSearch - the company that clai
+9. [p] For a test question - some Silicon Valley philanthropists recently started a pro
+10. [p] By two minutes in, the AI had deployed three subagents, read 16 websites, and (a
+11. [p] After five minutes, it had its answer: the chance of US respiratory infections h
+12. [p] It explained:
+13. [p] The agents’ reasoning centers on a tough conjunctive chain of requirements that 
+14. [p] 1: The biology is brutal. 200+ cold-causing viruses, 150+ rhinovirus serotypes a
+15. [p] 2: Intercept’s own timeline is tight. Their roadmap projects commercialization 5
+16. [p] 3: Adoption is a wildcard. For a mild illness, compliance with regular nasal spr
+17. [p] 4: Measurement may be impossible. The US lacks routine population-wide cold surv
+18. [p] The initiative is genuinely novel and credible, but halving cold frequency in 14
+19. [p] You could follow up by forecasting a softer threshold (e.g., 25% reduction by 20
+20. [p] …and, in case I wanted to learn more, cited its 212 sources. The forecast had ta
+21. [p] But is it true? Ideally we would wait until 2040 and see. For now, I started by 
+22. [p] 8.8% compared to FutureSearch’s 7%, not bad!
+23. [p] Are either of these true? I asked a human superforecaster to predict this questi
+24. [h3] Man Vs. Machine
+25. [p] Of course, it would be even better to do the same experiment at scale and figure
+26. [p] But measuring forecasting ability is hard. You can’t say something like “it gets
+27. [p] The forecasting website Metaculus matches AIs against humans and each other on a
+28. [p] The Metaculus Community Prediction is a “wisdom of crowds” style aggregation of 
+29. [p] But in a recent blog post, Metaculus adds context. The graph above only measures
+30. [p] If you extend the dotted green line on the graph to July 2026, then add nine mon
+31. [p] But the claim that scaffolded AIs are nine months ahead of base models is itself
+32. [p] Seems like time for a head-to-head matchup. The Metaculus Cup - the World Cup of
+33. [p] Humans took the top two spots, but Preseen’s AI came in third. Every forecasting
+34. [p] We can confirm by looking at the intermediate results of the ongoing summer Meta
+35. [p] Of humans who placed in the top ten during spring, 2/10 - benshindel and MarcosO
+36. [p] Industrial Revolution folklore tells of John Henry, the great steel-driver, who 
+37. [p] This is a forecasting question, so all the forecasting nerds at Metaculus have o
+38. [p] If bots aren’t soundly beating top humans, why are people able to tell me storie
+39. [p] First, the best human superforecasters in the world probably also beat the stock
+40. [p] Second, AIs are faster and more diligent than humans. Plenty of people beat pred
+41. [p] Third, and most speculatively, AI may have a special advantage in finance. This 
+42. [p] (“If this is true, then why aren’t all the top trading firms rushing to switch t
+43. [p] I think the best summary of the evidence is that the best human superforecasters
+44. [h3] Living In The World Where Bots Approximately Equal Top Humans
+45. [p] Suppose that AIs don’t improve any further. What would happen? Would anything ha
+46. [p] Yes. Getting information out of top human superforecasters is hard. First, you n
+47. [p] If you read about a cool new charity that’s trying to end the common cold, even 
+48. [p] But there are three more differences that I think will start out underappreciate
+49. [p] First, superforecasting feels like the sort of thing AIs should be doing. One of
+50. [p] Second, AIs are a standardized branded product, which makes them easier to expla
+51. [p] Third, AIs aren’t trying to screw you over. Human superforecasters are mostly ve
+52. [h3] Preparing For The World Where Bots Are Significantly Better Than Top Humans
+53. [p] Bots are now slightly below or equal to top humans. And bots improve at 0.9 Meta
+54. [p] Do we believe the trendline? So far, AIs have vastly surpassed humans in a few l
+55. [p] We offer a prediction based on this view of human abilities. We think there are 
+56. [p] Concretely, we propose two such areas: forecasting and persuasion. We predict th
+57. [p] I generally disagree with Sayash and Arvind, but this is the prediction of their
+58. [p] If the trendline does keep going, things start changing quickly. Finance gets tr
+59. [p] Savvy institutions will cede some of their strategic thinking to AI. Before star
+60. [p] The government isn’t usually classified as a savvy institution, but we might hop
+61. [p] But the dream is that, armed with AI superforecasters, the public and the politi
+62. [p] Here I am sobered by the current state of AI in the discourse. Every day, I see 
+63. [p] The optimistic argument runs less through an immediate direct effect, and more t
+64. [h3] Wait, Should We Rely On Good AI Superforecasters?
+65. [p] Superforecasters are heavily-tested on simple multiple-choice questions like “wh
+66. [p] We have less data about how they deal with long-term, society-wide, and truly we
+67. [p] I asked the AI superforecasters the probability of a US-China treaty to slow dow
+68. [p] Still, it’s a bad look. Here I am, writing about how other people will be dumb a
+69. [h3] Superforecasting As The Opinion Layer Of AI
+70. [p] One interesting outcome would be for superforecasting to turn into the opinion l
+71. [p] Current AI isn’t supposed to have opinions. It’s not supposed to tell you who to
+72. [p] This is mostly good. I don’t want pushy evangelist AI telling me to accept Jesus
+73. [p] Still, it’s disappointing, right? We have these new kinds of minds which are in 
+74. [p] Superforecasting is in a fertile middle ground between opinion and fact. We can 
+75. [p] “AI, how should I vote in the next presidential election?” I don’t think an AI s
+76. [p] So far this is the domain of specially-scaffolded AIs built by small startups. B
+77. [p] Eventually, you ought to be able to ask “AI, should I marry this person?” And ag
+78. [p] Unlike most forms of AI, I think this one is a straight win. In the years to com
+79. [h2] And What About Prediction Markets?
+80. [p] For an essay on forecasting, this one sure has gone through a lot of text while 
+81. [p] You, personally, should not play the prediction markets in the AI future. You’ll
+82. [p] But I think prediction markets themselves will remain an important piece of epis
+83. [p] Suppose your AI forecaster says that Vance will be a great president, but mine s
+84. [p] Prediction markets solve this, in two ways. First, regardless of how everyone tr
+85. [p] But the AI prediction markets of the future should be far superior to the human 
+86. [p] As the importance of being able to propose your exact personal question goes up,
+87. [p] This, then, is my prediction for the AI superforecaster future: for basic questi
+88. [h2] Can I Use An AI Superforecaster Now?
+89. [p] This part will sort of be an advertisement, sorry.
+90. [p] The only AI superforecaster that I know of which is currently open for public us
+91. [p] Preseen, the other AI superforecaster I’ve highlighted in this article, is curre
+92. [p] If you don’t want to sign up for either of those services, standard AIs have som
+93. [p] Post any interesting results in the comments - especially if they’re obviously w
+94. [p] For example, suppose I ask “conditional on Democrats nominating Newsom/AOC, what
+95. [p] After I sent a draft of this post to FutureSearch, they added explicitly-causal 
+96. [p] If you have another publicly available AI superforecaster similar to these which

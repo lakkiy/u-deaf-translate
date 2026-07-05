@@ -1,0 +1,38 @@
+Root descriptor: <article> id="" class=""
+Total candidate paragraph count: 34
+
+--- Paragraphs ---
+1. [h1] Nasa launches mission to save falling space telescope
+2. [div] Pallab GhoshScience Correspondent
+3. [figcaption] Artist's impression of the Swift observatory which was built to study the cosmos
+4. [p] A Nasa-funded spacecraft has been sent into space to catch a falling telescope.
+5. [p] The Swift observatory detects some of the most powerful explosions in the Univer
+6. [p] The small space telescope will be intercepted by the LINK craft, which will atte
+7. [p] The rescue mission, launched on Friday, has never been attempted before, and Dr 
+8. [p] "But Nasa obviously thinks it's worth a go. And the science community is hopeful
+9. [p] The Swift observatory is falling because increased solar activity has pushed out
+10. [p] When it was first launched it sat in an orbit at 373 miles (600 km) and has now 
+11. [p] Satellites fall to Earth and burn up on re-entry all the time. But Swift is scie
+12. [p] The observatory, which is the size of a large car, was launched in 2004, with th
+13. [p] These are caused by the final, violent deaths of giant stars and by the collisio
+14. [p] They release in just a few seconds the same energy as the Sun will give out over
+15. [p] In short, there is nothing like Swift, and Nasa deemed that it was a spacecraft 
+16. [div] NASA/Swift/A. Beardmore (University of Leicester)
+17. [figcaption] In 2022, Swift captured this image of a gamma-ray burst from a massive star dyin
+18. [p] The engineers of a young company, Katalyst Space Technologies, from Flagstaff, A
+19. [p] They had less than a year to launch their mission before Swift fell below the al
+20. [p] "What the Katalyst team has accomplished in just eight months is extraordinary. 
+21. [figcaption] Engineers from Katalyst Space Technologies built their rescue robot in record ti
+22. [p] The LINK spacecraft, which Lee's team came up with, is a three-armed robot, abou
+23. [p] Launched on Friday, the spacecraft will spend the next few weeks waking up its s
+24. [p] Although the Pegasus XL rocket on which it rode has flung LINK close to Swift's 
+25. [p] The rescue spacecraft, itself moving, has to home in on a moving target. But abo
+26. [p] Using its cameras and sensors, LINK will slide in close and circle the telescope
+27. [p] "The Swift telescope was never designed to be caught in space and have its orbit
+28. [p] Then comes the nail-biting moment: the catch, when LINK's three arms reach out.
+29. [p] If all goes to plan, LINK will take hold of Swift and take it back to where it c
+30. [p] "LINK will fire its engines to slowly raise the orbit of the telescope again to 
+31. [p] "It will be a very slow, graceful lift, not a sudden boost to a higher orbit."
+32. [p] Over the following two to three months, LINK will fire its small thrusters and g
+33. [p] The mission is ambitious and has never been carried out before. A lot will have 
+34. [p] Stay tuned.

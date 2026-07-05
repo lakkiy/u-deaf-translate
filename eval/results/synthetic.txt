@@ -1,0 +1,12 @@
+Root descriptor: <article> id="" class=""
+Total candidate paragraph count: 8
+
+--- Paragraphs ---
+1. [h1] Article Title
+2. [p] This is the first paragraph of the real article content, it has enough letters.
+3. [p] This is the second paragraph, also with plenty of real content in it.
+4. [h2] Self-linking Heading
+5. [p] This is the third paragraph of the article body text right here.
+6. [li] List item one with real text content.
+7. [li] List item two with real text content.
+8. [p] Table paragraph should be excluded entirely.

@@ -1,0 +1,11 @@
+Root descriptor: <main> id="bbc-main" class=""
+Total candidate paragraph count: 7
+
+--- Paragraphs ---
+1. [h1] News
+2. [h2] More to explore
+3. [h2] World Cup 2026
+4. [h2] Most watched
+5. [h2] Also in news
+6. [h2] Most read
+7. [h2] Sport

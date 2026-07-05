@@ -1,0 +1,18 @@
+{
+  // eval/ 不在根 tsconfig 的 include 里（bun 直接跑，不参与扩展构建）。
+  // 这份配置只为 IDE 类型检查服务：bun 全局（import.meta.dir / process）+ DOM 类型。
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["bun"],
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["*.ts", "../src/page-content.ts"]
+}

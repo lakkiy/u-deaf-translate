@@ -1,0 +1,36 @@
+Root descriptor: <article> id="" class="markdown-body.entry-content.container-lg"
+Total candidate paragraph count: 32
+
+--- Paragraphs ---
+1. [h1] Visual Studio Code - Open Source ("Code - OSS")
+2. [h2] The Repository
+3. [p] This repository ("Code - OSS") is where we (Microsoft) develop the Visual Studio
+4. [h2] Visual Studio Code
+5. [p] Visual Studio Code is a distribution of the Code - OSS repository with Microsoft
+6. [p] Visual Studio Code combines the simplicity of a code editor with what developers
+7. [p] Visual Studio Code is updated monthly with new features and bug fixes. You can d
+8. [h2] Contributing
+9. [p] There are many ways in which you can participate in this project, for example:
+10. [li] Submit bugs and feature requests, and help us verify as they are checked in
+11. [li] Review the documentation and make pull requests for anything from typos to new c
+12. [p] If you are interested in fixing issues and contributing directly to the code bas
+13. [h2] Feedback
+14. [li] Ask a question on Stack Overflow
+15. [li] Connect with the extension author community on GitHub Discussions or Slack
+16. [li] Follow @code and let us know what you think!
+17. [p] See our wiki for a description of each of these channels and information on some
+18. [h2] Related Projects
+19. [p] Many of the core components and extensions to VS Code live in their own reposito
+20. [h2] Bundled Extensions
+21. [p] VS Code includes a set of built-in extensions located in the extensions folder, 
+22. [h2] Development Container
+23. [p] This repository includes a Visual Studio Code Dev Containers / GitHub Codespaces
+24. [p] For Dev Containers, use the Dev Containers: Clone Repository in Container Volume
+25. [li] If you already have VS Code and Docker installed, you can also click here to get
+26. [p] For Codespaces, install the GitHub Codespaces extension in VS Code, and use the 
+27. [p] Docker / the Codespace should have at least 4 cores and 6 GB of RAM (8 GB recomm
+28. [h2] Code of Conduct
+29. [p] This project has adopted the Microsoft Open Source Code of Conduct. For more inf
+30. [h2] License
+31. [p] Copyright (c) Microsoft Corporation. All rights reserved.
+32. [p] Licensed under the MIT license.

@@ -1,0 +1,27 @@
+Root descriptor: <main> id="content" class="layout__content"
+Total candidate paragraph count: 23
+
+--- Paragraphs ---
+1. [h1] IntersectionObserver
+2. [p] This feature is well established and works across many devices and browser versi
+3. [p] * Some parts of this feature may have varying levels of support.
+4. [p] The IntersectionObserver interface of the Intersection Observer API provides a w
+5. [p] When an IntersectionObserver is created, it's configured to watch for given rati
+6. [h2] Constructor
+7. [p] Creates a new IntersectionObserver object which will execute a specified callbac
+8. [h2] Instance properties
+9. [p] An integer indicating the minimum delay between notifications from this observer
+10. [p] The Element or Document whose bounds are used as the bounding box when testing f
+11. [p] An offset rectangle applied to the root's bounding box when calculating intersec
+12. [p] An offset rectangle applied to each scroll container on the path from intersecti
+13. [p] A list of thresholds, sorted in increasing numeric order, where each threshold i
+14. [p] A boolean indicating whether this IntersectionObserver is checking that the targ
+15. [h2] Instance methods
+16. [p] Stops the IntersectionObserver object from observing any target.
+17. [p] Tells the IntersectionObserver a target element to observe.
+18. [p] Returns an array of IntersectionObserverEntry objects for all observed targets.
+19. [p] Tells the IntersectionObserver to stop observing a particular target element.
+20. [h2] Examples
+21. [h2] Specifications
+22. [h2] Browser compatibility
+23. [h2] See also

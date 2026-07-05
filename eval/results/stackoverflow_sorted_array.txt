@@ -1,0 +1,558 @@
+Root descriptor: <div> id="mainbar" class=""
+Total candidate paragraph count: 554
+
+--- Paragraphs ---
+1. [p] In this C++ code, sorting the data (before the timed region) makes the primary l
+2. [li] Without std::sort(data, data + arraySize);, the code runs in 11.54 seconds.
+3. [li] With the sorted data, the code runs in 1.93 seconds.
+4. [p] (Sorting itself takes more time than this one pass over the array, so it's not a
+5. [p] Initially, I thought this might be just a language or compiler anomaly, so I tri
+6. [p] With a similar but less extreme result.
+7. [p] My first thought was that sorting brings the data into the cache, but that's sil
+8. [li] What is going on?
+9. [li] Why is processing a sorted array faster than processing an unsorted array?
+10. [p] The code is summing up some independent terms, so the order should not matter.
+11. [h2] Related / follow-up Q&As with more modern C++ compilers
+12. [li] Why is processing an unsorted array the same speed as processing a sorted array 
+13. [li] gcc optimization flag -O3 makes code slower than -O2 - branchless scalar with cm
+14. [div] 10.9k99 gold badges7171 silver badges113113 bronze badges
+15. [div] asked Jun 27, 2012 at 13:51
+16. [div] 507k5656 gold badges506506 silver badges551551 bronze badges
+17. [li] 167 Another observation is that you don't need to sort the array, but you just n
+18. [li] 70 @screwnut here's an experiment which would show that partitioning is sufficie
+19. [li] 63 Btw. on Apple M1 the code runs in 17 sec unsorted, and in 7 sec sorted, so th
+20. [li] 55 @RomanYavorskyi: It depends on the compiler. If they make branchless asm for 
+21. [li] 38 @screwnut: To be fair, though, it still wouldn't be worth partitioning first,
+22. [h2] 26 Answers 26
+23. [div] Sorted by: Reset to default
+24. [div] Highest score (default) Trending (recent votes count more) Date modified (newest
+25. [p] You are a victim of branch prediction fail.
+26. [h2] What is Branch Prediction?
+27. [p] Consider a railroad junction:
+28. [p] Image by Mecanismo, via Wikimedia Commons. Used under the CC-By-SA 3.0 license.
+29. [p] Now for the sake of argument, suppose this is back in the 1800s - before long-di
+30. [p] You are a blind operator of a junction and you hear a train coming. You have no 
+31. [p] Trains are heavy and have a lot of inertia, so they take forever to start up and
+32. [p] Is there a better way? You guess which direction the train will go!
+33. [li] If you guessed right, it continues on.
+34. [li] If you guessed wrong, the driver will stop, back up, and yell at you to flip the
+35. [p] If you guess right every time, the train will never have to stop. If you guess w
+36. [p] Consider an if-statement: At the processor level, it is a branch instruction:
+37. [p] You are a processor and you see a branch. You have no idea which way it will go.
+38. [p] Modern processors are complicated and have long pipelines. This means they take 
+39. [p] Is there a better way? You guess which direction the branch will go!
+40. [li] If you guessed right, you continue executing.
+41. [li] If you guessed wrong, you need to flush the pipeline and roll back to the branch
+42. [p] If you guess right every time, the execution will never have to stop. If you gue
+43. [p] This is branch prediction. I admit it's not the best analogy since the train cou
+44. [p] How would you strategically guess to minimize the number of times that the train
+45. [p] In other words, you try to identify a pattern and follow it. This is more or les
+46. [p] Most applications have well-behaved branches. Therefore, modern branch predictor
+47. [p] Further reading: "Branch predictor" article on Wikipedia.
+48. [h2] As hinted from above, the culprit is this if-statement:
+49. [p] Notice that the data is evenly distributed between 0 and 255. When the data is s
+50. [p] This is very friendly to the branch predictor since the branch consecutively goe
+51. [p] Quick visualization:
+52. [p] However, when the data is completely random, the branch predictor is rendered us
+53. [p] What can be done?
+54. [p] If the compiler isn't able to optimize the branch into a conditional move, you c
+55. [p] Replace:
+56. [p] with:
+57. [p] This eliminates the branch and replaces it with some bitwise operations.
+58. [p] (Note that this hack is not strictly equivalent to the original if-statement. Bu
+59. [p] Benchmarks: Core i7 920 @ 3.5 GHz
+60. [p] C++ - Visual Studio 2010 - x64 Release
+61. [p] Java - NetBeans 7.1.1 JDK 7 - x64
+62. [p] Observations:
+63. [li] With the Branch: There is a huge difference between the sorted and unsorted data
+64. [li] With the Hack: There is no difference between sorted and unsorted data.
+65. [li] In the C++ case, the hack is actually a tad slower than with the branch when the
+66. [p] A general rule of thumb is to avoid data-dependent branching in critical loops (
+67. [p] Update:
+68. [p] GCC 4.6.1 with -O3 or -ftree-vectorize on x64 is able to generate a conditional 
+69. [p] (Or somewhat fast: for the already-sorted case, cmov can be slower especially if
+70. [p] VC++ 2010 is unable to generate conditional moves for this branch even under /Ox
+71. [p] Intel C++ Compiler (ICC) 11 does something miraculous. It interchanges the two l
+72. [p] If you give the Intel compiler the branchless code, it just outright vectorizes 
+73. [li] Clang also vectorizes the if() version, as will GCC 5 and later with -O3, even t
+74. [p] This goes to show that even mature modern compilers can vary wildly in their abi
+75. [div] 382k5353 gold badges763763 silver badges1k1k bronze badges
+76. [div] answered Jun 27, 2012 at 13:56
+77. [div] 473k4646 gold badges343343 silver badges338338 bronze badges
+78. [h2] 23 Comments
+79. [div] wait a second, doesnt shifting negative values to the right yield implementation
+80. [li] Copy link
+81. [div] Incidently branch prediction failure can also be exploited by a program to obtai
+82. [li] Copy link
+83. [div] @Mycotina, I'm no expert, but what I understand is: the processor needs multiple
+84. [li] Copy link
+85. [div] @Mycotina It's easier to understand when you think of the instruction pipeline c
+86. [li] Copy link
+87. [div] @C.Binair Primarily it's runtime, i.e. processor predicts branches while executi
+88. [li] Copy link
+89. [p] Branch prediction.
+90. [p] With a sorted array, the condition data[c] >= 128 is first false for a streak of
+91. [div] answered Jun 27, 2012 at 13:54
+92. [div] 185k1919 gold badges319319 silver badges436436 bronze badges
+93. [h2] 12 Comments
+94. [div] Does branch prediction work better on sorted arrays vs. arrays with different pa
+95. [li] Copy link
+96. [div] So basically everything I conventionally learned about big-O is out of the windo
+97. [li] Copy link
+98. [div] @AgrimPathak That depends. For not too large input, an algorithm with higher com
+99. [li] Copy link
+100. [div] When does branch prediction takes place? When does language will know that array
+101. [li] Copy link
+102. [div] @FilipBartuzi Branch prediction takes place in the processor, below the language
+103. [li] Copy link
+104. [p] The reason why performance improves drastically when the data is sorted is that 
+105. [p] Now, if we look at the code
+106. [p] we can find that the meaning of this particular if... else... branch is to add s
+107. [p] In C, thus C++, the statement, which would compile directly (without any optimiz
+108. [p] While maintaining readability, we can check the speedup factor.
+109. [p] On an Intel Core i7-2600K @ 3.4 GHz and Visual Studio 2010 Release Mode, the ben
+110. [p] The result is robust in multiple tests. We get a great speedup when the branch r
+111. [p] Now let's look more closely by investigating the x86 assembly they generate. For
+112. [p] max1 uses the conditional branch if... else ...:
+113. [p] max2 uses the ternary operator ... ? ... : ...:
+114. [p] On an x86-64 machine, GCC -S generates the assembly below.
+115. [p] max2 uses much less code due to the usage of instruction cmovge. But the real ga
+116. [p] So why does a conditional move perform better?
+117. [p] In a typical x86 processor, the execution of an instruction is divided into seve
+118. [p] In a branch case, the following instruction is determined by the preceding one, 
+119. [p] In a conditional move case, the execution of conditional move instruction is div
+120. [p] The book Computer Systems: A Programmer's Perspective, second edition explains t
+121. [p] Sometimes, some modern compilers can optimize our code to assembly with better p
+122. [div] 12711 silver badge99 bronze badges
+123. [div] answered Jun 28, 2012 at 2:14
+124. [div] 48.4k1010 gold badges5959 silver badges9292 bronze badges
+125. [h2] 4 Comments
+126. [li] Copy link
+127. [div] You forgot to enable optimization; it's not useful to benchmark debug builds tha
+128. [li] Copy link
+129. [div] I think calling the ternary operator "branchless" is the wrong idea here. You ar
+130. [li] Copy link
+131. [div] shouldn't it be int max2(int a, int b) { return a >= b ? a : b } so the value ma
+132. [li] Copy link
+133. [p] If you are curious about even more optimizations that can be done to this code, 
+134. [p] Starting with the original loop:
+135. [p] With loop interchange, we can safely change this loop to:
+136. [p] Then, you can see that the if conditional is constant throughout the execution o
+137. [p] Then, you see that the inner loop can be collapsed into one single expression, a
+138. [p] That one is 100,000 times faster than before.
+139. [div] 53122 gold badges88 silver badges2727 bronze badges
+140. [div] answered Jul 3, 2012 at 2:25
+141. [div] 33.9k1111 gold badges6161 silver badges101101 bronze badges
+142. [h2] 4 Comments
+143. [div] This is delightful, but for anyone who might not understand the joke: the purpos
+144. [li] Copy link
+145. [div] @NameSurname - your edit didn't actually change the syntax highlighting; Java/C+
+146. [li] Copy link
+147. [div] can we just lump it all into just sum += data[j] * (data[j] >= 128) * 100000, an
+148. [li] Copy link
+149. [div] "Great explanation! The branch prediction analogy really helped me understand wh
+150. [li] Copy link
+151. [p] No doubt some of us would be interested in ways of identifying code that is prob
+152. [p] Sorted:
+153. [p] Unsorted:
+154. [p] Drilling down into the line-by-line output produced by cg_annotate we see for th
+155. [p] Sorted:
+156. [p] Unsorted:
+157. [p] This lets you easily identify the problematic line - in the unsorted version the
+158. [p] Alternatively, on Linux you can use the performance counters subsystem to accomp
+159. [p] Sorted:
+160. [p] Unsorted:
+161. [p] It can also do source code annotation with dissassembly.
+162. [p] See the performance tutorial for more details.
+163. [div] 31k2222 gold badges111111 silver badges134134 bronze badges
+164. [div] answered Oct 12, 2012 at 5:53
+165. [div] 241k4242 gold badges344344 silver badges481481 bronze badges
+166. [h2] 3 Comments
+167. [div] This is scary, in the unsorted list, there should be 50% chance of hitting the a
+168. [li] Copy link
+169. [div] @tall.b.lo: The 25% is of all branches - there are two branches in the loop, one
+170. [li] Copy link
+171. [div] Note that benchmarking / profiling un-optimized ("debug mode") code is normally 
+172. [li] Copy link
+173. [p] I just read up on this question and its answers, and I feel an answer is missing
+174. [p] A common way to eliminate branch prediction that I've found to work particularly
+175. [p] This approach works in general if:
+176. [li] it's a small table and is likely to be cached in the processor, and
+177. [li] you are running things in a quite tight loop and/or the processor can preload th
+178. [p] Background and why
+179. [p] From a processor perspective, your memory is slow. To compensate for the differe
+180. [p] Like branch prediction, this was optimized in the Pentium processors: the proces
+181. [p] Fortunately for us, if the memory access pattern is predictable, the processor w
+182. [p] The first thing we need to know is what is small? While smaller is generally bet
+183. [p] Constructing a table
+184. [p] So we've figured out that we can create a small table. Next thing to do is get a
+185. [p] In this case: >= 128 means we can keep the value, < 128 means we get rid of it. 
+186. [p] Managed languages
+187. [p] You might wonder why this works well in managed languages. After all, managed la
+188. [p] Well, not exactly... :-)
+189. [p] There has been quite some work on eliminating this branch for managed languages.
+190. [p] In this case, it's obvious to the compiler that the boundary condition will neve
+191. [p] If you run into trouble with lookups in managed languages -- the key is to add a
+192. [p] The result of this case
+193. [div] 13.8k88 gold badges8181 silver badges148148 bronze badges
+194. [div] answered Apr 24, 2013 at 6:26
+195. [div] 31.3k33 gold badges6262 silver badges9494 bronze badges
+196. [h2] Comments
+197. [p] As data is distributed between 0 and 255 when the array is sorted, around the fi
+198. [p] The question is: What makes the above statement not execute in certain cases as 
+199. [p] Let's do some bench marking to understand it better
+200. [p] The performance of an if-statement depends on whether its condition has a predic
+201. [p] Let’s measure the performance of this loop with different conditions:
+202. [p] Here are the timings of the loop with different true-false patterns:
+203. [p] A “bad” true-false pattern can make an if-statement up to six times slower than 
+204. [p] So there is no doubt about the impact of branch prediction on performance!
+205. [div] 6,15555 gold badges4545 silver badges6666 bronze badges
+206. [div] answered Feb 15, 2013 at 7:24
+207. [div] 18k44 gold badges3131 silver badges3333 bronze badges
+208. [h2] 11 Comments
+209. [div] @MooingDuck 'Cause it won't make a difference - that value can be anything, but 
+210. [li] Copy link
+211. [div] @cst1992: Right now his slowest timing is TTFFTTFFTTFF, which seems, to my human
+212. [li] Copy link
+213. [div] @MooingDuck To a human eye, "TTFFTTFFTTFF" is a predictable sequence, but what w
+214. [li] Copy link
+215. [div] @steveha: I think you're making assumptions about how the CPU branch predictor w
+216. [li] Copy link
+217. [div] @steveha: The Two-level adaptive predictor could lock onto the TTFFTTFF pattern 
+218. [li] Copy link
+219. [p] One way to avoid branch prediction errors is to build a lookup table, and index 
+220. [p] But in this case, we know values are in the range [0, 255] and we only care abou
+221. [p] By using the 0/1 value of the decision bit as an index into an array, we can mak
+222. [p] This code wastes half of the adds but never has a branch prediction failure. It'
+223. [p] But in my testing, an explicit lookup table was slightly faster than this, proba
+224. [p] In this case, the lookup table was only 256 bytes, so it fits nicely in a cache 
+225. [p] The technique of indexing into an array, instead of using an if statement, can b
+226. [p] this library would do something like:
+227. [p] Here's a link to this code: Red Black Trees, Eternally Confuzzled
+228. [div] 3111 gold badge33 silver badges66 bronze badges
+229. [div] answered Jul 22, 2013 at 8:29
+230. [div] 77.2k2121 gold badges9494 silver badges120120 bronze badges
+231. [h2] 11 Comments
+232. [div] Right, you can also just use the bit directly and multiply (data[c]>>7 - which i
+233. [li] Copy link
+234. [div] I think indexing with the 0/1 value will probably be faster than an integer mult
+235. [li] Copy link
+236. [div] Possibly I'm missing something but in your j equals 0 or 1 method why don't you 
+237. [li] Copy link
+238. [div] @steveha Multiplication should be faster, I tried looking it up in the Intel boo
+239. [li] Copy link
+240. [div] @steveha P.S.: another possible answer would be int c = data[j]; sum += c & -(c 
+241. [li] Copy link
+242. [p] In the sorted case, you can do better than relying on successful branch predicti
+243. [p] Indeed, the array is partitioned in a contiguous zone with data < 128 and anothe
+244. [p] Something like (unchecked)
+245. [p] or, slightly more obfuscated
+246. [p] A yet faster approach, that gives an approximate solution for both sorted or uns
+247. [div] 3,1243838 silver badges2828 bronze badges
+248. [div] answered Jul 24, 2013 at 7:57
+249. [h2] 3 Comments
+250. [div] sum= 3137536 - clever. That's kinda obviously not the point of the question. The
+251. [li] Copy link
+252. [div] user1196549 Over a year ago
+253. [div] @DeadMG: this is indeed not the standard dichotomic search for a given key, but 
+254. [li] Copy link
+255. [div] Binary search for the cut-point is unnecessary, just start summing from the end 
+256. [li] Copy link
+257. [p] The above behavior is happening because of Branch prediction.
+258. [p] To understand branch prediction one must first understand an Instruction Pipelin
+259. [p] The the steps of running an instruction can be overlapped with the sequence of s
+260. [p] Generally, modern processors have quite long (and wide) pipelines, so many instr
+261. [p] But for ease let's consider a simple in-order pipeline with these 4 steps only. 
+262. [li] IF -- Fetch the instruction from memory
+263. [li] ID -- Decode the instruction
+264. [li] EX -- Execute the instruction
+265. [li] WB -- Write back to CPU register
+266. [p] 4-stage pipeline in general for 2 instructions.
+267. [p] Moving back to the above question let's consider the following instructions:
+268. [p] Without branch prediction, the following would occur:
+269. [p] To execute instruction B or instruction C the processor will have to wait (stall
+270. [p] Without prediction: when if condition is true:
+271. [p] Without prediction: When if condition is false:
+272. [p] As a result of waiting for the result of instruction A, the total CPU cycles spe
+273. [p] So what is branch prediction?
+274. [p] Branch predictor will try to guess which way a branch (an if-then-else structure
+275. [p] In case of a correct guess, the pipeline looks something like this:
+276. [p] If it is later detected that the guess was wrong then the partially executed ins
+277. [p] In the OP's code, the first time when the conditional, the branch predictor does
+278. [li] All the elements are less than 128
+279. [li] All the elements are greater than 128
+280. [li] Some starting new elements are less than 128 and later it become greater than 12
+281. [p] Let us assume that the predictor will always assume the true branch on the first
+282. [p] So in the first case, it will always take the true branch since historically all
+283. [p] In all these cases the failure will be too less in number and as a result, only 
+284. [p] But in case of a random unsorted array, the prediction will need to discard the 
+285. [p] Further reading:
+286. [li] Dan Luu's article on branch prediction (which covers older branch predictors, no
+287. [li] Branch Prediction and the Performance of Interpreters - Don’t Trust Folklore - 2
+288. [li] Static branch prediction on newer Intel processors - what CPUs actually do when 
+289. [div] 382k5353 gold badges763763 silver badges1k1k bronze badges
+290. [div] answered Jul 3, 2015 at 15:35
+291. [div] 11.3k22 gold badges2020 silver badges3030 bronze badges
+292. [h2] 2 Comments
+293. [div] how are two instructions executed together? is this done with separate cpu cores
+294. [li] Copy link
+295. [div] Sergey.quixoticaxis.Ivanov
+296. [div] @M.kazemAkhgary It's all inside one logical core. If you're interested, this is 
+297. [li] Copy link
+298. [p] An official answer would be from
+299. [li] Books: J.L. Hennessy, D.A. Patterson: Computer architecture: a quantitative appr
+300. [li] Articles in scientific publications: T.Y. Yeh, Y.N. Patt made a lot of these on 
+301. [p] You can also see from this lovely diagram why the branch predictor gets confused
+302. [p] Each element in the original code is a random value
+303. [p] so the predictor will change sides as the std::rand() blow.
+304. [p] On the other hand, once it's sorted, the predictor will first move into a state 
+305. [div] 21k1313 gold badges7878 silver badges106106 bronze badges
+306. [div] answered Oct 11, 2015 at 21:05
+307. [div] 16.2k33 gold badges2727 silver badges4040 bronze badges
+308. [h2] Comments
+309. [p] In the same line (I think this was not highlighted by any answer) it's good to m
+310. [p] or similarly:
+311. [p] Both likely() and unlikely() are in fact macros that are defined by using someth
+312. [p] Normally this kind of optimizations are mainly found in hard-real time applicati
+313. [div] 7,39677 gold badges6464 silver badges7676 bronze badges
+314. [div] answered Sep 23, 2015 at 14:57
+315. [div] 17.5k88 gold badges5050 silver badges6969 bronze badges
+316. [h2] Comments
+317. [p] Frequently used Boolean operations in C++ produce many branches in the compiled 
+318. [p] Boolean variables are overdetermined in the sense that all operators that have B
+319. [p] This is typically implemented by the compiler in the following way:
+320. [p] This code is far from optimal. The branches may take a long time in case of misp
+321. [p] char is used instead of bool in order to make it possible to use the bitwise ope
+322. [p] ~ can not be used for NOT. Instead, you can make a Boolean NOT on a variable whi
+323. [p] can be optimized to:
+324. [p] a && b cannot be replaced with a & b if b is an expression that should not be ev
+325. [p] Using bitwise operators is more advantageous if the operands are variables than 
+326. [p] is optimal in most cases (unless you expect the && expression to generate many b
+327. [div] 2,54022 gold badges2222 silver badges4040 bronze badges
+328. [div] answered Oct 10, 2015 at 0:30
+329. [div] 9,64322 gold badges1919 silver badges1818 bronze badges
+330. [h2] Comments
+331. [p] That's for sure!...
+332. [p] Branch prediction makes the logic run slower, because of the switching which hap
+333. [p] If the array is sorted, your condition is false at the first step: data[c] >= 12
+334. [p] Look at the image I created for you below. Which street is going to be finished 
+335. [p] So programmatically, branch prediction causes the process to be slower...
+336. [p] Also at the end, it's good to know we have two kinds of branch predictions that 
+337. [p] 1. Static
+338. [p] 2. Dynamic
+339. [p] See also this document from Intel, which says:
+340. [p] Static branch prediction is used by the microprocessor the first time a conditio
+341. [p] In order to effectively write your code to take advantage of these rules, when w
+342. [div] 42.4k1616 gold badges128128 silver badges180180 bronze badges
+343. [div] answered Jun 18, 2017 at 11:40
+344. [div] 106k2727 gold badges280280 silver badges173173 bronze badges
+345. [h2] Comments
+346. [p] This question has already been answered excellently many times over. Still I'd l
+347. [p] Recently this example (modified very slightly) was also used as a way to demonst
+348. [p] The link is here: A Demonstration of Self-Profiling
+349. [div] 46k77 gold badges7575 silver badges125125 bronze badges
+350. [div] answered Jan 12, 2017 at 1:50
+351. [div] 6,76544 gold badges3131 silver badges4040 bronze badges
+352. [h2] 2 Comments
+353. [div] That is a very interesting article (in fact, I have just read all of it), but ho
+354. [li] Copy link
+355. [div] @PeterMortensen I am a bit flummoxed by your question. For example here is one r
+356. [li] Copy link
+357. [p] As what has already been mentioned by others, what behind the mystery is Branch 
+358. [p] I'm not trying to add something but explaining the concept in another way. There
+359. [p] In computer architecture, a branch predictor is a digital circuit that tries to 
+360. [p] Two-way branching is usually implemented with a conditional jump instruction. A 
+361. [p] Based on the described scenario, I have written an animation demo to show how in
+362. [li] Without the Branch Predictor.
+363. [p] Without branch prediction, the processor would have to wait until the conditiona
+364. [p] The example contains three instructions and the first one is a conditional jump 
+365. [p] It will take 9 clock cycles for 3 instructions to be completed.
+366. [li] Use Branch Predictor and don't take a conditional jump. Let's assume that the pr
+367. [p] It will take 7 clock cycles for 3 instructions to be completed.
+368. [li] Use Branch Predictor and take a conditional jump. Let's assume that the predict 
+369. [p] It will take 9 clock cycles for 3 instructions to be completed.
+370. [p] The time that is wasted in case of a branch misprediction is equal to the number
+371. [p] As you can see, it seems we don't have a reason not to use Branch Predictor.
+372. [p] It's quite a simple demo that clarifies the very basic part of Branch Predictor.
+373. [div] answered Nov 6, 2017 at 16:15
+374. [div] 11.2k77 gold badges5858 silver badges7575 bronze badges
+375. [h2] 4 Comments
+376. [div] Almost as good as the Intel marketing animations, and they were obsessed not jus
+377. [li] Copy link
+378. [div] @mckenzm: out-of-order speculative exec makes branch prediction even more valuab
+379. [li] Copy link
+380. [div] Did you make the example app in JavaFX?
+381. [li] Copy link
+382. [div] @HannaMcquaig No, it's made by Swing. The code is available at github.com/Eugene
+383. [li] Copy link
+384. [p] Branch-prediction gain!
+385. [p] It is important to understand that branch misprediction doesn't slow down progra
+386. [p] Whenever there's an if-else \ switch statement, the expression has to be evaluat
+387. [p] A branch instruction can cause a computer to begin executing a different instruc
+388. [p] That being said, the compiler tries to predict the outcome prior to it being act
+389. [h3] Visualization:
+390. [p] Let's say you need to pick route 1 or route 2. Waiting for your partner to check
+391. [p] While flushing pipelines is super fast, nowadays taking this gamble is worth it.
+392. [div] answered Aug 4, 2017 at 10:07
+393. [div] 15.1k1212 gold badges6060 silver badges9393 bronze badges
+394. [h2] 1 Comment
+395. [div] While flushing pipelines is super fast Not really. It's fast compared to a cache
+396. [li] Copy link
+397. [p] On ARM, there is no branch needed, because every instruction has a 4-bit conditi
+398. [p] The inner loop for this algorithm would look something like the following in ARM
+399. [p] But this is actually part of a bigger picture:
+400. [p] CMP opcodes always update the status bits in the Processor Status Register (PSR)
+401. [p] The condition testing field and the optional "set status bit" field can be combi
+402. [li] ADD R1, R2, R3 performs R1 = R2 + R3 without updating any status bits.
+403. [li] ADDGE R1, R2, R3 performs the same operation only if a previous instruction that
+404. [li] ADDS R1, R2, R3 performs the addition and then updates the N, Z, C and V flags i
+405. [li] ADDSGE R1, R2, R3 performs the addition only if the GE test is true, and then su
+406. [p] Most processor architectures do not have this ability to specify whether or not 
+407. [p] When you don't have to branch, you can avoid the time cost of flushing the pipel
+408. [p] If you have ever wondered why ARM has been so phenomenally successful, the brill
+409. [div] answered Dec 22, 2017 at 13:13
+410. [div] 9,38033 gold badges5757 silver badges5353 bronze badges
+411. [h2] 7 Comments
+412. [div] The other innovation in ARM is the addition of the S instruction suffix, also op
+413. [li] Copy link
+414. [div] Not adding the S suffix allows you to have several conditional instructions in a
+415. [li] Copy link
+416. [div] Note that the OP is not including the time to sort in their measurement. It's pr
+417. [li] Copy link
+418. [div] BTW, you could save an instruction in the loop by indexing relative to the end o
+419. [li] Copy link
+420. [div] (ARM predicated execution truly NOPs the instruction, so you can even use it on 
+421. [li] Copy link
+422. [p] Besides the fact that the branch prediction may slow you down, a sorted array ha
+423. [p] You can have a stop condition instead of just checking the value, this way you o
+424. [div] answered Nov 23, 2017 at 14:28
+425. [div] 49.8k2525 gold badges156156 silver badges191191 bronze badges
+426. [h2] 5 Comments
+427. [div] Right, but the setup cost of sorting the array is O(N log N), so breaking early 
+428. [li] Copy link
+429. [div] Depends how many times you sort the data compared to how many times you loop on 
+430. [li] Copy link
+431. [div] Yes, that's exactly the point I made in my first comment :-) You say "The branch
+432. [li] Copy link
+433. [div] One significant optimization though would be to do only "half a quicksort", sort
+434. [li] Copy link
+435. [div] Came here looking for this exact answer. Early abort is the main reason to sort.
+436. [li] Copy link
+437. [p] Sorted arrays are processed faster than an unsorted array, due to a phenomena ca
+438. [p] The branch predictor is a digital circuit (in computer architecture) trying to p
+439. [p] Making a wrong prediction leads to going back to the previous step, and executin
+440. [p] The answer to your question is very simple.
+441. [p] In an unsorted array, the computer makes multiple predictions, leading to an inc
+442. [p] Sorted Array: Straight Road
+443. [p] Unsorted Array: Curved Road
+444. [p] Branch prediction: Guessing/predicting which road is straight and following it w
+445. [p] Although both the roads reach the same destination, the straight road is shorter
+446. [p] Also I want to cite @Simon_Weaver from the comments:
+447. [p] It doesn’t make fewer predictions - it makes fewer incorrect predictions. It sti
+448. [div] 46k77 gold badges7575 silver badges125125 bronze badges
+449. [div] answered Dec 7, 2017 at 17:28
+450. [div] 2,80711 gold badge1212 silver badges2222 bronze badges
+451. [h2] Comments
+452. [p] I tried the same code with MATLAB 2011b with my MacBook Pro (Intel i7, 64 bit, 2
+453. [p] The results for the above MATLAB code are as follows:
+454. [p] The results of the C code as in @GManNickG I get:
+455. [p] Based on this, it looks MATLAB is almost 175 times slower than the C implementat
+456. [div] 31k2222 gold badges111111 silver badges134134 bronze badges
+457. [div] answered Dec 30, 2012 at 16:16
+458. [div] 5,2621313 gold badges4747 silver badges5959 bronze badges
+459. [h2] 3 Comments
+460. [div] Just for the sake of completeness, this is probably not how you'd implement that
+461. [li] Copy link
+462. [div] Matlab does automatic parallelization / vectorization in many situations but the
+463. [li] Copy link
+464. [div] Does matlab use native numbers or a mat lab specific implementation (infinite am
+465. [li] Copy link
+466. [p] The assumption by other answers that one needs to sort the data is not correct.
+467. [p] The following code does not sort the entire array, but only 200-element segments
+468. [p] Sorting only k-element sections completes the pre-processing in linear time, O(n
+469. [p] This also "proves" that it has nothing to do with any algorithmic issue such as 
+470. [div] answered Dec 9, 2018 at 6:18
+471. [div] 3,43433 gold badges3131 silver badges4444 bronze badges
+472. [h2] 9 Comments
+473. [div] I don't really see how this proves anything? The only thing you have shown is th
+474. [li] Copy link
+475. [div] If you just want to implement the algorithm efficiently over unsorted data, you 
+476. [li] Copy link
+477. [div] Both comments above seem to ignore the general algorithmic issues and complexity
+478. [li] Copy link
+479. [div] Also note that specialized hardware instructions do not help if the computation 
+480. [li] Copy link
+481. [div] Just for the record, since our previous comments have been nuked, I don't think 
+482. [li] Copy link
+483. [p] Bjarne Stroustrup's Answer to this question:
+484. [p] That sounds like an interview question. Is it true? How would you know? It is a 
+485. [p] So, I tried with a vector of a million integers and got:
+486. [p] I ran that a few times to be sure. Yes, the phenomenon is real. My key code was:
+487. [p] At least the phenomenon is real with this compiler, standard library, and optimi
+488. [p] One reason is branch prediction: the key operation in the sort algorithm is “if(
+489. [p] Another reason is that when the vector is already sorted, we never need to move 
+490. [p] Quicksort (and sorting in general) is a complex study that has attracted some of
+491. [p] If you want to write efficient code, you need to know a bit about machine archit
+492. [h2] 2 Comments
+493. [div] This seems to be missing the point of the question, and is answering whether sor
+494. [li] Copy link
+495. [div] which is still 2 different questions - most algos still have major speed differe
+496. [li] Copy link
+497. [p] This question is rooted in branch prediction models on CPUs. I'd recommend readi
+498. [p] Increasing the Instruction Fetch Rate via Multiple Branch Prediction and a Branc
+499. [p] When you have sorted elements, branch prediction easily predicts correctly excep
+500. [div] 382k5353 gold badges763763 silver badges1k1k bronze badges
+501. [div] answered Oct 23, 2019 at 21:35
+502. [div] 1,72522 gold badges1313 silver badges2626 bronze badges
+503. [h2] 4 Comments
+504. [div] The instructions stay hot in the CPU's L1 instruction cache regardless of mispre
+505. [li] Copy link
+506. [div] Also, in a simple CPU that has an "instruction register", it definitely always n
+507. [li] Copy link
+508. [div] The paper gives a general idea of how it handles fetching coordinated data as in
+509. [li] Copy link
+510. [div] I'm not talking about what the linked paper says, I'm talking about the sentence
+511. [li] Copy link
+512. [p] An answer for quick and simple understanding (read the others for more details)
+513. [p] This concept is called branch prediction
+514. [p] Branch prediction is an optimization technique that predicts the path the code w
+515. [p] The problem arises in conditional branching, where there are two possible paths 
+516. [p] When the prediction was true, the optimization technique worked out.
+517. [p] When the prediction was false, to explain it in a simple way, the code statement
+518. [p] As common sense suggests, predictions of something sorted are way more accurate 
+519. [p] branch prediction visualisation:
+520. [p] sorted unsorted
+521. [div] 662k235235 gold badges2.1k2.1k silver badges1.6k1.6k bronze badges
+522. [div] answered Nov 5, 2021 at 10:05
+523. [div] 53966 silver badges1111 bronze badges
+524. [h2] 1 Comment
+525. [div] The should be a change near the middle of the sorted train-track / path of execu
+526. [li] Copy link
+527. [p] Or perhaps instead of using bit-wise ops, just completely prune away the filteri
+528. [p] pre-make a counter array one for each byte's ordinal, convert the loop to a mind
+529. [blockquote] ++counter_array[data[i]]
+530. [p] If a handy foreach() type construct is available in your particular language, th
+531. [blockquote] for (_ in data) ++counter_array[data[_]]
+532. [p] After iterating the input input, just start at 128, and iterate it to the highes
+533. [blockquote] for (_ = 128; _ < 256; ++_) __ += counter_array[_] * _
+534. [p] And scale it by the 100,000 only once at the return statement. In order to bypas
+535. [div] 3,12766 silver badges1515 bronze badges
+536. [h2] 7 Comments
+537. [div] The 100k outer loop is a repeat loop for benchmarking, to make the time easy to 
+538. [li] Copy link
+539. [div] C++ does have for (auto x : data) to iterate over values of a container. An arra
+540. [li] Copy link
+541. [div] A histogram is obviously ideal for answering multiple queries, like sum of value
+542. [li] Copy link
+543. [div] would something like this make it faster sum += (x >= 128) * x - at least by any
+544. [li] Copy link
+545. [div] Putting sum += x in the middle of the ternary makes it logically identical to an
+546. [li] Copy link
+547. [div] Thank god Yoda doesn't speak syntax jargon. Otherwise he'd be like :::::::::::::
+548. [li] Copy link
+549. [div] Sorting makes the loop faster because of CPU branch prediction. When the data is
+550. [li] Copy link
+551. [p] Start asking to get answers
+552. [p] Find the answer to your question by asking.
+553. [p] Explore related questions
+554. [p] See similar questions with these tags.

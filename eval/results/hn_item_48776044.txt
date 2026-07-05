@@ -1,0 +1,433 @@
+Root descriptor: <table> id="" class="comment-tree"
+Total candidate paragraph count: 429
+
+--- Paragraphs ---
+1. [p] Ok, so 100 people can all drive to the store, or one delivery truck can drive to
+2. [p] When I worked from the office, centralized retail was very convenient and hardly
+3. [p] The next revolution would be to standardize reusable packaging, that same daily 
+4. [p] The amount of optimization and process improvements required to 'beat that' will
+5. [p] Your car is very useful an generalized and adaptable.
+6. [p] So are you.
+7. [p] Only you know what you really want, the nuances of comparison, seeing things rea
+8. [p] Economies of scale work extremely well for Costco.
+9. [p] 'Home Delivery' is the operational argument that does not work very well.
+10. [p] If there were a hyper standard for mailboxes and automated delivery for tons of 
+11. [p] Home Delivery - in most situations - is effectively a first world luxury.
+12. [p] FYI - meal delivery depends on loopholes on migration, healthcare, work permits,
+13. [p] Unless you meant it's a luxury only in the first world, which I could get behind
+14. [div] The next revolution is zoning reform so it's legal to build shopping people want
+15. [p] Realistically you aren't going to reach more than 250k skus within a 20 minute w
+16. [p] With only 250k skus, you're still ordering from outside of walking distance ofte
+17. [p] EDIT: It's probably possible to reach 250k if you heavily lean on books/cds/dvds
+18. [div] 250k skus seems pretty arbitrary. What's the significance of this number? A bode
+19. [div] Much more expensive when you have stores in the city so much cheaper to buy in l
+20. [p] Even environment aside, from a purely self-interested perspective, I would much 
+21. [p] One problem with the bins for normal items is that rarely will they be packed to
+22. [p] And once they do so they'll have solved two big problems! :)
+23. [div] As someone who worked on logistics optimization algorithms for Amazon, I’ll just
+24. [p] So they were optimizing for something, but it definitely wasn’t packaging effici
+25. [p] Results would doubtless be different if they were optimizing for minimal environ
+26. [p] Another amusing one was when they packed a somewhat delicate pantry food item in
+27. [div] Bin packing is theoretically NP Hard but practically solved all the time on real
+28. [div] I see what you did there. Touché.
+29. [p] They’d slice cold cuts in New Jersey, and have USPS bring it to upstate NY and d
+30. [p] I will note like the other person though that I often get like "just one thing i
+31. [p] ... I see someone else has posted this elsewhere in the comment thread. Eh, I mi
+32. [div] The other boxes would slide around anyways after your box was delivered tho?
+33. [p] Plus, I seem to recall that they also optimize by giving the driver a route to f
+34. [div] I quite often get inappropriately sized boxes.
+35. [p] I'm not sure how true this is, nor how reasonable it sounds since I don't know w
+36. [p] And if I'm wrong about my source, the other person who I could possibly have hea
+37. [p] Either way, I believe that's correct, that the oversized boxes are that size bec
+38. [div] I do too, but also sometimes the boxes are the correct size. With standardized b
+39. [p] The funniest thing I remember though is that the totes weren't optimized for the
+40. [p] It’s been a long time. Very plausible that we did get the ones with the styrofoa
+41. [p] (at their physical stores)
+42. [p] You'd think Amazon could to that at one of their physical partners' locations.
+43. [div] "Amazon bins" ... or maybe just reusable bins that aren't specific to a company?
+44. [p] FWIW most Amazon packages I get nowadays are just heavy paper anyways.
+45. [p] How I would imagine this work if there was will (I don’t think there is)… there 
+46. [p] You get your stuff delivered in a reusable bag. They charge you 1 dollar for the
+47. [div] In fairness, Amazon does seem to have improved in this regard. There's less plas
+48. [div] Order whole foods from them. They will pack 6 things in 4 reusable insulated bag
+49. [div] This must vary by region. We get paper bags with a reflective liner. They’re re-
+50. [div] In the US, most people don't their shopping near the office. In Renton (commute 
+51. [div] Amazon already delivers to the house next door to yours. The incremental cost of
+52. [p] This assumes folks get deliveries on the same day and largely only from Amazon. 
+53. [div] Amazon already gives a discount if you're willing to wait for them to batch deli
+54. [p] If feels like there are Amazon households that get a delivery every or every oth
+55. [div] Anything to avoid walkable neighborhoods, naturally.
+56. [div] When all the “walkable” neighborhoods embraced chaos and crime, yes, there are n
+57. [p] Others have mentioned the parking lot sizes. If we wanted the best of both world
+58. [p] Finally, Costco delivers if you really don't want to leave your house. Now we ar
+59. [div] Exact opposite for me, a weekend day is explicitly a Costco day to rack up for t
+60. [p] But yeah the wrong day, and it's 30m at least.
+61. [div] People go to Costco and only get a couple of things and not a cart load? You've 
+62. [div] When I lived closer to a Costco and had my membership, I used to do what I calle
+63. [p] (I have two good sized panniers and can end up with ~$150 of foodstuffs packed w
+64. [div] We live two hours from the closest Costco. We make a day of it once every 45-60 
+65. [div] We’re an hour out and I had to do a deep dive and finally admit to myself that t
+66. [p] I don't know which of us is the more common scenario. What other sorts of things
+67. [div] Nobody does Costco and something else. That’s insane. Like going to IKEA and the
+68. [div] Depends on your Costco, I can make a 10m run after work (to from parking lot) if
+69. [div] I live 5 min from my closest Costco, and I go 2-3 times per week for a handful o
+70. [div] I actually saw a man check out at Costco once with just a chicken and some milk 
+71. [div] Did he at least get a hot dog on the way out?!
+72. [p] Do you want an 18-wheeler truck to do your curb-side deliveries? Or a personal t
+73. [div] If I had a nickel for every time an 18 wheeler dropped something off at my house
+74. [div] I think to clarify your point, curbside pickup is the curb of the store/warehous
+75. [p] So you still have to go to the store but it can be an in-and-out if everything w
+76. [div] Those individual trips to the store are typically for more than single items, an
+77. [div] Technically, so is the home delivery. It is usually a delivery truck full of pac
+78. [div] Right, 100 trucks delivering 100 single items to 100 homes, or 100 consumers eac
+79. [div] It is more like 1 truck delivering 100 single items to 100 homes.
+80. [div] No, not if you're matching the volume of items between the two scenarios.
+81. [p] One truck per delivery service
+82. [div] It's a little my complicated than that though, I'm very rarely driving to the st
+83. [div] Not groceries, which I'm typically buying locally anyway. But I'll frequently dr
+84. [div] When the Amazon truck drives down my street it’s always stopping at 5 houses or 
+85. [div] If you have ever watched a deliver truck on their tracking app to crawl its way 
+86. [p] Fedex/UPS cost for a single package is roughly ~$13.95 (this was ~5 years ago wh
+87. [div] Also, in the photo, it shows a huge car park. The stores, have to support large 
+88. [p] On the other end of the spectrum, the notorious (in the Bay Area) Sunnyvale Cost
+89. [div] Put solar panels over ‘em
+90. [div] Put the entire building over 'em. And solar panels over the building. The Target
+91. [div] The exepense is what's not to like. Far cheaper to build a single-story warehous
+92. [div] Only because stores that have large parking lots are in cheap land areas that ar
+93. [p] In lieu of Costco, my family buys all of the big and non-perishable stuff at a g
+94. [div] In most places in the US, land is cheap enough that paved surface parking is che
+95. [div] I have yet to see a Costco not filled to the brim.
+96. [p] It results in fewer miles driven and more being done per mile driven. Each parki
+97. [div] This is in comparison to the delivery center methodology by e commerce where the
+98. [p] Your SUV with a Costco haul is probably driving less distance per person and car
+99. [p] Amortizing fuel per item or distance per item I'm betting the personal vehicle w
+100. [p] (also the likes of Amazon are terrible to employees in order to make margin whil
+101. [p] Amazon goes to great lengths to make purchasing exceedingly easy and fast. And w
+102. [p] This was detailed in a 2024 Netflix documentary that interviewed a former Amazon
+103. [p] She disclosed, brace yourself, that Amazon encourages people to buy stuff they d
+104. [p] Unlike Costco, Amazon does not disclose data on its environmental impact, e.g., 
+105. [p] Is driving to a warehouse, retrieving items in bulk, paying for them and driving
+106. [p] Of course some HN reply will say "yes", implying that the former Amazon VP's sto
+107. [p] Let the reader decide who to beileve
+108. [p] Anyway, my 55 gallon drum of mayonnaise is starting to go bad, got to make a run
+109. [p] And how Costco can never be relied on having the same item outside of those core
+110. [p] That’s on purpose to induce you to wander the store more and “discover” items fo
+111. [p] Costco absolutely optimizes as much as it can to induce impulse buys. Pretending
+112. [p] Costco is also world renowned as a meme for peak American style consumerism. I s
+113. [p] Whether you see that statement and read it as "obviously the delivery truck is b
+114. [p] I live a bit more than a mile away from Costco. I often buy 25-60 items, for eac
+115. [p] If I lived an hour away that calculation turns out entirely differently, at leas
+116. [p] I saw commentary from a garment designer that there is enough clothing currently
+117. [p] At least in person people can try the stuff on and ensure it fits.
+118. [div] I never thought about it but doorstep delivery actually saves on emissions in a 
+119. [div] One issue is Amazon doesn’t appear to optimize for “fewest trucks trips to the b
+120. [p] How full are those Amazon trucks, and how many deliveries are they each making o
+121. [p] They aren't optimizing for "fewest truck trips to the block", they are optimizin
+122. [p] That may include many trucks running to the same location, or it may not. You ca
+123. [p] Right but a truck could be full of not 100 packages for 100 houses, but 100 pack
+124. [p] They presort regionally and the trucks at the delivery stations are loaded with 
+125. [p] They do other stuff too. They schlep heavy stuff on UPS, and hazardous or liquid
+126. [div] Cuts both ways. When I go to the grocery store, I buy 30-40 items at once. When 
+127. [div] But there are 100+ items for other people on the route on each delivery truck ea
+128. [p] Either we can view single-packaged items as a gap in the goods procurement proce
+129. [p] I wouldn’t feel comfortable saying it averages out to being better or worse.
+130. [p] Tesla uses something like 15kWh per 100km, so 5 mile drive is something like 1.1
+131. [div] Yeah I botched that. It's around 1.5kw/mile for an ICE car.
+132. [div] It might, but I go to Costco every 3-4 weeks. If I depended on Amazon for everyt
+133. [p] Amazon's biggest benefit is that anything can be sold there. So now more problem
+134. [p] As for the delivery? There are more efficient ways to send deliveries. People ca
+135. [p] People don't care. How is that Amazon's fault?
+136. [div] So you replace a loop that delivers last mile goods to a lot of cars going decen
+137. [div] I agree. It depends on how well the pickup points are located. Often Amazon can 
+138. [div] I wonder if Amazon eventually gets cut out by 3D printing/replicators for imitab
+139. [div] For the average person an Amazon package has amazingly lower emissions than driv
+140. [div] I'd be curious further upstream as well. How would it compare from whatever shar
+141. [div] How many items does the average consumer buy when they go to the store? It's not
+142. [div] Carbon offset credits bought by Bezos' Yacht holdco.
+143. [p] Amazon is also specifically incentivized to be efficient at scale, it impacts th
+144. [p] I honestly can imagine that Costco is overall more efficient than Amazon, especi
+145. [div] I honestly don't know where the nearest Costco is but it's nowhere convenient.
+146. [p] there are people who regularly go out of their way to drive to their favorite st
+147. [p] individuals are irrationally inefficient in dozens of ways that large businesses
+148. [p] No one is driving an hour out of their way for groceries.
+149. [p] And even the F150 truck example: if they are driving 30 miles to work, but 10 mi
+150. [p] Integrating routes throughout the day that matches your driving habits is a basi
+151. [p] > that F150 going 5 extra miles is more efficient than a Prius driving 25 miles 
+152. [p] but that's not what's happening, Amazon isn't driving a Prius to your individual
+153. [p] Individual people make inefficient preferential decisions all the time, because 
+154. [p] The vast majority of those Amazon packages are for one thing. When the inefficie
+155. [p] It's unlikely that a daily commuter would go to Costco for just one gallon of mi
+156. [p] Anyone grabbing just some extra milk or toothpaste is likely grabbing it at an e
+157. [p] Non-perishables are fine on a single-unit purchase because again, they're not ju
+158. [p] I know where you're coming from, but there's a reason this whole model exists, a
+159. [p] Costco shoppers buy a lot at a time. Because Costco forces you to buy 4 tubes of
+160. [p] For Costco, the efficiency is the shear size of the shopping carts and shear mas
+161. [p] You literally can't buy only one bar of soap or one toothbrush like you can from
+162. [p] In contrast, I can look out and see the Amazon packages in my neighbors doors. I
+163. [div] Costco's trademark is pretty large minimum size containers which reduces transpo
+164. [div] great for specialized items you want to pay premium for, awful for paper towels
+165. [div] Back in the day people weren't driving to Walmart or whatever all the time to pi
+166. [div] But most people go to Costco for bulk buys. amazon deliveries are almost daily s
+167. [div] Prices tell this activity is very efficient and not burdensome on society.
+168. [p] In a society where everybody is already driving to school, work, food, shopping 
+169. [p] Having redundant logistics companies (USPS, FedEx, UPS, DHL, Amazon, WalMart, Ub
+170. [p] Also, there is the game theory aspect. When a consumer mentally thinks they can 
+171. [p] A clever person solves a problem; a wise person avoids it.
+172. [p] I think it holds a lot of truth in engineering.
+173. [div] Both spectrums are hard. Solving last mile is really really hard, but if you do 
+174. [div] They also offer some degree of curation, so your dollar goes further by volume/w
+175. [p] Return policy is also pain free. You can pretty much return anything you don't l
+176. [p] They used to have amazingly generous return policy for electronics. Since some p
+177. [div] Amazon largely being a dumb marketplace, a faster-shipping AliExpress/Temu, real
+178. [p] Could you just place 3 different orders to 3 different vendors? Sure.
+179. [p] Could you just drive to the grocery for 2 bananas and then to Costco for the big
+180. [p] But likely you will not. Which is why Amazon pulls a Trillion in revenue.
+181. [div] When some of your products are fraudulent all your products are fraudulent. Amaz
+182. [div] You do you, I and most others don't have issues, hence their revenue.
+183. [p] So since I'm 100% definitely going to the grocery store for produce, at minimum,
+184. [p] I’m not so sure their retail piece is the part that’s making them big money.
+185. [p] Retail has famously razor thin margins.
+186. [p] But their cash flow came in handy when AWS needed 300B in cash for gpus. Nobody 
+187. [p] My point wasn’t that they don’t do a lot of volume; it’s that their retail busin
+188. [p] I wouldn’t be surprised (though have not looked) if DoorDash (with DashMart), Ub
+189. [p] If you do 2 deliveries per hour (like Uber Eats / door dash), you pay essentiall
+190. [p] So no in the US, Amazon is not threatened by such delivery services.
+191. [p] Now if you go to China, the equation flips. Which is why Amazon failed completel
+192. [div] Thats the story they tell investors because investors love a growing tech compan
+193. [div] Do you have anything to indicate this? A source or any analysis?
+194. [p] The only order I did for temu, everything arrived completely DOA
+195. [div] It’s also amazing how bad delivery services are in general. The incentives for t
+196. [div] I think it probably depends too on what different people's living situations are
+197. [div] But they don't avoid solving it, they offer it by partnering with instacart.
+198. [div] They also ship a lot of items.
+199. [div] It seems costco can deliver HEAVY things that amazon can't (economically, afaict
+200. [p] They even rebated $100 because it got scuffed during installation :-)
+201. [p] I am not sure if costco's model could allow it but especially for amazon, if the
+202. [p] There was also a company I think who spent hundreds of millions of dollars (IIRC
+203. [p] Another fun fact: when Amazon was first established, one of the largest loophole
+204. [p] So within the start, what they did was found out there was 1 book which was cons
+205. [p] There was also the fact that Barnes and nobles created their website and everyon
+206. [p] My conclusion is that Retail works in strange ways and timing matters a lot.
+207. [p] Also there are so many little facts within the book and it might be one of the f
+208. [p] Here is a graph that I was making of a very limited connection graph of companie
+209. [p] I think that i have gone a bit too afar from my original comment but I sometimes
+210. [p] Probably thinking of HomeGrocer or WebVan (which bought out the former and then 
+211. [p] > (which bought out the former and then went bankrupt too)
+212. [p] ironic, does make you think if the clock has reached full circle in terms of bub
+213. [div] I would have said cloud and AI but dot com probably works too.
+214. [div] Sounds Costco not paying for externalities.
+215. [div] Incredible quote, thank you for posting it
+216. [div] They don’t avoid the problem. They avoid solving it and let it be your problem.
+217. [p] Okay you like Tailwind because you seem to think “p-2” is better than specifying
+218. [div] Often, you are better off with a single standard environment rather than one wit
+219. [div] Hum... You want to say that tailwind is that standard, and some place can just a
+220. [div] You want to say that there shouldn’t be standards because tailwind has limitatio
+221. [div] Depends on who "you" are. A project manager might be better off. An individual c
+222. [div] You can put tailwind on the CV
+223. [p] What is the challenge in downloading class names into a style directory?
+224. [p] Then you didn’t understand my point, because it didn’t make or break a project. 
+225. [p] Who works with Tailwind? The dev writing code or the product person demanding th
+226. [p] Wow, what a great quote!I think that this combined with "there is no free lunch"
+227. [p] (I like to write and once I write, I like to send it free on the internet in the
+228. [p] I think that this holds a lot within career-making as well, in terms of deciding
+229. [p] but at the same time I think that although its just good thinking about it and g
+230. [p] Some problems are worth the risk/tradeoff when thought from short term but they 
+231. [p] I am a somewhat frugal guy and my philosophy has always been of do it yourself b
+232. [p] and even a single aluminim screw-esque component could take like 4-5 turns from 
+233. [p] All while a software engineer from say India/America/Europe is making the websit
+234. [p] Basically, although I have gotten on a tangent, my main point is that not every 
+235. [p] Be wise in selecting the problems to be clever at! but to be wise on selecting t
+236. [div] Whenever someone says America can do great things, I don't think of battleships,
+237. [div] Agree 100%. Costco exemplifies american dream... recent immigrants perusing well
+238. [div] Perhaps this depends a lot on location. Parking is a nightmare at my local Costc
+239. [div] It's because they are so busy. Yeah, costco is the one store I go to that people
+240. [div] Agreed. The entire store is wired to encourage impulse buying and keep you from 
+241. [p] My average food waste from a Costco trip is significantly lower than other groce
+242. [div] I find the experience of shopping at Costco very uncomfortable. The parking lots
+243. [div] ample parking? Not at any locations in my area. Even on weekdays.
+244. [p] I used to work right across the st from one and would spend most of my shift loo
+245. [p] It's always least crowded right at open and then an hour (? or maybe two?) later
+246. [p] Hah. It’s such a PITA that Costco includes an hour earlier entry on the top tier
+247. [p] I often see people cruising around still looking for parking while I already man
+248. [div] For lots and lots of Americans, endless consumerism, driving and junk food are n
+249. [div] The hotdogs. You know the world is ending when Costco raises the prices of their
+250. [p] It still exists in select locations in some countries, but are more exotic exper
+251. [p] Our situation is pretty common; it's just a normal grocery store in effect for l
+252. [p] Sadly this is not the case anymore these days.
+253. [div] Wallmart is absolutely impressive. But many places have something similar to Cos
+254. [div] I mean, Costco is great, but I think the purest expression of American capitalis
+255. [div] I present to you, the 8th wonder of the world: https://en.wikipedia.org/wiki/Mem
+256. [div] Yeah that’s pretty not bad. They just need to deposit them along the interstate 
+257. [div] Can you explain why? Non-american here :)
+258. [div] Welcome to Costco, I love you.
+259. [div] "[W]hat earlier century had even a presentiment that such productive forces slum
+260. [p] For me, I'll join a friend who has a membership from time to time, but I'll only
+261. [p] The small selection of things I get are the few items—as the probably AI author 
+262. [div] Agree with you on most angles but with a twist: the suburbanite should be seen n
+263. [div] Costco stuff is quantity and quality
+264. [p] Here membership is unusual in that it isn't technically open to everyone, it's b
+265. [p] Also no mention in the article of non-food. In UK Costco is known for special of
+266. [p] In the UK not everyone drives like USA and Costco's are few and far between, so 
+267. [p] And people also have smaller homes compared to USA and smaller families maybe (o
+268. [div] USA Costco does also have a business wholesale side
+269. [div] That's interesting, what do people have to do to get membership?
+270. [div] What on earth is the point of limiting membership to such random and specific gr
+271. [p] > According to the Costco U.K. website, memberships to those stores are only ava
+272. [div] This is about 80% spot on, but the last 20% fails to mention that you can avoid 
+273. [div] True, but at higher prices (and with delivery fees), which somewhat defeats the 
+274. [div] Yep, around 18% higher not including tip, in my estimate. HEB (local Texas groce
+275. [div] There's free 2-day shipping from Costco for purchases over $75 (at least in Seat
+276. [div] But saving the cost and time of you driving there yourself, which if you're hone
+277. [div] Sure, although personally the comparison would be to delivery from other stores.
+278. [p] Thinking of changing this distribution is highly disturbing because of time wast
+279. [div] I've rarely lived somewhere where I can't bike to a grocery store within 10 minu
+280. [div] I understand the appeal, but let’s be honest. Costco is designed for rich people
+281. [p] Membership is $65.
+282. [p] You don't need an SUV to shop at Costco, it is easy to load the groceries into a
+283. [div] I think average familiy could do better at financing so that they can affort to 
+284. [div] I’m not sure you have to be that rich to pay the $300 per year membership to buy
+285. [div] Membership is only $65 a year and I save more than that on diapers. So it pretty
+286. [div] If you think "has an SUV and can buy food in advance" == "rich", then the billio
+287. [p] (just kidding, but they are the best priced hotdogs anywhere! smart move by Cost
+288. [div] Costco is mostly food, clothes, furniture, other large things, and auto services
+289. [div] Yeah I can’t get 5 different varieties of a ball bearings in the size I need del
+290. [div] The dumbest assumption I saw Amazon baiting people into was using Chase credit c
+291. [div] They often have promotions which can make this very lucrative. “spend at least 1
+292. [div] yes, I started buying with miles because Amazon was giving me more value for tho
+293. [p] Similarities:
+294. [p] * Like you said, both have fewer choices than a conventional grocery store: if y
+295. [p] * Both of them don't have scales at the registers: unlike at a conventional groc
+296. [p] * Both of them are cheaper than your typical grocery store.
+297. [p] Differences:
+298. [p] * I feel like Trader Joe's leans on store brand / white-labeling items more than
+299. [p] * The shopping experience is pretty different both in terms of the in-store expe
+300. [p] * Costco requires a membership, Trader Joe's doesn't.
+301. [p] I wonder which elements of the two models would work best for a public grocery s
+302. [p] Costco and TJs both sell items like meat by weight, they're just pre-labeled so 
+303. [p] They are huge - ~15,000 stores worldwide and growing fast
+304. [p] IMO Costco’s food hits the sweet spot between high end grocery store quality and
+305. [div] I think a lot of people buy furniture and clothing on Amazon. It's extremely che
+306. [div] I do actually buy furniture from Amazon and Walmart, don't think I'm the common 
+307. [p] And the reason I chose Walmart at that time is because they offered good product
+308. [p] I own no vehicle; I live on the second floor no elevator, and the haul-away serv
+309. [p] On the delivery side: US suburbia is just in general not a sustainable solution.
+310. [p] The bit about agents doing your shopping is falling for the same trap as crypto 
+311. [div] Somehow Costco managed to get their store right in the middle of downtown Vancou
+312. [p] I don’t know if Vancouver has any of these off the top of my head.
+313. [p] And what you’re saying is true as a generality, that big box stores often fit in
+314. [p] Maybe not in Manhattan or anything but in many other large cities with high land
+315. [div] Highly recommend the Acquired podcast and their Costco episode if people want to
+316. [p] Costco do plenty of online only offers, partner with Doordash/Instacart, even se
+317. [p] The only precise opposite is that they're still paying IBM goodness knows how mu
+318. [div] I dont like Costco, it epitomizes American over-consumption. Parking lot overflo
+319. [p] I think what you're really critiquing is people who don't shop frequently, and t
+320. [p] Of course it comes down to how much personal time you then have to spend on shop
+321. [p] You're pointing out that you need to plan properly to bulk shop, since you're ne
+322. [p] I despise the city living lifestyle, where folks jam themselves in tiny grocery 
+323. [div] There are four Costco's in NYC, all but one in working class neighborhoods, and 
+324. [div] Yeah, they're in Manhattan. Wasn't trying to paint NYC as homogeneous, just want
+325. [div] I know there's at least one Costco in Brooklyn
+326. [p] Are you under the impression that it is a uniquely American trait to have a bigg
+327. [p] Maybe it isn't even overconsumption. Maybe it's just a different way of getting 
+328. [div] Since toilet paper is mostly non-perishable it shouldn't really matter, right? B
+329. [p] The people I know who shop at Costco aren’t throwing away half of what they buy.
+330. [p] While there are certainly people that shop there and waste what they buy, it’s a
+331. [p] Come on now.
+332. [div] I said nothing about that. But there are tipping points where buying too much is
+333. [div] If that's the only thing you can find to dislike about Costco, then they are ind
+334. [div] Costco is one of the few stores in America that attempts to give great value to 
+335. [div] Aldi seems to. I thought of them as I read about Costco, not because of the size
+336. [div] Walmart does this too, and it's one of the worst experiences/value-propositions 
+337. [div] Walmart stores are huge though, particulary the SuperWalmarts with supermarket a
+338. [div] Not sure that counters their point...or even relates to it.
+339. [div] Enforcing appropriate sized consumption is a terrifying thought.
+340. [p] Saying that everyone eating there is indulging in overconsumption is a ridiculou
+341. [div] We have a larger family and Costco combined with access to a decent grocery stor
+342. [p] It's really awesome to have plenty of food storage, with extra and oversized ref
+343. [p] I keep mine full of vegetables and beef - I have a whole beef slaughtered annual
+344. [p] Can you explain why this is a bad thing or why it means overconsumption? Why is 
+345. [div] There’s nothing wrong with your way, it’s just a different lifestyle based on ho
+346. [p] I think the the GP would love this too if it was practical- but it’s not for him
+347. [div] Minor point: you have a whole cow slaughtered annually.
+348. [div] What sizes of SUV, trolleys, fridges, and storage basements would meet with your
+349. [p] I'd much rather order some heavy stuff from Amazon to have delivered and walk to
+350. [div] A major upside to Costco is you can actually see stuff and you also can walk out
+351. [div] What about the price-quality aspect? Costco blows Amazon away here IME. Plus the
+352. [div] You can order from Costco on Instacart here in the Bay Area. This said, there's 
+353. [div] As someone who finds ordering groceries obscene what kind of heavy stuff do you 
+354. [p] We still drive to the Chinese grocery for a big bag of rice every once in awhile
+355. [div] I would love to hear more about Costco's engineering culture. The fact they are 
+356. [div] I don't think anyone has mentioned the obvious middle ground: PO Boxes at USPS p
+357. [p] For that is a large appeal of Costco. If I need a blanket, I can visit a Costco 
+358. [div] Biz idea for you. Make that as an external site using Amazon associate.
+359. [div] Costco is also an anti-Amazon in that they treat their workers and their supplie
+360. [div] Costco should aquire Hetzner :)
+361. [p] The shipping is slower, but it’s an interesting part of their business, and I en
+362. [div] Hate Costco. Buying from Amazon
+363. [p] That further helps simplify shopping and decision-making and resolves the parado
+364. [div] If the stats in this are true, Amazon’s warehouse workforce turns over at 25 tim
+365. [div] Time and motion/Taylorism is an anti pattern for staff retention. There is more 
+366. [p] When I was shopping for a water distiller there was only one large one but brand
+367. [p] B. F. Skinner's Utopian Vision: Behind and Beyond Walden Two
+368. [p] Amazon and other delivery companies (e.g. Weee) came to the rescue. For a while 
+369. [p] For those that think Costco are the uber-shopping experience are missing that th
+370. [p] This is also opposite to corner store grocery systems where you can pop in at an
+371. [p] tldr - what I think I'm saying is that Costco is the perfect "suburban" purchasi
+372. [p] anyone who don't tick those boxes can't really take advantage of any of that - s
+373. [div] I really don’t understand why people are so passionate about Costco. Every time 
+374. [div] They would be , in their own way, competing against "each other"? , with differe
+375. [div] nothing I buy on amazon is available at costo
+376. [div] I nodded along to much of the article, but I really think it's wrong to see this
+377. [p] I wonder why other stores like Target don't do that as well. Beyond the obvious,
+378. [div] Walmart does, under the Sam's Club brand, and there's a handful of other regiona
+379. [p] Costco is an exploitative mega-corporation and Amazon is too. Ask a Costco enthu
+380. [div] I agree IKEA is my cathedral. Aldi Süd is my shrine.
+381. [div] You should look up choice paralysis if you think that less choice being good is 
+382. [p] It makes me want to check my purchasing habits to see if I'm around that mark.
+383. [p] Seriously though, I was thinking on how I had to stop and get cat litter, milk, 
+384. [div] This surprised me too. My apartment hallway has 5-10 amazon packages in it per d
+385. [p] There’s no reason they couldn’t do basically all of the good things mentioned in
+386. [div] Sad that we don't see more high praise of simple things. Not exciting enough, I 
+387. [p] It was a used car tier hard sell to get the “executive” membership, after saying
+388. [p] Then they offer $20 back on your membership if you sign up for auto pay (and ins
+389. [p] Well we couldn’t get the $20 back coupon and at this point im feeling like Costc
+390. [p] I ended up getting the plain gold star card, got some free samples and was thoro
+391. [div] You can sign up online, which you should have done, the guy you were taking was 
+392. [p] When you order your X, a van doesn't drive from Amazon's warehouse to your home 
+393. [p] That seems more efficient, in terms of fuel, climate impact, etc., than each cus
+394. [p] In-store pickup using a internal combustion engined vehicle produced more emissi
+395. [p] ... We report and compare the greenhouse gas (GHG) emissions for a 36-item groce
+396. [p] It's interesting that consumers driving EVs reduce the cost on the same scale as
+397. [p] They omit apples-to-apples comparisons (at least from the press release and abst
+398. [div] Also this argument is easily refuted by the US Postal Service, which physically 
+399. [p] Like every other government service - highways, defense, etc. They’re profitable
+400. [div] The US Post Office is funded by its own revenue, I'm pretty sure.
+401. [p] See: American Letter Mail Company.
+402. [div] USPS is fueled by parcel deliveries, but also in large part by literal tons of j
+403. [div] The postal service is a quasi government entity that has operated (not to get to
+404. [p] "In 2006, Congress passed the Postal Accountability and Enhancement Act (PAEA). 
+405. [div] There's also the externalities. Costco effectively supports car infested surburb
+406. [div] I would expect Amazon to be more efficient. Besides the round trips, there's ope
+407. [p] That said people don’t typically get in a car to buy one thing -though obviously
+408. [div] I've always wondered why I don't see passed on savings for the "amazon day" thin
+409. [div] I don’t know how much they are saving. On the one hand they save a stop (they ar
+410. [div] I get 6% back instead of 5% with my Amazon card which is more than enough to inc
+411. [p] I'd still love to see data.
+412. [p] The problem with environmental impact is really a consequence of subsidized ener
+413. [p] Oh how I would wish for this crap to be banned. By law. Simply put, at the scale
+414. [p] Contract law still builds on the idea that b2b contracts are made between roughl
+415. [p] This needs to change, and the sooner the better.
+416. [div] Why? Then we’d have to pay more to buy stuff.
+417. [div] Because Amazon and Walmart, as the giants they are, aren't hurting for cash. If 
+418. [div] Yeah, and? Redistribute all the wealth that goes to the stonk market to the peop
+419. [p] Just wait until Amazon turns some of its warehouses into Costco-style retail sto
+420. [p] I’m probably the only person who would notice that. Sort of how Steve Jobs expla
+421. [div] Thanks for an interesting comment! (No irony intended).
+422. [p] That being said their refund and the way their employees is great though. I woul
+423. [div] And yet, Amazon Prime is inspired by Costco membership.
+424. [div] Costco is way too damn crowded. There needs to be 2x or 3x the number of stores.
+425. [div] Comparatively, as I have both a Costco and Sam's Club memberships, the floorplan
+426. [p] At one point they had the pallets at the front aligned so you could just queue b
+427. [p] I often just get it delivered to my house to avoid the crowds though.
+428. [p] Them is a universal variable you already injected.
+429. [div] Personal convenience vs societal cost? Let’s have both ffs. Fucking luddites. Sa

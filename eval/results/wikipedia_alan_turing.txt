@@ -1,0 +1,445 @@
+Root descriptor: <div> id="" class="mw-content-ltr.mw-parser-output"
+Total candidate paragraph count: 441
+
+--- Paragraphs ---
+1. [div] English computer scientist (1912–1954)
+2. [div] "Turing" redirects here. For other uses, see Turing (disambiguation).
+3. [p] Alan Mathison Turing (/ˈtjʊərɪŋ/; 23 June 1912 – 7 June 1954) was an English mat
+4. [p] Born in London, Turing was raised in southern England. He graduated from King's 
+5. [p] After the war, Turing worked at the National Physical Laboratory, where he desig
+6. [p] In 1952, Turing was prosecuted for homosexual acts. He accepted hormone treatmen
+7. [p] Turing left an extensive legacy in mathematics and computing which has become wi
+8. [p] The cognitive scientist Douglas Hofstadter writes:
+9. [p] Atheist, homosexual, eccentric, marathon-running mathematician, A. M. Turing was
+10. [h2] Early life and education
+11. [h3] Family
+12. [figcaption] English Heritage blue plaque in Maida Vale, London marking Turing's birthplace i
+13. [p] Turing was born in Maida Vale, London, while his father, Julius Mathison Turing,
+14. [p] Julius's work with the ICS brought the family to British India, where his grandf
+15. [p] Turing's father's civil service commission was still active during Turing's chil
+16. [p] Very early in life, Turing's parents purchased a house in Guildford in 1927, and
+17. [h3] School
+18. [figcaption] Turing at age 16, c. 1928 – c. 1929
+19. [p] Turing's parents enrolled him at St Michael's, a primary school at 20 Charles Ro
+20. [p] Between January 1922 and 1926, Turing was educated at Hazelhurst Preparatory Sch
+21. [p] Turing's natural inclination towards mathematics and science did not earn him re
+22. [h3] Christopher Morcom
+23. [div] Main article: Christopher Morcom
+24. [p] At Sherborne, Turing formed a significant friendship with fellow pupil Christoph
+25. [p] The event caused Turing great sorrow. He coped with his grief by working that mu
+26. [p] I am sure I could not have found anywhere another companion so brilliant and yet
+27. [p] Turing's relationship with Morcom's mother continued long after Morcom's death, 
+28. [p] I expect you will be thinking of Chris when this reaches you. I shall too, and t
+29. [p] It has been speculated that Morcom's death was the cause of Turing's atheism and
+30. [p] Personally, I believe that spirit is really eternally connected with matter but 
+31. [h3] University and work on computability
+32. [figcaption] Turing in the 1930s
+33. [p] In 1929 Turing and his friend Christopher Morcom applied for scholarships at Tri
+34. [p] Turing was awarded an exhibition (a lower-value scholarship) worth £80 per annum
+35. [p] Between the springs of 1935 and 1936, at the same time as Alonzo Church, Turing 
+36. [figcaption] King's College, Cambridge, where Turing was an undergraduate in 1931 and became 
+37. [p] Although Turing's proof was published shortly after Church's equivalent proof us
+38. [p] From September 1936 to July 1938, Turing spent most of his time studying under C
+39. [h2] Career and research
+40. [p] When Turing returned to Cambridge, he attended lectures given in 1939 by Ludwig 
+41. [h3] Cryptanalysis
+42. [p] During the Second World War, Turing was a leading participant in the breaking of
+43. [p] From September 1938, Turing worked part-time with the Government Code and Cypher
+44. [figcaption] Two cottages in the stable yard at Bletchley Park. Turing worked here in 1939 an
+45. [p] On 4 September 1939, the day after the UK declared war on Germany, Turing report
+46. [p] Specifying the bombe was the first of five major cryptanalytical advances that T
+47. [p] By using statistical techniques to optimise the trial of different possibilities
+48. [p] [He] said the fact that the contents had been restricted "shows what a tremendou
+49. [p] Turing had a reputation for eccentricity at Bletchley Park. He was known to his 
+50. [p] In the first week of June each year he would get a bad attack of hay fever, and 
+51. [p] Peter Hilton recounted his experience working with Turing in Hut 8 in his "Remin
+52. [p] It is a rare experience to meet an authentic genius. Those of us privileged to i
+53. [p] While working at Bletchley, Turing, who was a talented long-distance runner, occ
+54. [p] I have such a stressful job that the only way I can get it out of my mind is by 
+55. [p] Due to the challenges answering questions concerning what an outcome would have 
+56. [p] At the end of the war, a memo was sent to all those who had worked at Bletchley 
+57. [h3] Bombe
+58. [p] Within weeks of arriving at Bletchley Park,[81] Turing had specified an electrom
+59. [figcaption] A working replica of a bombe now at The National Museum of Computing on Bletchle
+60. [p] The bombe searched for possible correct settings used for an Enigma message (i.e
+61. [p] The bombe detected when a contradiction had occurred and ruled out that setting,
+62. [h4] Action This Day
+63. [div] Main article: Action This Day (memo)
+64. [p] By late 1941, Turing and his fellow cryptanalysts Welchman, Hugh Alexander and S
+65. [p] On 28 October they wrote directly to Winston Churchill explaining their difficul
+66. [h3] Hut 8 and the naval Enigma
+67. [figcaption] Statue of Turing holding an Enigma machine by Stephen Kettle at Bletchley Park, 
+68. [p] Turing decided to tackle the particularly difficult problem of cracking the Germ
+69. [p] That same night, he also conceived of the idea of Banburismus, a sequential stat
+70. [p] Turing travelled to the United States in November 1942 and worked with US Navy c
+71. [p] Turing's reaction to the American bombe design was far from enthusiastic:
+72. [p] The American Bombe programme was to produce 336 Bombes, one for each wheel order
+73. [p] During this trip, he also assisted at Bell Labs with the development of secure s
+74. [p] Alexander wrote of Turing's contribution:
+75. [p] There should be no question in anyone's mind that Turing's work was the biggest 
+76. [h3] Turingery
+77. [p] In July 1942, Turing devised a technique termed Turingery (or jokingly Turingism
+78. [h3] Delilah
+79. [p] Following his work at Bell Labs in the US,[129] Turing pursued the idea of elect
+80. [h3] Early computers and the Turing test
+81. [figcaption] Plaque, 78 High Street, Hampton
+82. [p] Between 1945 and 1947, Turing lived in Hampton, London,[134] while he worked on 
+83. [p] Although ACE was a feasible design, the effect of the Official Secrets Act surro
+84. [p] According to the memoirs of the German computer pioneer Heinz Billing from the M
+85. [figcaption] A blue plaque commemorating Alan Turing's work at the University of Manchester w
+86. [p] In 1948, Turing was appointed reader in the Mathematics Department at the Univer
+87. [p] In 1948, Turing, working with his former undergraduate colleague, D.G. Champerno
+88. [p] His Turing test was a significant, characteristically provocative, and lasting c
+89. [h3] Pattern formation and mathematical biology
+90. [p] When Turing was 39 years old in 1951, he turned to mathematical biology, finally
+91. [p] Although published before the structure and role of DNA was understood, Turing's
+92. [p] A study conducted in 2023 confirmed Turing's mathematical model hypothesis. Pres
+93. [h3] Ratio Club and other cybernetics contacts
+94. [p] The Ratio Club was a London dining club for researchers (mostly biologists) with
+95. [p] On a 1949 visit to Britain to attend a conference on psychiatry American cyberne
+96. [h2] Personal life
+97. [h3] Treasure
+98. [p] In the 1940s, Turing became worried about losing his savings in the event of a G
+99. [h3] Engagement
+100. [p] In 1941, Turing proposed marriage to Hut 8 colleague Joan Clarke, a fellow mathe
+101. [h3] Chess
+102. [p] Turing invented a hybrid chess sport, earlier than chess boxing, referred to as 
+103. [h3] Homosexuality and indecency conviction
+104. [figcaption] The Dancehouse Theatre, formerly the Regal Cinema, pictured in 2006, outside of 
+105. [figcaption] The house where Alan Turing lived in his final years from 1950 to 1954 at 43 Adl
+106. [p] In December 1951, Turing met Arnold Murray, a 19-year-old unemployed man. Turing
+107. [p] Turing was later convinced by the advice of his brother and his own solicitor, a
+108. [p] Turing's conviction led to the removal of his security clearance and barred him 
+109. [p] Turing was denied entry into the United States after his conviction in 1952, but
+110. [h2] Death
+111. [figcaption] A blue plaque on the house at 43 Adlington Road, Wilmslow, where Turing lived an
+112. [p] On 8 June 1954, at his house at 43 Adlington Road, Wilmslow, Turing's housekeepe
+113. [p] Turing's brother, John, identified the body the following day and took the advic
+114. [p] Turing's remains were cremated at Woking Crematorium just two days later on 12 J
+115. [p] Hodges and a later biographer, David Leavitt, have both speculated that Turing w
+116. [figcaption] Turing's OBE currently held in Sherborne School archives
+117. [p] It has also been suggested that Turing's belief in fortune-telling may have caus
+118. [p] But it was a lovely sunny day and Alan was in a cheerful mood and off we went ..
+119. [h3] Doubts on suicide thesis
+120. [p] Turing's nephew, writer Dermot Turing, does not believe that his conviction or h
+121. [p] Philosopher Jack Copeland has questioned various aspects of the coroner's histor
+122. [p] Doubts on the suicide thesis have been also cast by John W. Dawson Jr. who, in h
+123. [h2] Government apology and pardon
+124. [div] Further information: Alan Turing law
+125. [p] In August 2009, British programmer John Graham-Cumming started a petition urging
+126. [p] Thousands of people have come together to demand justice for Alan Turing and rec
+127. [p] In December 2011, William Jones and his member of Parliament, John Leech, create
+128. [p] We ask the HM Government to grant a pardon to Alan Turing for the conviction of 
+129. [p] The petition gathered over 37,000 signatures,[212][214] and was submitted to Par
+130. [p] A posthumous pardon was not considered appropriate as Alan Turing was properly c
+131. [p] John Leech, the MP for Manchester Withington (2005–15), submitted several bills 
+132. [p] On 26 July 2012, a bill was introduced in the House of Lords to grant a statutor
+133. [p] At the bill's second reading in the House of Commons on 29 November 2013, Conser
+134. [p] In September 2016, the government announced its intention to expand this retroac
+135. [p] On 19 July 2023, following an apology to LGBT veterans from the UK Government, D
+136. [h2] Further reading
+137. [h3] Articles
+138. [li] Copeland, B. Jack (ed.). "The Mind and the Computing Machine: Alan Turing and ot
+139. [li] Copeland, B. Jack (ed.). "Alan Turing: Father of the Modern Computer". The Ruthe
+140. [li] Hodges, Andrew (2004). "Turing, Alan Mathison". Oxford Dictionary of National Bi
+141. [li] Hodges, Andrew (2007). "Alan Turing". In Edward N. Zalta (ed.). Stanford Encyclo
+142. [li] Gray, Paul (29 March 1999). "Computer Scientist: Alan Turing". Time. Archived fr
+143. [li] O'Connell, H; Fitzgerald, M (2003). "Did Alan Turing have Asperger's syndrome?".
+144. [h3] Books
+145. [li] Agar, Jon (2001). Turing and the Universal Machine. Duxford: Icon. ISBN 978-1-84
+146. [li] Agar, Jon (2003). The government machine: a revolutionary history of the compute
+147. [li] Babbage, Charles (2016) [1864]. Campbell-Kelly, Martin (ed.). The Works of Charl
+148. [li] Beniger, James (1986). The control revolution: technological and economic origin
+149. [li] Bernhardt, Chris (2017). Turing's Vision: The Birth of Computer Science. MIT Pre
+150. [li] Bodanis, David (2005). Electric Universe: How Electricity Switched on the Modern
+151. [li] Bruderer, Herbert (2012). "Die Maschinen von Charles Babbage, Alan Turing und Jo
+152. [li] Campbell-Kelly, Martin; Aspray, William (1996). Computer: A History of the Infor
+153. [li] Ceruzzi, Paul E. (1998). A History of Modern Computing. Cambridge, Massachusetts
+154. [li] Chandler, Alfred (1977). The Visible Hand: The Managerial Revolution in American
+155. [li] Cooper, S. Barry; van Leeuwen, Jan (2013). Alan Turing: His Work and Impact. New
+156. [li] Copeland, B. Jack, ed. (2005). Alan Turing's Automatic Computing Engine. Oxford:
+157. [li] Copeland, B. Jack; Bowen, Jonathan P.; Wilson, Robin; Sprevak, Mark (2017). The 
+158. [li] Dyson, George (2012). Turing's Cathedral: The Origins of the Digital Universe. V
+159. [li] Edwards, Paul N (1996). The closed world: computers and the politics of discours
+160. [li] Hochhuth, Rolf (1988). Alan Turing: en berättelse. Symposion. ISBN 978-91-7868-1
+161. [li] Levin, Janna (2006). A Madman Dreams of Turing Machines. New York: Knopf. ISBN 9
+162. [li] Lubar, Steven (1993). Infoculture. Boston, Massachusetts and New York: Houghton 
+163. [li] Petzold, Charles (2008). The Annotated Turing: A Guided Tour through Alan Turing
+164. [li] Smith, Michael (1998). The Secrets of Station X: How the Bletchley Park codebrea
+165. [li] Smith, Roger (1997). Fontana History of the Human Sciences. London: Fontana.
+166. [li] Turing, Sara Stoney (1959). Alan M Turing. W Heffer. Turing's mother, who surviv
+167. [li] Turing, Sara (2012). Alan M. Turing. Cambridge University Press. ISBN 978-1-107-
+168. [li] Weizenbaum, Joseph (1976). Computer Power and Human Reason. London: W.H. Freeman
+169. [li] Whitemore, Hugh; Hodges, Andrew (1988). Breaking the code. S. French. This 1986 
+170. [li] Williams, Michael R. (1985). A History of Computing Technology. Englewood Cliffs
+171. [li] Yates, David M. (1997). Turing's Legacy: A history of computing at the National 
+172. [h2] See also
+173. [h3] Works cited
+174. [li] Alexander, C. Hugh O'D. "Cryptographic History of Work on the German Naval Enigm
+175. [li] Beavers, Anthony (2013). "Alan Turing: Mathematical Mechanist". In Cooper, S. Ba
+176. [li] Copeland, B. Jack (2004a). "Colossus: Its Origins and Originators". IEEE Annals 
+177. [li] Copeland, B. Jack, ed. (2004b). The Essential Turing. Oxford: Oxford University 
+178. [li] Hilton, Peter (2006). "Living with Fish: Breaking Tunny in the Newmanry and Test
+179. [li] Gannon, Paul (2007) [2006]. Colossus: Bletchley Park's Greatest Secret. London: 
+180. [li] Hodges, Andrew (1983). Alan Turing: The Enigma. London: Burnett Books Ltd. ISBN 
+181. [li] Leavitt, David (2007). The man who knew too much: Alan Turing and the invention 
+182. [li] Lewin, Ronald (1978). Ultra Goes to War: The Secret Story. Classic Military Hist
+183. [dd] In 1996, a copy was released to the National Archives and Records Administration
+184. [li] Oakley, Brian, ed. (2006). The Bletchley Park War Diaries: July 1939 – August 19
+185. [li] Sipser, Michael (2006). Introduction to the Theory of Computation. PWS Publishin
+186. [li] Turing, A. M. (1937) [Delivered to the Society November 1936]. "On Computable Nu
+187. [h2] Notes
+188. [li] ↑ Turing's death was officially determined as a suicide by an inquest, but this 
+189. [li] ↑ This was likely not Turing's first meeting: there was a sizeable backlog of in
+190. [h2] References
+191. [li] 1 2 3 4 Pease, Roland (23 June 2012). "Alan Turing: Inquest's suicide verdict 'n
+192. [li] 1 2 Alan Turing publications indexed by Google Scholar
+193. [li] ↑ Gandy, Robin Oliver (1953). On axiomatic systems in mathematics and theories i
+194. [li] 1 2 Bowen, Jonathan P. (2019). "The Impact of Alan Turing: Formal Methods and Be
+195. [li] ↑ "Alan Turing". The British Library. Archived from the original on 23 July 2019
+196. [li] ↑ Gray, Paul (29 March 1999). "Computer Scientist: Alan Turing". Time. Archived 
+197. [li] ↑ Sipser 2006, p. 137
+198. [li] ↑ Beavers 2013, p. 481
+199. [li] ↑ Copeland, Jack (18 June 2012). "Alan Turing: The codebreaker who saved 'millio
+200. [li] ↑ A number of sources state that Winston Churchill said that Turing made the sin
+201. [li] ↑ Leavitt 2007, pp. 231–233
+202. [li] ↑ Milinkovitch, Michel C.; Jahanbakhsh, Ebrahim; Zakany, Szabolcs (16 October 20
+203. [li] ↑ Olinick, Michael (2021). "Chapter 15". Simply Turing. United States: Simply Ch
+204. [li] ↑ "'Alan Turing law': Thousands of gay men to be pardoned". BBC News. 20 October
+205. [li] ↑ "Alan Turing is voted the nation's icon of the 20th century in BBC Two's Icons
+206. [li] ↑ Hodges 1983, p. xiii.
+207. [li] ↑ "The Alan Turing Internet Scrapbook". Alan Turing: The Enigma. Archived from t
+208. [li] ↑ Maguire, Phil (23 June 2012). "An Irishman's Diary". The Irish Times. p. 5.
+209. [li] ↑ Irish Marriages 1845–1958 / Dublin South, Dublin, Ireland / Group Registration
+210. [li] ↑ "London Blue Plaques". English Heritage. Archived from the original on 3 Septe
+211. [li] ↑ "The Scientific Tourist In London: #17 Alan Turing's Birth Place". Nature Lond
+212. [li] ↑ "The Alan Turing Internet Scrapbook". Archived from the original on 20 July 20
+213. [li] ↑ "Sir John Dermot Turing". Bletchley Park. Archived from the original on 18 Oct
+214. [li] 1 2 Hodges 1983, p. 16.
+215. [li] ↑ Hodges 1983, p. 6.
+216. [li] ↑ "Plaque unveiled at Turing's home in St Leonards". Hastings & St. Leonards Obs
+217. [li] ↑ "St Leonards plaque marks Alan Turing's early years". BBC News. 25 June 2012. 
+218. [li] ↑ "Guildford Dragon NEWS". The Guildford Dragon. 29 November 2012. Archived from
+219. [li] ↑ Cawthorne, Nigel (2014). Alan Turing : the enigma man. London: Arcturus Publis
+220. [li] ↑ Alan Mathison (April 2016). "Alan Turing Archive – Sherborne School (ARCHON CO
+221. [li] ↑ "Alan Turing OBE, PhD, FRS (1912–1954)". The Old Shirburnian Society. 1 Septem
+222. [li] ↑ Hofstadter, Douglas R. (1985). Metamagical Themas: Questing for the Essence of
+223. [li] ↑ Hodges 1983, p. 34.
+224. [li] ↑ "The Shirburnian" (PDF). Archived (PDF) from the original on 9 October 2022.
+225. [li] ↑ The Alyson Almanac: A Treasury of Information for the Gay and Lesbian Communit
+226. [li] ↑ Hodges, Andrew (1992). Alan Turing: The Enigma. Vintage. p. 35. ISBN 978-0-09-
+227. [li] ↑ Tekhnema: Journal of Philosophy and Technology. American University of Paris. 
+228. [li] ↑ Caryl, Christian (19 December 2014). "Poor Imitation of Alan Turing". New York
+229. [li] ↑ Hassall, Rachel (2012–2013). "The Sherborne Formula: The Making of Alan Turing
+230. [li] ↑ Teuscher, Christof, ed. (2004). Alan Turing: Life and Legacy of a Great Thinke
+231. [li] ↑ Hodges 1983, p. 61.
+232. [li] ↑ Hodges 1983, p. 87.
+233. [li] ↑ Hodges 1983, p. 90.
+234. [li] ↑ Gray, Paul. "Alan Turing". Time Magazine's Most Important People of the Centur
+235. [li] ↑ Hodges 1983, p. 82-83.
+236. [li] ↑ "Alan Turing and the 'Nature of Spirit'". oldshirburnian.org.uk. 15 August 202
+237. [li] ↑ Hodges 1983, pp. 57, 58.
+238. [li] ↑ Hodges 1983, p. 74–75.
+239. [li] ↑ "Inflation calculator". Archived from the original on 5 October 2018. Retrieve
+240. [li] ↑ (Schedule B was a three-year scheme consisting of Parts I and II, of the Mathe
+241. [li] ↑ Aldrich, John (December 2009). "England and Continental Probability in the Int
+242. [li] ↑ Turing, Alan (1939). "Letter From Alan Turing to his mother, Sara Turing, 1939
+243. [li] ↑ Hodges 1983, p. 113.
+244. [li] ↑ Zabell, S. L. (1995). "Alan Turing and the Central Limit Theorem". The America
+245. [li] ↑ Turing, A. M. (1938). "On Computable Numbers, with an Application to the Entsc
+246. [li] ↑ B. Jack Copeland; Carl J. Posy; Oron Shagrir (2013). Computability: Turing, Gö
+247. [li] ↑ Avi Wigderson (2019). Mathematics and Computation. Princeton University Press.
+248. [li] ↑ Grime, James (February 2012). "What Did Turing Do for Us?". NRICH. University 
+249. [li] ↑ "von Neumann ... firmly emphasised to me, and to others I am sure, that the fu
+250. [li] ↑ De Mol, Liesbeth (2021). "Turing Machines". In Zalta, Edward N. (ed.). The Sta
+251. [li] ↑ Hodges 1983, p. 138.
+252. [li] ↑ Turing, A.M. (1939). "Systems of Logic Based on Ordinals". Proceedings of the 
+253. [li] ↑ Turing, Alan (1938). Systems of Logic Based on Ordinals. Proceedings of the Lo
+254. [li] ↑ Turing, A.M. (1938). "Systems of Logic Based on Ordinals" (PDF). Archived from
+255. [li] ↑ John Von Neumann: The Scientific Genius Who Pioneered the Modern Computer, Gam
+256. [li] ↑ Hodges 1983, p. 152.
+257. [li] ↑ Diamond, Cora, ed. (1976). Wittgenstein's Lectures on the Foundations of Mathe
+258. [li] ↑ Hodges 1983, p. 153-154.
+259. [li] ↑ Briggs, Asa (21 November 2011). Britain's Greatest Codebreaker (TV broadcast).
+260. [li] ↑ Copeland, Jack (2001). "Colossus and the Dawning of the Computer Age". In Smit
+261. [li] ↑ Copeland 2004a, p. 217
+262. [li] ↑ Clark, Liat (18 June 2012). "Turing's achievements: codebreaking, AI and the b
+263. [li] 1 2 Copeland, 2006 p. 378.
+264. [li] 1 2 3 Collins, Jeremy (24 June 2020). "Alan Turing and the Hidden Heroes of Blet
+265. [li] ↑ "How Alan Turing Cracked The Enigma Code". Imperial War Museums. Archived from
+266. [li] ↑ Turing, Alan M.; Bayley, D. (2012). "Report on Speech Secrecy System DELILAH, 
+267. [li] ↑ Turing, Alan (c. 1941). "The Applications of Probability to Cryptography". The
+268. [li] ↑ Turing, Alan (c. 1941). "Paper on Statistics of Repetitions". The National Arc
+269. [li] ↑ Vallance, Chris (19 April 2012). "Alan Turing papers on code breaking released
+270. [li] ↑ Hodges 1983, p. 208.
+271. [li] ↑ Turing, Alan M. (1940). The Prof's Book: Turing's Treatise on the Enigma. In l
+272. [li] ↑ Lewin 1978, p. 57
+273. [li] ↑ Hilton, Peter. "A Century of Mathematics in America, Part 1, Reminiscences of 
+274. [li] ↑ Graham-Cumming, John (10 March 2010). "An Olympic honour for Alan Turing". The
+275. [li] ↑ Butcher, Pat (14 September 2009). "In Praise of Great Men". Globe Runner. Arch
+276. [li] ↑ Hodges, Andrew. "Alan Turing: a short biography". Alan Turing: The Enigma. Arc
+277. [li] ↑ Graham-Cumming, John (10 March 2010). "Alan Turing: a short biography". The Gu
+278. [li] ↑ Butcher, Pat (December 1999). "Turing as a runner". Maths History at St. Andre
+279. [li] ↑ Kottke, Jason (17 April 2018). "Turing was an excellent runner". kottke.org. A
+280. [li] ↑ See for example Richelson, Jeffery T. (1997). A Century of Spies: Intelligence
+281. [li] ↑ Hinsley, Harry (1996) [1993]. The Influence of ULTRA in the Second World War. 
+282. [li] ↑ "Alan Turing: Colleagues share their memories". BBC News. 23 June 2012. Archiv
+283. [li] ↑ "This month in history: Alan Turing and the Enigma code". thegazette.co.uk. Ar
+284. [li] ↑ Welchman, Gordon (1997) [1982]. The Hut Six story: Breaking the Enigma codes. 
+285. [li] ↑ Jack Good in "The Men Who Cracked Enigma", 2003: with his caveat: "if my memor
+286. [li] ↑ "The Turing-Welchman Bombe". The National Museum of Computing. Archived from t
+287. [li] ↑ Oakley 2006, p. 40/03B
+288. [li] 1 2 Hodges 1983, p. 218.
+289. [li] 1 2 Hodges 1983, p. 221.
+290. [li] ↑ Copeland, The Essential Turing, pp. 336–337 Archived 18 February 2015 at the W
+291. [li] ↑ Copeland, Jack; Proudfoot, Diane (May 2004). "Alan Turing, Codebreaker and Com
+292. [li] ↑ "Bletchley Park Unveils Statue Commemorating Alan Turing". Archived from the o
+293. [li] 1 2 3 Mahon 1945, p. 14.
+294. [li] ↑ Leavitt 2007, pp. 184–186
+295. [li] ↑ Gladwin, Lee (Fall 1997). "Alan Turing, Enigma, and the Breaking of German Mac
+296. [li] ↑ Good, Jack; Michie, Donald; Timms, Geoffrey (1945). General Report on Tunny: W
+297. [li] ↑ Hodges 1983, p. 204-245.
+298. [li] ↑ "Alan Turing's Report from Washington, 1942". www.turing.org.uk. Archived from
+299. [li] ↑ "Alan Turing's Dayton Report, 1942". www.turing.org.uk. Retrieved 12 July 2023
+300. [li] ↑ Turing, Alan M. (2001). "Visit to National Cash Register Corporation of Dayton
+301. [li] ↑ Hodges 1983, p. 245-253.
+302. [li] ↑ "Marshall Legacy Series: Codebreaking – Events". marshallfoundation.org. Archi
+303. [li] ↑ Copeland 2006, p. 380
+304. [li] ↑ Copeland 2006, p. 381
+305. [li] ↑ Gannon 2007, p. 230
+306. [li] ↑ Hilton 2006, pp. 197–199
+307. [li] ↑ Copeland 2006, pp. 382, 383
+308. [li] ↑ Hodges 1983, p. 245-250.
+309. [li] ↑ Harper, John (Spring 2023). "Delilah Voice Secrecy System". Resurrection: The 
+310. [li] ↑ Harper, John (Summer 2023). "Delilah Voice Secrecy System [part 2]: The Design
+311. [li] ↑ Hodges 1983, p. 273.
+312. [li] ↑ Hodges 1983, p. 346.
+313. [li] ↑ Copeland 2006, p. 108
+314. [li] ↑ Randell, Brian (1980). "A History of Computing in the Twentieth Century: Colos
+315. [li] ↑ Hodges 1983, p. 416.
+316. [li] ↑ See Copeland 2004b, pp. 410–432
+317. [li] ↑ "Turing at NPL". Archived from the original on 5 July 2015. Retrieved 3 July 2
+318. [li] ↑ Bruderer, Herbert. "Did Alan Turing interrogate Konrad Zuse in Göttingen in 19
+319. [li] ↑ Dobson, Charlotte (28 June 2021). "Alan Turing's home could be yours - for £1.
+320. [li] ↑ Minute Book of the Manchester Lit & Phil, 1954
+321. [li] ↑ Swinton, Jonathan (2 October 2019). "If I walked that Way I'd get arrested: th
+322. [li] ↑ Swinton, Jonathan (2019). Alan Turing's Manchester. Manchester: Infang Publish
+323. [li] ↑ Turing, A.M. (1948). "Rounding-Off Errors in Matrix Processes". The Quarterly 
+324. [li] ↑ Harnad, Stevan (2008). "The Annotation Game: On Turing (1950) on Computing, Ma
+325. [li] ↑ Clark, Liat. "Turing's achievements: codebreaking, AI and the birth of compute
+326. [li] ↑ "Alan Turing vs Alick Glennie (1952) "Turing Test"". Chessgames.com. Archived 
+327. [li] ↑ Kasparov, Garry (15–16 April 2017). "Smart machines will free us all". The Wal
+328. [li] ↑ Pinar Saygin, A.; Cicekli, I.; Akman, V. (2000). "Turing Test: 50 Years Later"
+329. [li] ↑ Gribbin, John (2004). Deep Simplicity. Random House. p. 126.
+330. [li] ↑ "Turing's Last, Lost work". Archived from the original on 23 August 2003. Retr
+331. [li] ↑ Douady, Stéphane; Dumais, Jacques; Golé, Christophe; Pick, Nancy (2024). Do pl
+332. [li] ↑ Murray, James D. (March 1988). "How the Leopard Gets Its Spots". Scientific Am
+333. [li] ↑ Murray, James D. (2007). "Chapter 6". Mathematical Biology I. Springer Verlag.
+334. [li] ↑ Gribbin, John (2004). Deep Simplicity. Random House. p. 134.
+335. [li] ↑ Vogel, G. (2012). "Turing Pattern Fingered for Digit Formation". Science. 338 
+336. [li] ↑ Sheth, R.; Marcon, L.; Bastida, M.F.; Junco, M.; Quintana, L.; Dahn, R.; Kmita
+337. [li] ↑ Andrew Hodges. "The Alan Turing Bibliography". turing.org.uk. p. morphogenesis
+338. [li] ↑ James R. Riordon (26 March 2023). "Chia seedlings verify Alan Turing's ideas a
+339. [li] ↑ Brendan D'Aquino (7 March 2023). "Abstract: F46.00003 : Studying Turing patter
+340. [li] ↑ Husbands, Phil; Holland, Owen (September 2012). "Warren McCulloch and the Brit
+341. [li] 1 2 Husbands, Phil; Holland, Owen (2008). "The Ratio Club: A Hub of British Cybe
+342. [li] ↑ Williams, Colin (2024). A serendipity of mavericks: the Ratio Club and the Bri
+343. [li] ↑ Husbands, Phil; Holland, Owen (September 2012). "Warren McCulloch and the Brit
+344. [li] ↑ Myrberg Burström, Nanouschka (2015). A tale of buried treasure, some good esti
+345. [li] ↑ Hodges 1983, p. 643.
+346. [li] ↑ Leavitt 2007, pp. 176–178
+347. [li] ↑ agelman (11 July 2010). "A problem with Turing's run-around-the-house chess ga
+348. [li] ↑ Łupkowski, Paweł (22 June 2019). "Turinga propozycja testu dla "papierowej mas
+349. [li] ↑ "Alan Turing". Spartacus Educational. Archived from the original on 25 Novembe
+350. [li] ↑ Hodges 1983, p. 458.
+351. [li] ↑ Leavitt 2007, p. 268
+352. [li] ↑ "Historic courthouse near Manchester where famous trial took place unrecognisa
+353. [li] ↑ Hodges 1983, p. 463.
+354. [li] ↑ Hodges 1983, p. 471.
+355. [li] 1 2 3 4 Copeland, Jack; Bowen, Jonathan; Sprevak, Mark; Wilson, Robin (26 Januar
+356. [li] 1 2 Peralta, René (23 June 2022). "Alan Turing's Everlasting Contributions to Co
+357. [li] ↑ Turing, Alan (1952). "Letters of Note: Yours in distress, Alan". Archived from
+358. [li] ↑ Hodges 1983, p. xxviii.
+359. [li] ↑ Hodges 1983, p. 473.
+360. [li] ↑ Hodges, Andrew (2012). Alan Turing: The Enigma The Centenary Edition. Princeto
+361. [li] ↑ "The Panic that followed the defection of the Cambridge spies". The Conversati
+362. [li] ↑ Copeland 2006, p. 143
+363. [li] 1 2 Olinick, Michael (2021). "Chapter 13". Simply Turing. United States: Simply 
+364. [li] 1 2 Vincent Dowd (6 June 2014). "What was Alan Turing really like?". BBC. Archiv
+365. [li] 1 2 Anon (2021). "Turing's House: Copper Folly, 43 Adlington Road, Wilmslow, Che
+366. [li] ↑ "Post Mortem Examination". Turing Digital Archive. Archived from the original 
+367. [li] ↑ "Alan Turing. Biography, Facts, & Education". Encyclopædia Britannica. Archive
+368. [li] ↑ Hodges 1983, p. 488.
+369. [li] 1 2 Turing, Dermot (2021). Reflections of Alan Turing. The History Press. ISBN 9
+370. [li] ↑ Backhouse, Paul (2016). Alan Turing: Guildford's best kept secret. Guildford T
+371. [li] ↑ Hodges 1983, p. 529.
+372. [li] 1 2 3 Hodges 1983, p. 50.
+373. [li] ↑ Hodges 1983, p. 140.
+374. [li] ↑ Hodges 1983, p. 149.
+375. [li] ↑ Hodges 1983, p. 489.
+376. [li] 1 2 Stewart, Ian (12 September 2017). Significant Figures: The Lives and Work of
+377. [li] ↑ Hodges 1983, pp. 488, 489.
+378. [li] ↑ "Thousands call for Turing apology". BBC News. 31 August 2009. Archived from t
+379. [li] ↑ Petition seeks apology for Enigma code-breaker Turing. CNN. 1 September 2009. 
+380. [li] 1 2 3 Davies, Caroline (11 September 2009). "PM's apology to codebreaker Alan Tu
+381. [li] ↑ The petition was only open to UK citizens.
+382. [li] ↑ "PM apology after Turing petition". BBC News. 11 September 2009. Archived from
+383. [li] ↑ "Full text of the Prime Minister's apology". Archived from the original on 9 N
+384. [li] 1 2 3 "Grant a pardon to Alan Turing". 6 December 2011. Archived from the origin
+385. [li] ↑ "Petition to pardon computer pioneer Alan Turing started". BBC News. 6 Decembe
+386. [li] 1 2 Wright, Oliver (23 December 2013). "Alan Turing gets his royal pardon for 'g
+387. [li] ↑ Wainwright, Martin (7 February 2012). "Government rejects a pardon for compute
+388. [li] ↑ "hansard". Parliament of the United Kingdom. 2 February 2012. Archived from th
+389. [li] ↑ Stevenson, Alex (24 December 2013). "Better late than never, Alan Turing is fi
+390. [li] ↑ Fitzgerald, Todd (24 September 2016). "Alan Turing's court convictions go on d
+391. [li] ↑ Britton, Paul (24 December 2013). "Alan Turing pardoned by The Queen for his '
+392. [li] ↑ "MP calls for pardon for computer pioneer Alan Turing". BBC News. 1 February 2
+393. [li] ↑ "Bill". Parliament of the United Kingdom. 26 July 2012. Archived from the orig
+394. [li] ↑ Pearse, Damian (13 December 2012). "Alan Turing should be pardoned, argue Step
+395. [li] ↑ Watt, Nicholas (19 July 2013). "Enigma codebreaker Alan Turing to be given pos
+396. [li] ↑ Worth, Dan (30 October 2013). "Alan Turing pardon sails through House of Lords
+397. [li] ↑ "Alan Turing (Statutory Pardon) Bill". Archived from the original on 5 July 20
+398. [li] ↑ Roberts, Scott (2 December 2013). "Lib Dem MP John Leech disappointed at delay
+399. [li] ↑ Roberts, Scott (2 December 2013). "Lib Dem MP John Leech disappointed at delay
+400. [li] ↑ "Alan Turing (Statutory Pardon) Bill". Archived from the original on 2 Novembe
+401. [li] ↑ Swinford, Steven (23 December 2013). "Alan Turing granted Royal pardon by the 
+402. [li] ↑ "Royal pardon for codebreaker Alan Turing". BBC News. 24 December 2013. Archiv
+403. [li] ↑ "With Queen's Decree, Alan Turing Is Now Officially Pardoned". Advocate.com. 2
+404. [li] ↑ "Pardoned: Alan Turing, Computing patriarch". Time Magazine. Vol. 183, no. 1. 
+405. [li] ↑ Davies, Caroline (24 December 2013). "Codebreaker Turing is given posthumous r
+406. [li] ↑ "Government 'committed' to Alan Turing gay pardon law". BBC News. 22 September
+407. [li] ↑ Cowburn, Ashley (21 September 2016). "Theresa May committed to introducing the
+408. [li] ↑ "Policing and Crime Act 2017". Government of the United Kingdom. Archived from
+409. [li] ↑ "Manchester computer pioneer Alan Turing announced as face of new £50 note". 1
+410. [li] ↑ "John Leech secures historic deal with Government on 'Alan Turing Law'". outne
+411. [li] ↑ Elliott, Larry; Halliday, Josh, eds. (15 July 2019). "Alan Turing to feature o
+412. [li] ↑ "My proudest day as a Liberal Democrat". Liberal Democrat Voice. Archived from
+413. [li] ↑ "Veterans Update". Hansard – UK Parliament. Archived from the original on 24 J
+414. [li] ↑ Sheridan, Danielle (19 July 2023). "Alan Turing statue should be put on Trafal
+415. [li] ↑ Khomami, Nadia; Arts, Nadia Khomami (24 July 2023). "LGBTQ+ military charity b
+416. [li] ↑ Mahon-kings, A.P. (June 1945). "The history of Hut Eight: 1939-1945". The Turi
+417. [li] ↑ Mahon-Kew, A P (1 January 1939). "The History of Hut 8". Catalogue description
+418. [li] ↑ Mahon-Military-Press, A. P. (2009). Naval Enigma: The History of Hut Eight, 19
+419. [h2] External links
+420. [div] Alan Turing at Wikipedia's sister projects
+421. [li] Media from Commons
+422. [li] Quotations from Wikiquote
+423. [li] Texts from Wikisource
+424. [li] Alan Turing plaques Archived 24 April 2024 at the Wayback Machine on openplaques
+425. [p] Papers
+426. [li] Science in the MakingArchived 4 April 2023 at the Wayback Machine Alan Turing's 
+427. [li] The Turing Digital Archive – contains scans of some unpublished documents and ma
+428. [p] Interviews
+429. [li] Oral history interview with Nicholas C. Metropolis, Charles Babbage Institute, U
+430. [p] Articles
+431. [li] How Alan Turing Cracked The Enigma Code Imperial War Museums
+432. [li] Jones, G. James (11 December 2001). "Alan Turing – Towards a Digital Mind: Part 
+433. [p] Websites
+434. [li] AlanTuring.net – Turing Archive for the History of Computing by Jack Copeland
+435. [li] Alan Turing site maintained by Andrew Hodges including a short biography
+436. [p] Events
+437. [li] Alan Turing Year Archived 17 February 2019 at the Wayback Machine
+438. [p] Sherborne School
+439. [li] Sherborne School Archives – holds papers relating to Turing's time at Sherborne 
+440. [li] Alan Turing and the 'Nature of Spirit' (Old Shirburnian Society)
+441. [li] Alan Turing OBE, PhD, FRS (1912-1954) (Old Shirburnian Society)

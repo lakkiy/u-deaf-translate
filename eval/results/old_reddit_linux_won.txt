@@ -1,0 +1,555 @@
+Root descriptor: <body> id="" class="single-page.comments-page"
+Total candidate paragraph count: 551
+
+--- Paragraphs ---
+1. [div] this post was submitted on 03 Jul 2026
+2. [div] 1,219 points (83% upvoted)
+3. [h1] programming
+4. [p] /r/programming is a reddit for discussion and news about computer programming.
+5. [p] Rules
+6. [p] Refer to the rules page for more info.
+7. [p] No LLM-Written Content
+8. [p] AI-related posts must comply with the AI Policy
+9. [p] No Political Posts or Personal/Social Drama/Gossip
+10. [p] No Non-Programming/Generic LLM/Diffusion Content
+11. [p] No Product Promotion/"I Made This" Project Demo Posts
+12. [p] No Content Aggregators
+13. [p] No Surveys Or Job Postings
+14. [p] No Support Questions or AskReddit-Type Questions
+15. [p] No Meta Posts
+16. [p] No Images, Memes, Or Other Low Effort Posts
+17. [p] No Blogspam
+18. [p] No Extreme Beginner Content
+19. [p] Comments: No Bots
+20. [p] Comments: No Incivility
+21. [p] Info
+22. [li] Do you have a question? Check out /r/learnprogramming, /r/cscareerquestions, or 
+23. [li] Do you have something funny to share with fellow programmers? Please take it to 
+24. [li] For posting job listings, please visit /r/forhire or /r/jobbit.
+25. [li] Check out our faq. Feel free to update it!
+26. [li] Are you interested in promoting your own content? STOP! Read this first.
+27. [p] Related reddits
+28. [h1] MODERATORS
+29. [p] submitted 1 day ago * by BankApprehensive7612
+30. [p] Actually it happened in June of 2025, but the process has completed recently, th
+31. [p] What's also interesting. Linux can run other Linux distros and with this Alpine 
+32. [p] It's the biggest win for the whole open-source software and I believe it should 
+33. [div] top 200 commentsshow all 325
+34. [p] [–]Gastredner 79 points80 points81 points 21 hours ago (6 children)
+35. [p] What's also interesting. Linux can run other Linux distros and with this Alpine 
+36. [p] Maybe the most used due to their use in containers, but I'm not sure that qualif
+37. [p] [–]zzzthelastuser 13 points14 points15 points 19 hours ago (5 children)
+38. [p] Alpine Linux could become the most popular version of Linux in the World
+39. [p] I have never even heard of this distro before and since the post doesn't provide
+40. [p] Pretty sure OP is just living in a bubble.
+41. [p] [–]treba_dzemper 46 points47 points48 points 17 hours ago (0 children)
+42. [p] It is by far the most used distro in containers because it is super lean which i
+43. [p] [–]ubermoo2010 15 points16 points17 points 17 hours ago (0 children)
+44. [p] yeah Alpine is used in a lot of embedded applications like routers and container
+45. [p] Well I'm sure there's someone...
+46. [p] [–]ConspicuousPineapple 5 points6 points7 points 8 hours ago (0 children)
+47. [p] I take it you've never had any serious use for docker before.
+48. [p] [–]Valonter 10 points11 points12 points 11 hours ago (0 children)
+49. [p] Anyone who works with containerized applications in a modern dev environment kno
+50. [p] [–]creeper6530 3 points4 points5 points 13 hours ago (0 children)
+51. [p] It is very lightweight distro common in containersd
+52. [p] [–]ElvishJerricco 1321 points1322 points1323 points 23 hours ago (127 children)
+53. [p] > Linux has became the first standard operating system
+54. [p] UNIX is literally a standard that OSes can conform to since the 80s.
+55. [p] [–]HRApprovedUsername 470 points471 points472 points 23 hours ago (76 children)
+56. [p] and fun fact Apple is a unix OS
+57. [p] [–]TCB13sQuotes 275 points276 points277 points 18 hours ago (19 children)
+58. [p] The funnier fact is that macOS is more UNIX than Linux ever was.
+59. [p] [–]fnork 138 points139 points140 points 16 hours ago (5 children)
+60. [p] Funniest fact is that UNIX was de facto superseded by POSIX, not that Linux is f
+61. [p] [–]non3type 29 points30 points31 points 12 hours ago (0 children)
+62. [p] It wasn’t so much superseded as POSIX was the actual standard when it became obv
+63. [p] [–]patrixxxx 14 points15 points16 points 11 hours ago* (0 children)
+64. [p] Funniest Unix fact is that if you type make love into a terminal without a speci
+65. [p] make: *** No rule to make target 'love'. Stop.
+66. [p] [–]ConspicuousPineapple 3 points4 points5 points 12 hours ago (2 children)
+67. [p] Wait unless I'm remembering incorrectly, POSIX is part of the Single Unix Specif
+68. [p] [–]spamcow_moo 1 point2 points3 points 9 hours ago (0 children)
+69. [p] That’s sus
+70. [p] [–]bobjonvon 20 points21 points22 points 14 hours ago (5 children)
+71. [p] Linux Is Not Unix. Why is that a funnier fact?
+72. [p] [–]ProgrammersAreSexy 28 points29 points30 points 13 hours ago (4 children)
+73. [p] I'd just like to interject for a moment. What you're referring to as Linux is in
+74. [p] [–]diatonic 17 points18 points19 points 10 hours ago (0 children)
+75. [p] <cut to video of Richard Stallman eating something from his foot>
+76. [p] [–][deleted] 11 hours ago* (2 children)
+77. [p] [deleted]
+78. [p] [–]zxyzyxz 5 points6 points7 points 10 hours ago (0 children)
+79. [p] It's a copypasta you're responding to
+80. [p] [–]akho_ 0 points1 point2 points 8 hours ago (0 children)
+81. [p] Or, you know. Android.
+82. [p] [–]nihsett 7 points8 points9 points 13 hours ago (3 children)
+83. [p] For those who didn't know like me - macOS and iOS descend from BSD which is a Un
+84. [p] [–]non3type 13 points14 points15 points 11 hours ago* (2 children)
+85. [p] Modern BSD technically doesn’t as it’s based on 4.4BSD-lite which removed all pr
+86. [p] [–]nihsett 7 points8 points9 points 11 hours ago (1 child)
+87. [p] Yeah, thank you saying that. I was reading for the past hour about how BSD vs AT
+88. [p] Fascinating stuff and so random how something becomes popular.
+89. [p] [–]non3type 7 points8 points9 points 11 hours ago (0 children)
+90. [p] Yeah, FreeBSD is still a very strong OS, I’m a big fan, and it contributes more 
+91. [p] [–]sapphired_808 0 points1 point2 points 3 hours ago (0 children)
+92. [p] not "more", it's certified "UNIX 03"
+93. [p] [–]pohuing 20 points21 points22 points 21 hours ago (34 children)
+94. [p] Only with great pains. Regular consumer macos as used by everyone isn't. https:/
+95. [p] [–]Exepony 115 points116 points117 points 20 hours ago* (32 children)
+96. [p] Have you actually looked at the article you posted? The "great pains" are:
+97. [li] core dumps are off by default (because most normal users don't need them)
+98. [li] System Integrity Protection enabled by default (again, a good thing for most nor
+99. [li] timer coalescing enabled by default (something that every modern OS does for pow
+100. [li] atimes updated lazily by the filesystem (another performance optimization you ca
+101. [li] APFS is case-insensitive by default (really the only actual incompatibility, but
+102. [li] there's a file search service you should turn off if you want the timing tests t
+103. [li] uucp quirks (who the hell even cares about uucp in the year of our Lord 2026)
+104. [p] For all intents and purposes, macOS is a perfectly normal UNIX. It's not unusual
+105. [p] [–]chucker23n 23 points24 points25 points 20 hours ago (30 children)
+106. [p] case-insensitive option in APFS (which isn't even default)
+107. [p] It is (and it should be; no sane human being considers "readme.txt" and "ReadMe.
+108. [p] [–]Exepony 12 points13 points14 points 20 hours ago (0 children)
+109. [p] You're right, of course. Guess I wasn't entirely awake yet.
+110. [p] [–]lolis5 42 points43 points44 points 18 hours ago (1 child)
+111. [p] no sane human being considers "readme.txt" and "ReadMe.txt" to be different file
+112. [p] Oof... Going about my day reading random nerd fights on reddit, only to learn th
+113. [p] How's your day going?
+114. [p] [–]MrPhi -5 points-4 points-3 points 17 hours ago* (0 children)
+115. [p] So, you are one of them.
+116. [p] (that was a joke, because this fight is pointless and the entire thing seems blo
+117. [p] [–]wosmo 9 points10 points11 points 16 hours ago (1 child)
+118. [p] The default is case-preserving, but not case-sensitive.
+119. [p] So if you create ReadMe, then touch readme - you won't have a second file, you'l
+120. [p] [–]chucker23n 1 point2 points3 points 15 hours ago (0 children)
+121. [p] The default is case-preserving, but not case-sensitive.
+122. [p] Yep.
+123. [p] [–]GOKOP 40 points41 points42 points 15 hours ago (4 children)
+124. [p] No it shouldn't. This only seemed like a good idea in English-centric, ASCII bas
+125. [p] There's a very important problem with case-insensitive filenames: Case conversio
+126. [p] Just two examples:
+127. [p] German letter ß traditionally doesn't have an uppercase variant; in modern times
+128. [p] Turkish has letters i and ı. They are capitalized as İ and I. This makes case co
+129. [p] [–]NuclearVII[🍰] 9 points10 points11 points 13 hours ago (1 child)
+130. [p] This right here is why I'm a graphics programmer and avoid anything that looks l
+131. [p] Great comment.
+132. [p] [–]HolyInlandEmpire 2 points3 points4 points 9 hours ago (0 children)
+133. [p] Strings are ascii, everything else was a mistake
+134. [p] [–]Thotaz 0 points1 point2 points 2 hours ago (0 children)
+135. [p] If it's such a big problem, how come no one ever complains about it in communiti
+136. [p] [–]novafunc 26 points27 points28 points 17 hours ago (8 children)
+137. [p] That opens a whole can of worms.
+138. [p] The standard Linux behavior is predictable. 'a' is different from 'A' so they ar
+139. [p] Once you start making exceptions, things get weird.
+140. [p] Ok, so upper/lowercase doesn't matter. That doesn't seem bad.
+141. [p] What about quotes? “ ” is different from " ". Should those be allowed to co exis
+142. [p] What about characters that look exactly the same, but different because of unico
+143. [p] [–]chucker23n 10 points11 points12 points 17 hours ago (7 children)
+144. [p] That opens a whole can of worms.
+145. [p] Don't let perfect be the enemy of good.
+146. [p] Users expect those two to refer to the same file, because it's how it's always w
+147. [p] It's also how e-mail addresses work. Or domains.
+148. [p] [–]crackanape 9 points10 points11 points 16 hours ago (4 children)
+149. [p] It's also how e-mail addresses work. Or domains.
+150. [p] Domains are not case-sensitive, but technically the part before the @ is. Howeve
+151. [p] [–]trparky 1 point2 points3 points 6 hours ago (3 children)
+152. [p] Exactly. So do web browsers. Going to https://www.ReDdIt.com in your web browser
+153. [p] And you really should be thanking them for that or phishing would be even worse 
+154. [p] [–]crackanape 1 point2 points3 points 4 hours ago (0 children)
+155. [p] Well web browsers don't often deal with the part before the @ sign in an email a
+156. [p] But it doesn't have to be the same as USER@gmail.com (even though gmail does tre
+157. [p] [–]Asbolus_verrucosus 2 points3 points4 points 4 hours ago (1 child)
+158. [p] The person you are replying to already correctly stated that DNS host names are 
+159. [p] [–]ImprovedSilence 2 points3 points4 points 17 hours ago (0 children)
+160. [p] no fucking sane user expects them to be the same file WHEN THEY ARE INDEED NAMED
+161. [p] [–]alvenestthol 29 points30 points31 points 18 hours ago (5 children)
+162. [p] By the same logic, no sane person would consider readme.txt and ｒｅａｄｍｅ.txt to be
+163. [p] Case-insensitivity is a special case that applies specifically to western alphab
+164. [p] [–]chucker23n 2 points3 points4 points 17 hours ago (3 children)
+165. [p] yet another reminder that the tech stack is filled with assumptions made by peop
+166. [p] It is, but the conclusion from "not every culture has the notion of a last name"
+167. [p] Treating ReadMe and readme and README the same is useful even when not all cultu
+168. [p] [–]crackanape -1 points0 points1 point 16 hours ago (0 children)
+169. [p] Treating ReadMe and readme and README the same is useful even when not all cultu
+170. [p] In fact it's even more useful then, since keeping case straight is often challen
+171. [p] [–]happyscrappy 1 point2 points3 points 12 hours ago (0 children)
+172. [p] Yeah, unfortunately we have makefile and Makefile. And two different languages u
+173. [p] This could have been avoided if sane people made all the decisions that roll dow
+174. [p] Git's issue with case insensitivity did indicate why case sensitivity is the def
+175. [p] [–]swni 0 points1 point2 points 4 hours ago (0 children)
+176. [p] Mac's weird filename rules caused me headaches the last time I had to use a mac,
+177. [p] "Filenames should be case insensitive" feels like a provincial attitude that sou
+178. [p] [–]fragbot2 1 point2 points3 points 11 hours ago* (0 children)
+179. [p] In the RH 8.0 timeframe, I took a look at the utilities they provided with a def
+180. [p] It’s small and unintrusive so it’s not clear why it was excluded.
+181. [p] [–]SemaphoreBingo 0 points1 point2 points 15 hours ago (0 children)
+182. [p] I used a few too many oddball unices back in the 90s to start getting picky abou
+183. [p] [–]jackun 5 points6 points7 points 21 hours ago (2 children)
+184. [p] is microsoft an os?
+185. [p] [–]mycall 6 points7 points8 points 20 hours ago (0 children)
+186. [p] A business operations system
+187. [p] [–]stovenn 0 points1 point2 points 1 hour ago (0 children)
+188. [p] more an ocg
+189. [p] [–]balefrost 25 points26 points27 points 22 hours ago (5 children)
+190. [p] And early versions of Windows NT had a UNIX subsystem. I don't know if it was ac
+191. [p] [–]Otis_Inf 29 points30 points31 points 22 hours ago (3 children)
+192. [p] Posix compliant, yes. still works
+193. [p] [–]G_Morgan 25 points26 points27 points 20 hours ago (2 children)
+194. [p] It was POSIX compliance in so far as they needed to either implement APIs or pro
+195. [p] Windows never implemented fork for instance which is pretty fundamental.
+196. [p] Also worth noting there are multiple sections to POSIX and MS only 'implemented'
+197. [p] [–]Otis_Inf 2 points3 points4 points 18 hours ago (1 child)
+198. [p] Windows never implemented fork for instance which is pretty fundamental.
+199. [p] True, tho likely because under windows, processes use threads for multithreading
+200. [p] To my knowledge not a lot of people actually used the Posix implementation on wi
+201. [p] [–]amroamroamro 0 points1 point2 points 19 hours ago (0 children)
+202. [p] And early versions of Windows NT had a UNIX subsystem
+203. [p] [–]Illustrious-Owl-2755 49 points50 points51 points 23 hours ago (38 children)
+204. [p] Linux had become the first standard operating system a long time before containe
+205. [p] [–]MOSFETmisfit 13 points14 points15 points 22 hours ago (1 child)
+206. [p] VxWorks is still widely used for good reason but yeah if your application doesn'
+207. [p] [–]Illustrious-Owl-2755 4 points5 points6 points 22 hours ago (0 children)
+208. [p] 100%, that's why I said "it's not that other OSes don't exist". My point was tha
+209. [p] [–]pheonixblade9 13 points14 points15 points 21 hours ago (9 children)
+210. [p] BSD is still quite common, as well.
+211. [p] [–]swansongofdesire 3 points4 points5 points 20 hours ago* (8 children)
+212. [p] I don’t know if it’s still the case, but ~~Samsung~~ Edit: Panasonic smart TVs w
+213. [p] [–]amroamroamro 1 point2 points3 points 19 hours ago (4 children)
+214. [p] Samsung smart TVs
+215. [p] [–]swansongofdesire 0 points1 point2 points 15 hours ago (3 children)
+216. [p] My mistake, it was Panasonic
+217. [p] [–]amroamroamro 0 points1 point2 points 11 hours ago* (2 children)
+218. [p] perhaps you are thinking of PlayStation (based on FreeBSD), Panasonic smart tvs 
+219. [p] [–]swansongofdesire 0 points1 point2 points 11 hours ago (1 child)
+220. [p] Panasonic Viera Connect was based on FreeBSD (this was when Plasma TVs were stil
+221. [p] [–]amroamroamro 0 points1 point2 points 11 hours ago (0 children)
+222. [p] oh i see, i missed that in a quick google search
+223. [p] [–]Undrafted4596 1 point2 points3 points 15 hours ago (1 child)
+224. [p] Maybe you’re thinking of the PlayStation OS, which is a FreeBSD derivative?
+225. [p] Tizen, the Samsung TV OS is Linux.
+226. [p] [–]swansongofdesire 0 points1 point2 points 15 hours ago (0 children)
+227. [p] It was Panasonic I was thinking of
+228. [p] [–]imbev 0 points1 point2 points 15 hours ago (0 children)
+229. [p] Playstation's OS is BSD-based, and BSD is popular with Netflix and IPS's
+230. [p] [–]pjmlp -1 points0 points1 point 22 hours ago (25 children)
+231. [p] Nope, HP-UX already had containers in the late 90's, followed by Solaris, before
+232. [p] [–]Illustrious-Owl-2755 6 points7 points8 points 22 hours ago (1 child)
+233. [p] Sure, but this is not the containers we're taking about. Mainframe partitions ar
+234. [p] [–]chucker23n 7 points8 points9 points 20 hours ago (8 children)
+235. [p] Yes indeed, obnoxious OS tribalism already existed in the 1990s.
+236. [p] [–]levir 4 points5 points6 points 20 hours ago (13 children)
+237. [p] That... has nothing to do with the conversation at hand. They're not saying cont
+238. [p] [–]pjmlp 1 point2 points3 points 19 hours ago (12 children)
+239. [p] I wonder by whom,
+240. [p] Linux had become the first standard operating system a long time before containe
+241. [p] No it did not, Linux was barely standard by 2000.
+242. [p] [–]mallardtheduck 4 points5 points6 points 19 hours ago (11 children)
+243. [p] Linux was already the most common platform for web servers by 2000. It was well 
+244. [p] [–]azswcowboy 3 points4 points5 points 16 hours ago (2 children)
+245. [p] Thanks for bringing facts to the nerd fight.
+246. [p] As expected, a sizeable chunk of the Linux drop is at register.com which has aro
+247. [p] If you look carefully there, actively hosted sites were basically 1/3 windows, 1
+248. [p] Having lived through the era it was far from a foregone conclusion that a server
+249. [p] Fun side story - a Solaris server I interacted with ran uninterrupted from 1997 
+250. [p] [–]CoderDevo 0 points1 point2 points 14 hours ago (1 child)
+251. [p] Did that Solaris server actually do anything or was it just there to answer a re
+252. [p] [–]azswcowboy 1 point2 points3 points 11 hours ago (0 children)
+253. [p] It was running a web server with some Perl/cgi stuff and a few other cron applic
+254. [p] [–]medforddad 0 points1 point2 points 1 hour ago (0 children)
+255. [p] Holy shit. I was going to make a "Netcraft confirms it" joke... But you actually
+256. [p] [–]Ok-Scheme-913 7 points8 points9 points 23 hours ago (0 children)
+257. [p] 'Standard OS' doesn't mean the same as 'standard' alone.
+258. [p] [–]mallardtheduck 4 points5 points6 points 19 hours ago* (0 children)
+259. [p] Originally (from 1988), the "standard" was POSIX which defines a fairly minimal 
+260. [p] These days (since 1994), we have the "Single UNIX Specification" which allows an
+261. [p] [–]developer-mike 2 points3 points4 points 10 hours ago (0 children)
+262. [p] You're referring to "standardized" OS where OP is not.
+263. [p] [–]pickle9977 0 points1 point2 points 15 hours ago (0 children)
+264. [p] POSIX is the first standard operating system Linux is a kernel and with the GNU 
+265. [p] There are others like *BSD, that have their own non-gnu tool chain.
+266. [p] [–]myhf 0 points1 point2 points 3 hours ago (0 children)
+267. [p] and ed is the standard editor!
+268. [p] [–]Flimsy_Complaint490 351 points352 points353 points 23 hours ago (88 children)
+269. [p] Considering Apple+Windows is 97% of the market and what most normal people will 
+270. [p] But this does kinda get me thinking about the future of Windows in particular - 
+271. [p] [–]Comfortable-Habit242 63 points64 points65 points 22 hours ago (2 children)
+272. [p] I worked at Microsoft from 2012-2015.
+273. [p] What you’re hypothesizing as a future situation was already the case a decade ag
+274. [p] They’ve taken some shifts to move a lot of front end development to web based st
+275. [p] But ultimately, I think they just will continue to have high costs to onboard an
+276. [p] [–]levir 24 points25 points26 points 19 hours ago (1 child)
+277. [p] They’ve taken some shifts to move a lot of front end development to web based st
+278. [p] And I think this is part of the reason they're starting to fail. They've suppoed
+279. [p] [–]Skellicious 0 points1 point2 points 1 hour ago (0 children)
+280. [p] Haven't they announced to be reversing course back to native applications a few 
+281. [p] [–]macholusitano 101 points102 points103 points 21 hours ago (3 children)
+282. [p] What winning means in this case: * 90% of cloud infra * 100% of the top 500 supe
+283. [p] [–]bryiewes 14 points15 points16 points 14 hours ago (0 children)
+284. [p] Linux is a silent winner
+285. [p] [–]currentscurrents 5 points6 points7 points 11 hours ago (0 children)
+286. [li] 100% of the top 500 supercomputers
+287. [p] All those AI datacenters are also running Linux, and at this point they likely e
+288. [p] [–]FoolHooligan 1 point2 points3 points 7 hours ago (0 children)
+289. [p] This is a better definition of winning than OP. They could say Windows is winnin
+290. [p] [–]Miserable_Ad7246 9 points10 points11 points 22 hours ago (3 children)
+291. [p] Where is a very real strategy, where MS moves to Linux to reduce development cos
+292. [p] An average user does not care about Kernel, its all about apps and UX experience
+293. [p] [–]Zeznon 8 points9 points10 points 11 hours ago (0 children)
+294. [p] Microsoft "Ship of Theseus-ing" Windows would be hilarious if it actually happen
+295. [p] [–]rebbsitor 0 points1 point2 points 3 hours ago* (1 child)
+296. [p] This has been discussed ever since WSL became a thing. Replacing the NT kernel w
+297. [p] The big challenge for Microsoft would be their Enterprise infrastructure. Moving
+298. [p] Microsoft would have to do significant work to replace the whole Windows Server 
+299. [p] [–]goldman60 0 points1 point2 points 44 minutes ago (0 children)
+300. [p] They've already done that work with Azure and Microsoft 365, on-prem domain cont
+301. [p] Group policy on target machines is probably the hardest part, there's no unified
+302. [p] [–]levir 34 points35 points36 points 20 hours ago (1 child)
+303. [p] what happens to the culture and future development track at MSFT when the next g
+304. [p] We've already seen this begin to happen. This is why Microsoft can't put put a n
+305. [p] [–]MrSnowflake 17 points18 points19 points 20 hours ago (1 child)
+306. [p] 97% of what market? Personal computers, sure, but that market is getting pretty 
+307. [p] [–]wrosecrans 38 points39 points40 points 23 hours ago (16 children)
+308. [p] Considering Apple+Windows is 97% of the market
+309. [p] ~97% of the desktop market, sure. But in 2026, the desktop has become a fairly n
+310. [p] If you look at the broader programming and compute marketplace, Linux has owned 
+311. [p] [–]Flimsy_Complaint490 19 points20 points21 points 23 hours ago (3 children)
+312. [p] Yes and that is a very specific definition of winning that to me, isnt particula
+313. [p] [–]G_Morgan 8 points9 points10 points 20 hours ago (2 children)
+314. [p] The big difference from 20 years ago is Android has subsequently taken over 75% 
+315. [p] [–]levir 9 points10 points11 points 19 hours ago (1 child)
+316. [p] Android is Linux, but it isn't "GNU/Linux" or whatever we call the actual OS we'
+317. [p] [–]Chr0nicConsumer 4 points5 points6 points 16 hours ago (0 children)
+318. [p] Obligatory copypasta:
+319. [p] I’d just like to interject for a moment. What you’re refering to as Linux, is in
+320. [p] Many computer users run a modified version of the GNU system every day, without 
+321. [p] There really is a Linux, and these people are using it, but it is just a part of
+322. [p] [–]Otis_Inf 15 points16 points17 points 22 hours ago (2 children)
+323. [p] Fairly niche? THere are billions of Windows installs alone. I don't call that 'n
+324. [p] [–]Dragon_yum 2 points3 points4 points 15 hours ago (2 children)
+325. [p] Let me know when your grandma needs help operating her Linux based data center.
+326. [p] [–]fashionistaconquista 4 points5 points6 points 22 hours ago (0 children)
+327. [p] If you look at the broader market, linux has already won there this whole time s
+328. [p] [–]my_password_is______ -2 points-1 points0 points 22 hours ago (3 children)
+329. [p] But in 2026, the desktop has become a fairly niche part of the broader computer 
+330. [p] HA HA HA HA
+331. [p] have you EVER worked in an office ?
+332. [p] [–]wrosecrans 14 points15 points16 points 22 hours ago (0 children)
+333. [p] Yes. The last full time in-person office job I had before I went mostly remote w
+334. [p] Did you miss the Nvidia example I gave in my previous comment? People still tend
+335. [p] The average computer is not a desktop computer, by at least an order of magnitud
+336. [p] There's no actual math or criteria or metric that makes desktop computers not a 
+337. [p] [–]MrSnowflake 1 point2 points3 points 20 hours ago (0 children)
+338. [p] I bet you there are more otherdevices than personal computers in the work place.
+339. [p] [–]tooclosetocall82 2 points3 points4 points 15 hours ago (1 child)
+340. [p] My CS degree in early 2000s was already 100% Linux based. My first job was C# an
+341. [p] [–]knightcrusader 0 points1 point2 points 12 hours ago (0 children)
+342. [p] Same for me. All my curriculum was Linux and some Unix based stuff, zero Windows
+343. [p] [–]nitePhyyre 20 points21 points22 points 23 hours ago (41 children)
+344. [p] I've been saying since WSL that 12 will be the last non-linux windows.
+345. [p] [–]Raid-Z3r0 33 points34 points35 points 23 hours ago (0 children)
+346. [p] These last three words don't make any sense strung together like that. Yet, that
+347. [p] [–]NenAlienGeenKonijn 49 points50 points51 points 22 hours ago (19 children)
+348. [p] That is ignoring that the whole reason windows has such a huge marketshare is be
+349. [p] [–]golf1052 28 points29 points30 points 21 hours ago (5 children)
+350. [p] I feel like programmers should know and understand this but I've seen this kind 
+351. [p] [–]treba_dzemper 3 points4 points5 points 18 hours ago (1 child)
+352. [p] They won't but they also know they're no longer a target as much as they were BI
+353. [p] I also fully expect things like multimedia and gaming to run as first class Wind
+354. [p] [–]Venthe 1 point2 points3 points 10 hours ago (0 children)
+355. [p] Eh, wsl2 Linux still runs within a thin vm, on demand, so I wouldn't necessarily
+356. [p] [–]modernkennnern -1 points0 points1 point 21 hours ago (3 children)
+357. [p] Yet Linux has better support for Windows XP-era games than Windows, like Lego Ra
+358. [p] There must be something I'm clearly missing because I've never understood this "
+359. [p] [–]NenAlienGeenKonijn 19 points20 points21 points 21 hours ago (0 children)
+360. [p] Your videogame working on proton doesn't mean that you can run legacy windows ap
+361. [p] [–]hoodieweather- 13 points14 points15 points 20 hours ago (0 children)
+362. [p] video games are not the primary reason Windows wants to be backwards compatible.
+363. [p] [–]levir 8 points9 points10 points 20 hours ago (0 children)
+364. [p] They don't though. 32-bit Windows applications for the most part work perfectly 
+365. [p] [–]DB6 14 points15 points16 points 22 hours ago (1 child)
+366. [p] Are you twelve?
+367. [p] This is never ever going to happen.
+368. [p] [–]harylmu 9 points10 points11 points 21 hours ago* (0 children)
+369. [p] I'm so confused why is his comment on 20+ upvotes honestly.
+370. [p] [–]cone5000 1 point2 points3 points 16 hours ago (0 children)
+371. [p] I use WSL all the time
+372. [p] [–]gimpwiz 1 point2 points3 points 11 hours ago (0 children)
+373. [p] What most normal people see in the morning, evening, and in their pockets all da
+374. [p] Then if they crack open a laptop or turn on a desktop you're right that it's pro
+375. [p] But "the market" you're defining is specifically PC, whether laptop or desktop, 
+376. [p] [–]Hacnar 1 point2 points3 points 22 hours ago (0 children)
+377. [p] For all the benefits of such future, it sucks that *nix way will lose the only r
+378. [p] [–]Zeznon 0 points1 point2 points 11 hours ago (0 children)
+379. [p] Windows/Linux
+380. [p] [–]non3type 0 points1 point2 points 10 hours ago* (0 children)
+381. [p] This was always the case. Most major college CS programs I’m aware of have been 
+382. [p] [–]mnp 0 points1 point2 points 10 hours ago (0 children)
+383. [p] 97% of the market
+384. [p] For desktop, maybe. For computers in general, it's not even close. Linux kernels
+385. [p] [–][deleted] 23 hours ago (5 children)
+386. [p] [deleted]
+387. [p] [–]golf1052 5 points6 points7 points 21 hours ago (4 children)
+388. [p] For GUI it's mostly QT
+389. [p] Can you point to a single Microsoft published app on Windows that builds with QT
+390. [p] On the Electron side it's an OpenJS Foundation project now but it's kind of Micr
+391. [p] [–]amroamroamro 2 points3 points4 points 18 hours ago (0 children)
+392. [p] Can you point to a single Microsoft published app on Windows that builds with QT
+393. [p] [–]NotUniqueOrSpecial 1 point2 points3 points 21 hours ago (2 children)
+394. [p] Can you point to a single Microsoft published app on Windows that builds with QT
+395. [p] The OneDrive UI does for sure.
+396. [p] [–]rdtsc 4 points5 points6 points 19 hours ago (1 child)
+397. [p] Where? I know that the bottom-right corner popup when you click the taskbar icon
+398. [p] [–]NotUniqueOrSpecial 1 point2 points3 points 13 hours ago (0 children)
+399. [p] Ah, it could be my information's out of date, then.
+400. [p] [–]corruptbytes 115 points116 points117 points 23 hours ago (21 children)
+401. [p] linux won a long time ago…it’s literally the majority of the worlds compute
+402. [p] [–]Raknarg 21 points22 points23 points 23 hours ago (15 children)
+403. [p] cool but now its getting first class support in the other 2 major competing OS's
+404. [p] [–]corruptbytes 12 points13 points14 points 23 hours ago (0 children)
+405. [p] i agree, my best friend works on the apple container project and i can finally s
+406. [p] i think apple supporting linux containers is a win for apple end of the day, it 
+407. [p] [–]this_knee 5 points6 points7 points 23 hours ago (0 children)
+408. [p] When free works … somehow.
+409. [p] [–]Strange-Scientist706 16 points17 points18 points 22 hours ago (1 child)
+410. [p] I mean, I am the world’s sexiest man, for certain specific values of “sexy”
+411. [p] [–]Cultural_Gur_7441 1 point2 points3 points 8 hours ago (0 children)
+412. [p] Loved by most CPUs? And by an order of magnitude.
+413. [p] [–]andarmanik 5 points6 points7 points 17 hours ago (0 children)
+414. [p] In terms of tech stack, yes this is nice.
+415. [p] But what is containerization solving, which wasn’t in the “problem set” for an O
+416. [p] Not that Linux failed, but the fact that we can’t get multi tenancy and portabil
+417. [p] Conference talk about history of containerization that I’m regurgitating: https:
+418. [p] [–]digikar 9 points10 points11 points 23 hours ago (4 children)
+419. [p] I can't use this to run KDE on Mac, can I?
+420. [p] [–]levir 2 points3 points4 points 19 hours ago (3 children)
+421. [p] Would you want to?
+422. [p] [–]mpyne 5 points6 points7 points 11 hours ago (2 children)
+423. [p] Some people want to run a decent GUI on top of their Linux
+424. [p] [–]themegainferno 15 points16 points17 points 22 hours ago (0 children)
+425. [p] Why are people in programming and linux communities so weirdly dogmatic about so
+426. [p] [–]HRApprovedUsername 38 points39 points40 points 23 hours ago (4 children)
+427. [p] You can already run whatever OS you want with VMs. Why is this a win exactly?
+428. [p] [–]sid34 13 points14 points15 points 21 hours ago (2 children)
+429. [p] Building a solution for normal people that first requests creating a VM is prett
+430. [p] [–]HRApprovedUsername 0 points1 point2 points 10 hours ago (1 child)
+431. [p] No normal person is using a vm or container
+432. [p] [–]mekkr_ 1 point2 points3 points 6 hours ago (0 children)
+433. [p] There is software that uses containerisation or VMs without you even noticing. T
+434. [p] This’ll be super useful for my job, I’m hyped.
+435. [p] [–]Holzkohlen 0 points1 point2 points 11 hours ago (0 children)
+436. [p] Containers offer much better performance while also being more light weight
+437. [p] [–]SwitchBoi 3 points4 points5 points 14 hours ago (0 children)
+438. [p] Linux is winning because now there is less reason to download Linux on a PC 👍
+439. [p] [–]Venthe 15 points16 points17 points 22 hours ago (2 children)
+440. [p] And Microsoft had announced native support of containerization without Docker in
+441. [p] Which is literally the same thing in operating principle as docker desktop? It s
+442. [p] If anything; both companies are ensuring lock-in by removing a barrier, but in p
+443. [p] Knowledge of Linux is now part of learning any of these systems, at least for de
+444. [p] Most of the Devs that were running docker on windows didn't even knew they were 
+445. [p] [–]treba_dzemper 6 points7 points8 points 17 hours ago (0 children)
+446. [p] BITD no one outside Linux bubble could utter a line of Bash.
+447. [p] Nowadays most developers I've met are decently versed in it (if not exactly flue
+448. [p] On an unrelated note, I expect this will mark a "good riddance" on Docker as the
+449. [p] [–]GasolinePizza 3 points4 points5 points 14 hours ago (0 children)
+450. [p] ensuring lock-in by removing a barrier
+451. [p] Did you mean "retention"? Lock-in would be pretty much the opposite of this, no?
+452. [p] [–]pjmlp 31 points32 points33 points 23 hours ago (7 children)
+453. [p] Won what?
+454. [p] The Year of Desktop Linux is a meme, unless Linux is running on a VM on top of W
+455. [p] Valve has lost trying to make game studios care about Linux, it provides a Windo
+456. [p] One might argue it won on the server room, however in the days of cloud computin
+457. [p] Maybe on mobile with Android, however there what matters is the Java and Kotlin 
+458. [p] Huawei now have their own microkernel based OS, after the sanctions.
+459. [p] Makers now are having more fun with ESP32, with FreeRTOS, or Arduinos, instead o
+460. [p] Many other examples could be provided, so won where?
+461. [p] [–]kreco 7 points8 points9 points 15 hours ago (1 child)
+462. [p] One might argue it won on the server room, however in the days of cloud computin
+463. [p] Maybe on mobile with Android, however there what matters is the Java and Kotlin 
+464. [p] Those two points are fallacious arguments.
+465. [p] Linux is widespread on server, and on Android devices, that's an hard fact.
+466. [p] Saying that it's a detail assumes you can just change the backend whenever you w
+467. [p] Similarly, Windows is not going anywhere on desktop because of all those drivers
+468. [p] Everything is an implementation details, including Windows, or nothing is.
+469. [p] [–]No-Consequence-1863 2 points3 points4 points 12 hours ago (0 children)
+470. [p] Linux won because Apple finally implemented a container API???
+471. [p] . Did WSL mean ubuntu won?
+472. [p] [–]bwainfweeze 2 points3 points4 points 9 hours ago (0 children)
+473. [p] Linux won when everything move to The Cloud.
+474. [p] [–]commandersaki 2 points3 points4 points 7 hours ago (0 children)
+475. [p] Won what? People have been running VMs and containers on Mac for at least a deca
+476. [p] [–]UnstoppableJumbo 3 points4 points5 points 17 hours ago (1 child)
+477. [p] Linux winning is assuming everyone is a programmer. Which isn't really true. The
+478. [p] [–]SuperbRuin8319 1 point2 points3 points 23 hours ago (0 children)
+479. [p] The real winner? The penguin who never cared about the desktop wars.
+480. [p] [–]StruggleNew8988 1 point2 points3 points 16 hours ago (0 children)
+481. [p] I feel like the container story really just proves how far behind proprietary sy
+482. [p] [–]RagnarDannes 1 point2 points3 points 16 hours ago (0 children)
+483. [p] I tried running containers on a macbook in a headless configuration. It was mise
+484. [p] For anyone thinking of running MacOS as server, it is just bad. It does everythi
+485. [p] [–]NewDistribution549 1 point2 points3 points 14 hours ago (0 children)
+486. [p] Isn't this the same as VMs? How is this a win?
+487. [p] [–]Aroochacha 1 point2 points3 points 6 hours ago (0 children)
+488. [p] Such a misleading title.
+489. [p] [–]Chance-Plantain8314 2 points3 points4 points 9 hours ago (0 children)
+490. [p] I think measuring "most popular OS in the world" as "what the most popular OS la
+491. [p] [–]Harha 1 point2 points3 points 23 hours ago (0 children)
+492. [p] Linux kernel being open source and free is simply amazing.
+493. [p] [–]my_password_is______ 2 points3 points4 points 22 hours ago (3 children)
+494. [p] linux hasn't won a damn thing
+495. [p] how many laptops or desktops come with linux preinstalled as the default OS
+496. [p] how many home users use linux as their default OS
+497. [p] how many office workers use linux as their default OS
+498. [p] [–]_w62_ 0 points1 point2 points 21 hours ago (0 children)
+499. [p] IMHO, the most adopted remains and lasts. It is more or less natural selection. 
+500. [p] [–]CondiMesmer 0 points1 point2 points 20 hours ago (1 child)
+501. [p] I'm confused, was WSL not already a Linux container? What is the difference betw
+502. [p] Guess it means I can stop using docker and have Dev Containers use wslc instead.
+503. [p] [–]13steinj 0 points1 point2 points 3 hours ago* (0 children)
+504. [p] WSL uses HyperV under the hood to spin up a lightweight VM.
+505. [p] Docker Desktop spins up a dedicated VM with a dockerd daemon running on it, and 
+506. [p] Apple's "native" container project, as does Microsoft's, does effectively the sa
+507. [p] "Linux has won" is only something that people who don't understand how operating
+508. [p] E: Weirder still true Darwin containers are at a very pre-alpha state, as are BS
+509. [p] E: lol@ OP's bio.
+510. [p] Pavel AI
+511. [p] I write code in JS and 🪼 TS, do AI things. Big fan of 🦀 Rust I'm an expert dev
+512. [p] This screams web dev who doesn't understand actual technology, if not one such p
+513. [p] [–]alcantara78 0 points1 point2 points 20 hours ago (0 children)
+514. [p] no memory ballooning, dealbreaker for me
+515. [p] [–]TheGreatArmageddon 0 points1 point2 points 19 hours ago (1 child)
+516. [p] Apple container: How is this different than docker containers, aws ecs ?
+517. [p] [–]absx 1 point2 points3 points 18 hours ago (0 children)
+518. [p] Apple Containers seems to be an implementation of the Open Container Initiative 
+519. [p] [–]cheezballs 0 points1 point2 points 14 hours ago (0 children)
+520. [p] No, I think Docker has won. What are the metrics of "winning" - just being used 
+521. [p] [–]TheRealBobbyJones 0 points1 point2 points 13 hours ago (0 children)
+522. [p] Technological progress? That is a bit much.
+523. [p] [–]thecodingart[🍰] 0 points1 point2 points 11 hours ago (0 children)
+524. [p] Is anyone going to tell this guy?
+525. [p] [–]mnp 0 points1 point2 points 10 hours ago (0 children)
+526. [p] In terms of devices, Linux blew past everything long ago: data centers, phones, 
+527. [p] [–]napping-normie 0 points1 point2 points 8 hours ago (0 children)
+528. [p] What do you even need to learn about Linux as a Mac or BSD user? Both carry unix
+529. [p] [–]Lutz_Gebelman 0 points1 point2 points 7 hours ago (0 children)
+530. [p] How is it different from lima-vm?
+531. [p] [–]acdbddh 0 points1 point2 points 7 hours ago (0 children)
+532. [p] Can it run Doom?
+533. [p] [–]13steinj 0 points1 point2 points 3 hours ago (0 children)
+534. [p] I'm fairly certain the "nativeness" still relies on some level of virtualization
+535. [p] Also insert obligatory "GNU+Linux" copypasta here. Linux is just the kernel, the
+536. [p] [–]agiblox 0 points1 point2 points 1 hour ago (0 children)
+537. [p] linux won the same way tcp/ip won - by becoming the substrate nobody names. nobo
+538. [p] [–]xoteonlinux 0 points1 point2 points 23 hours ago (0 children)
+539. [p] In this regard, much more interesting thing is, how companies are literally bend
+540. [p] [–]Dry-Page-4935 0 points1 point2 points 22 hours ago (3 children)
+541. [p] Surely docker would remain the standard in containerization because it is a one 
+542. [p] [–]laffer1 1 point2 points3 points 12 hours ago (0 children)
+543. [p] Docker must die. Podman runs on more operating systems and they will take patche
+544. [p] [–]treba_dzemper 0 points1 point2 points 17 hours ago* (1 child)
+545. [p] Not necessarily, Podman is already a drop in replacement (you can literally alia
+546. [p] [–]tukanoid 0 points1 point2 points 12 hours ago (0 children)
+547. [p] Sadly, in an enterprise setting, not that easy to switch. We got a lot of infra 
+548. [p] Could be smth going on with my nixos specifically, but no matter what I tried, I
+549. [p] [–]kishore_jana 0 points1 point2 points 18 hours ago (0 children)
+550. [p] Even people who never touch a terminal outside of work end up learning cgroups a
+551. [p] π Rendered by PID 96 on reddit-service-r2-loggedout-7cbc86668b-zbprz at 2026-07-

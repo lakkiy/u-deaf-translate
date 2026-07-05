@@ -1,0 +1,6 @@
+Root descriptor: <body> id="" class=""
+Total candidate paragraph count: 2
+
+--- Paragraphs ---
+1. [h1] Astral Codex Ten
+2. [h4] Astral Codex Ten
