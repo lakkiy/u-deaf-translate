@@ -1,27 +1,15 @@
 // 全页沉浸式翻译：识别正文段落 → 滚动到视口时翻译 → 译文插在原文下方。
 // 与划词翻译共存：复用 translator.ts 的实例缓存、语言检测。
 // 一次 startPageTranslation() 只识别一次正文，IntersectionObserver 注册到所有候选段落。
+// 正文识别算法（findContentRoot / collectParagraphs）见 page-content.ts。
 
 import { resolveSourceLanguage, translate } from './translator';
+import { findContentRoot, collectParagraphs, paragraphText } from './page-content';
 
 const MARKER_ATTR = 'data-tnyl-translated';
 const TRANSLATION_CLASS = 'tnyl-translation';
 const STYLE_ID = 'tnyl-page-translation-style';
 const MAX_CONCURRENT = 3;
-const MIN_TEXT_LENGTH = 4;
-
-// 排除：自身或祖先在这些标签内的"段落"不翻译
-// TABLE：表格里常混代码标识符（cargo build / go run）和短说明，整段翻译会把代码也吞进去；
-//        按用户意图全表跳过最稳。
-const EXCLUDE_TAGS = new Set([
-  'PRE', 'CODE', 'SCRIPT', 'STYLE', 'NOSCRIPT',
-  'NAV', 'HEADER', 'FOOTER', 'ASIDE', 'MENU',
-  'BUTTON', 'SELECT', 'FORM', 'TEXTAREA', 'INPUT',
-  'TABLE',
-]);
-
-// 候选段落标签
-const PARAGRAPH_TAGS = ['p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dd'];
 
 // 当前是否已启动整页翻译
 let started = false;
@@ -74,93 +62,6 @@ function injectStyle(): void {
   styleInjected = true;
 }
 
-function findRoot(): Element {
-  const seed = document.querySelector('main')
-    ?? document.querySelector('article')
-    ?? document.body;
-
-  // web app 页（HuggingFace / GitHub）的 <main> 常同时含正文和侧栏，
-  // 而侧栏里可能有零星 <p>（例如 GitHub About 描述）——简单的"最小公共祖先"
-  // 会被那一个 <p> 拉宽到整个 main。
-  //
-  // 改成：找最深的子树，其包含的 <p> 数 >= 全部 <p> 的 80%。
-  // 正文容器（README article、文章主体）的 <p> 占绝对多数；侧栏那点 <p>
-  // 单独不够 80%，不会被选中。"最深"保证收敛到最窄的合适容器。
-  const validPs = Array.from(seed.querySelectorAll('p')).filter((p) => !isExcluded(p));
-  if (validPs.length < 3) return seed;
-
-  const target = Math.ceil(validPs.length * 0.8);
-  const pSet = new Set<Element>(validPs);
-
-  let best: Element = seed;
-  let bestDepth = -1;
-
-  const walk = (el: Element, depth: number): number => {
-    let count = pSet.has(el) ? 1 : 0;
-    for (const child of Array.from(el.children)) {
-      count += walk(child, depth + 1);
-    }
-    if (count >= target && depth > bestDepth) {
-      best = el;
-      bestDepth = depth;
-    }
-    return count;
-  };
-  walk(seed, 0);
-
-  return best;
-}
-
-function isExcluded(el: Element): boolean {
-  let cur: Element | null = el;
-  while (cur && cur !== document.documentElement) {
-    if (EXCLUDE_TAGS.has(cur.tagName)) return true;
-    cur = cur.parentElement;
-  }
-  return false;
-}
-
-function hasMeaningfulText(el: Element): boolean {
-  const text = (el.textContent ?? '').trim();
-  if (text.length < MIN_TEXT_LENGTH) return false;
-  // 全是数字/标点的不翻译（页码、序号）
-  if (!/\p{L}/u.test(text)) return false;
-  return true;
-}
-
-/**
- * 候选元素的文字大部分来自 <a> 子节点 → 多半是 metadata 行（用户名 + 时间戳链接、
- * "Replies: 5 comments" 之类）。正常正文段落里 inline link 不会占 70%。
- * 例：GitHub Discussion 的 `<h3><a>spenserblack</a> <a>May 21, 2025</a></h3>`
- *      整行近 100% 是 link 文字。
- */
-function isMostlyLinks(el: Element): boolean {
-  const total = (el.textContent ?? '').replace(/\s+/g, '').length;
-  if (total === 0) return false;
-  let linkLen = 0;
-  for (const a of el.querySelectorAll('a')) {
-    linkLen += (a.textContent ?? '').replace(/\s+/g, '').length;
-  }
-  return linkLen / total > 0.7;
-}
-
-function collectParagraphs(root: Element): Element[] {
-  const out: Element[] = [];
-  const nodes = root.querySelectorAll(PARAGRAPH_TAGS.join(','));
-  for (const el of nodes) {
-    if (el.hasAttribute(MARKER_ATTR)) continue;
-    if (isExcluded(el)) continue;
-    if (!hasMeaningfulText(el)) continue;
-    if (isMostlyLinks(el)) continue;
-    // 已有嵌套候选时只取最内层：<li> 含 <p> 时翻译 <p> 不翻译 <li>
-    // querySelectorAll 文档序，先父后子；用 closest 反查更可靠：
-    // 这里简化——如果该元素内还有其他候选段落，跳过自己
-    if (el.querySelector(PARAGRAPH_TAGS.join(','))) continue;
-    out.push(el);
-  }
-  return out;
-}
-
 function enqueue(task: () => Promise<void>): void {
   const run = async () => {
     inflight++;
@@ -193,6 +94,12 @@ async function getSourceLanguage(sampleText: string): Promise<string> {
 // <div display:flex><h3>标题</h3><a>锚点复制按钮</a></div>，译文插在 h3 后就排到了右侧）。
 // 这种情况改成把译文塞进原文元素内部当末尾子节点，靠原文自身的块级布局换行到下方。
 function insertTranslationNode(el: Element, node: HTMLElement): void {
+  // td/th 的 afterend 兄弟是非法 DOM（同一行内多出一个非 td/th 节点），浏览器会把它
+  // 渲染到怪位置；直接塞进单元格内部当末尾子节点。
+  if (el.tagName === 'TD' || el.tagName === 'TH') {
+    el.appendChild(node);
+    return;
+  }
   const parent = el.parentElement;
   const display = parent ? getComputedStyle(parent).display : '';
   if (display === 'flex' || display === 'inline-flex' || display === 'grid' || display === 'inline-grid') {
@@ -207,7 +114,7 @@ async function translateParagraph(el: Element): Promise<void> {
   const mySession = sessionId;
   el.setAttribute(MARKER_ATTR, '');
 
-  const text = (el.textContent ?? '').trim();
+  const text = paragraphText(el).trim();
   if (!text) return;
 
   // 译文节点先以 pending 态插入，避免布局突变；翻译完直接替换文本
@@ -258,8 +165,8 @@ function startPageTranslation(): void {
   sessionId++;
   injectStyle();
 
-  const root = findRoot();
-  const paragraphs = collectParagraphs(root);
+  const root = findContentRoot();
+  const paragraphs = collectParagraphs(root).filter((el) => !el.hasAttribute(MARKER_ATTR));
   if (paragraphs.length === 0) {
     console.warn('[叫你翻译你聋吗] 未识别到正文段落');
     return;
