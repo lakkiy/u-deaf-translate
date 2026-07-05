@@ -13,37 +13,17 @@ Chrome Translator API 不能在 Worker 上下文调用，而 MV3 service worker 
 ### Popup「翻这一页」直接从扩展页发 `tnyl:translate-page` 到当前 tab，不经 background
 点图标弹出的 `src/popup.html`/`popup.ts` 运行在扩展页上下文（不是 content script），`chrome.tabs.query({active,currentWindow})` 拿到当前 tab 再 `chrome.tabs.sendMessage(tab.id, {type:'tnyl:translate-page'})`——和右键菜单走同一条消息、同一个 content 端 handler，行为完全一致（再点即取消）。复用现有 message type 而不新增，content.ts 那个 listener 不用动。无需新权限：`tabs.query/sendMessage` 在扩展页本就可用，`host_permissions` 覆盖 sendMessage。注入不到 content 的页面（chrome:// 等）sendMessage reject，`catch` 静默。popup 故意极简——按用户要求砍掉 stats（今日tokens/延迟/成本）、快捷键提示、提示词预设；只留「正在用 + 换后端（循环切 config.active）」「翻成（改全局 config.targetLanguage）」「翻这一页」「齿轮开 options」。
 
-### 整页翻译的正文选取算法（`findRoot` + `collectParagraphs`，不引入 Readability.js）
-**这套算法是沉浸式翻译的核心，下面写全到能脱离代码复现。** 不引入 Readability.js（70KB+ 太重），手写两步启发式：先 `findRoot()` 圈出正文容器，再 `collectParagraphs()` 在容器内挑要翻的段落。两个标签集是算法的基础：
+### 整页翻译的正文选取算法（`src/page-content.ts`：`findContentRoot` + `collectParagraphs`，不引入 Readability.js）
+两步启发式：`findContentRoot` 找最深的、保留 ≥80% 正文字符且丢弃 ≤500 字符的子树作为正文容器，`collectParagraphs` 在容器内两遍扫描挑出候选段落（排除规则筛一遍，"让位给更内层合格候选"再筛一遍）。不引入 Readability.js（70KB+ 太重），但借鉴其三个原理：class/id 负面词过滤、按文本量而非节点数衡量内容、区分数据表与布局表。完整设计、各常量论证、与 Readability 的详细对照、评测结论见 `docs/content-detection.md`。
 
-- **PARAGRAPH_TAGS（候选段落标签）**：`p / li / h1 / h2 / h3 / h4 / h5 / h6 / blockquote / dd`。
-- **EXCLUDE_TAGS（自身或任一祖先命中即整体排除）**：
-  - `PRE / CODE / SCRIPT / STYLE / NOSCRIPT` —— 代码与脚本不翻，且 `textContent` 会把 `<code>` 子节点的代码字符一并吞进去翻乱；
-  - `NAV / HEADER / FOOTER / ASIDE / MENU` —— 导航 / 页眉页脚 / 侧栏，非正文；
-  - `BUTTON / SELECT / FORM / TEXTAREA / INPUT` —— 交互控件；
-  - `TABLE` —— 整表跳过（理由见下一条独立决策）。
-
-**第一步 `findRoot()` —— "最深的、覆盖 ≥80% `<p>` 的子树" 即正文容器：**
-1. seed 取 `<main>` → `<article>` → `<body>`（依次兜底）。
-2. 统计 seed 内所有 `<p>`（排除落在 EXCLUDE_TAGS 内的）得 `validPs`。**若 `validPs.length < 3` 直接返回 seed**——样本太少做不了统计，整个 seed 当正文。
-3. 否则 `target = ceil(validPs.length * 0.8)`，遍历 seed 整棵子树，对每个元素算它子树内含多少个 `validPs`，记下"含量 ≥ target 的**最深**元素"作为正文容器返回。
-- 为什么拿 `<p>` 数量当信号、且要"最深"：正文容器（README、文章主体）的 `<p>` 占绝对多数，侧栏 / 元数据区即使有零星 `<p>` 也凑不到 80%；"最深"保证收敛到最窄的合适容器。代价：当真正的正文被拆进两个并列容器（各自 < 80%）时会回退到 seed——目前没遇到。演化史见 pitfalls："正文识别"几条记录了从「所有 `<p>` 的 LCA」（被侧栏一个 `<p>` 拉宽到整个 `<main>`）改到「80% 覆盖最深子树」的过程。
-
-**第二步 `collectParagraphs(root)` —— 容器内逐个筛候选，全部通过才翻：**
-- 已带 `data-tnyl-translated` 标记 → 跳过（防重入）；
-- 自身或任一祖先在 EXCLUDE_TAGS 内 → 跳过；
-- `hasMeaningfulText` 不过 → 跳过：`trim()` 后**少于 4 字符**（`MIN_TEXT_LENGTH`），或**不含任何字母**（`/\p{L}/u` 不匹配）。滤掉页码、序号、纯标点；
-- `isMostlyLinks` 命中 → 跳过：去空白后的文本**≥ 70% 来自 `<a>` 子节点**。滤掉"用户名 + 时间戳"这类几乎全是链接的元数据行（正常正文的 inline link 占比远不到 70%）；
-- 内部还含其它候选（`el.querySelector(PARAGRAPH_TAGS)` 非空）→ 跳过，**只翻最内层**，避免 `<li><p>…</p></li>` 把 `<li>` 和 `<p>` 双翻。
-
-### `<table>` 整张跳过，不把 `<td>` 当段落
-表格里常混代码标识符（`go build` / `cargo build`）和短英文说明（"Compile the project"），但 `textContent` 会把 `<code>` 子节点的代码字符也一并取出来送去翻译，得到"去建造"、"货物建造"这种荒谬结果。逐 cell 判断"是不是主要内容是 code"启发式很脆，按用户反馈整张表跳过最稳。代价是表格里的英文说明不翻——可接受。
+### `<table>` 从"整张跳过"改为"仅数据表跳过"
+最初按用户反馈整表跳过：表格常混代码标识符（`go build` / `cargo build`），`textContent` 把 `<code>` 子节点的代码也送去翻译，得到"去建造"、"货物建造"。2026-07 实测发现一刀切让 HN 这类 table 布局页整页 0 段落——布局表是结构容器不是数据表。改为 `isDataTable` 判定（有 caption/thead/th、任一行 td ≥ 4、或 role=grid/table 才排除）：corrode.dev 那张带表头的对比表仍被排除，原始动机保住；HN 的嵌套布局表放行。同理 FORM 也从一刀切改为"真表单"判定（见算法主条目）。
 
 ### 整页译文节点 inject 全局 `<style>` 而非 Shadow DOM
 划词翻译用 closed Shadow DOM 隔离样式，整页翻译做不到——译文要跟原文同字号/行高/排版，必须沿用原页面的 CSS 继承链。代价是样式可能被页面覆盖。class 名加 `tnyl-` 前缀（`tnyl-translation`）降低冲突概率，关键属性用 `inherit` 让原文样式自然带过来。
 
 ### 整页翻译用 `data-tnyl-translated` + pending 节点双防重入
-段落进入视口后立刻给原文加 `data-tnyl-translated` + 在 afterend 插入带 `data-tnyl-pending` 的占位 div——双层防御 IntersectionObserver 在同一段上重复触发。pending 显示"翻译中…"（opacity 0.5 + 斜体），翻译完成只替换 `textContent`，不动 DOM 结构，避免布局抖动。
+段落进入视口后立刻给原文加 `data-tnyl-translated` + 在 afterend 插入带 `data-tnyl-pending` 的占位 div——双层防御 IntersectionObserver 在同一段上重复触发。带标记的段落在 page-translator.ts 里 `collectParagraphs(root).filter(...)` 时排除（标记是翻译状态，不进 page-content.ts 的算法模块），SPA 重扫时只翻新内容。pending 显示"翻译中…"（opacity 0.5 + 斜体），翻译完成只替换 `textContent`，不动 DOM 结构，避免布局抖动。
 
 ### Closed Shadow DOM 隔离气泡 UI
 气泡用 `attachShadow({ mode: 'closed' })` 包起来。网页 CSS 不污染气泡，气泡的样式也不会泄漏到网页；`mode: 'closed'` 还防止网页通过 JS 访问内部节点。

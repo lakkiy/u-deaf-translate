@@ -93,7 +93,27 @@
 ### `<table>` 单元格 `textContent` 把 `<code>` 子节点的代码也吞了
 - **现象：** corrode.dev 一个对比表，"Go tool / Rust equivalent" 列里 `<td>` 含 `<code>go build</code>`，整段翻译得到"去建造"、"货物建造"。
 - **真相：** `<td>` 是候选段落，`isExcluded` 只查祖先标签——`<td>` 内的 `<code>` 是子节点不是祖先，`textContent` 把代码字符也提走了。
-- **修复：** PARAGRAPH_TAGS 删 `td`，EXCLUDE_TAGS 加 `TABLE`。代价是表格里的英文长说明也不翻——按用户反馈整张表跳过更可控。
+- **修复：** PARAGRAPH_TAGS 删 `td`，EXCLUDE_TAGS 加 `TABLE`。代价是表格里的英文长说明也不翻——按用户反馈整张表跳过更可控。**后记（2026-07）：**一刀切让 HN 布局表页面整页 0 段落，已改为仅排除数据表（`isDataTable`：caption/thead/th、宽行、role）；这张有表头的对比表仍被排除。
+
+### TABLE/FORM 一刀切排除把布局容器页整站吞掉
+- **现象：** HN 帖子页 0 段落（328 条评论全没了）；old.reddit 帖子页 196 个候选全是 metadata、评论正文 0 条。
+- **真相：** HN 全站是嵌套 `<table>` 布局，任何 `<p>` 都有 table 祖先；old.reddit 把每条评论包在 `<form class="usertext">`（内联编辑容器，SSR 里只有 hidden input）。这两个标签的排除是给"数据表格 / 交互表单"设计的，误伤把它们当结构容器用的老站。
+- **修复：** `page-content.ts` 的 `isDataTable`（数据表才排除）+ `isRealForm`（含可见控件才排除），均 WeakMap 缓存。HN 0→429 段、old.reddit 评论 98% 找回。
+
+### `<style>` 作为段落**子节点**时 CSS 文本被当正文送翻
+- **现象：** Wikipedia 引用列表某条 `<li>` 的输出以 `.mw-parser-output cite.citation{...}` 一大段 CSS 开头。
+- **真相：** TemplateStyles 把 `<style>` 直接嵌在 `<li>` 里；`isExcluded` 只查祖先，`<style>` 是后代查不到；`<style>` 的 textContent 在 DOM 规范里是真实文本，只是浏览器不渲染。
+- **修复：** `paragraphText()`：取文本跳过 style/script/noscript/template 后代，`hasMeaningfulText` / `isMostlyLinks` / page-translator 取原文统一走它。
+
+### 整卡包在 `<a>` 里的推荐位标题绕过 isMostlyLinks
+- **现象：** BBC 文末"相关阅读"卡片标题、GitHub 侧栏模块标题被当正文收进来。
+- **真相：** 这类卡片是链接包着标题（`<a><h2>…</h2></a>`），isMostlyLinks 只统计候选**内部**的 `<a>` 文字——内部没有链接，0% 占比直接放行。与"单链接标题豁免"是两个方向的问题。
+- **修复：** EXCLUDE_SELECTOR 加 `a`：候选有 `<a>` 祖先即排除（块级内容出现在链接里=导航卡片，正文不会这么写）。
+
+### root 收敛按 `<p>` 个数在 GitHub / StackOverflow 双向翻车
+- **现象：** GitHub repo 页侧栏垃圾大量混入（root 收不窄）；StackOverflow 问题正文整个消失、只剩答案（root 收太窄到 `#answers`）。
+- **真相：** 按个数算占比对"多个短侧栏 p vs 少数长正文 p"不敏感：GitHub README 的 p 个数只占 58% 不达 80% 阈值；SO 的 answers 区 p 个数超 80%，"最深达标子树"恰好把问题区甩出去。
+- **修复：** 改按 `paragraphText` 字符量加权，再加"丢弃 > 500 字符（`ROOT_MAX_DROPPED_CHARS`）不许收窄"的绝对下限。实测 GitHub 收窄后只丢 250 字符侧栏碎片、SO 停在含问题+答案的 `#mainbar`。
 
 ## 整页翻译 — 运行时
 

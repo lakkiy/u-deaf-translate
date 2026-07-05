@@ -53,6 +53,12 @@ Default to surfacing uncertainty, not hiding it.
 
 不要等用户提醒。但简单 bug、改名、refactor 这类不必记。
 
+## 正文识别算法的维护
+
+- 算法在 `src/page-content.ts`，设计文档在 `docs/content-detection.md`，回归测试集在 `eval/`。
+- **用户说某个页面正文获取有问题时**：按 `eval/README.md` 的流程把该页面抓下来收进 `eval/pages/`，跑 `bun run eval` 确认问题重现，再修算法。
+- 任何改动 `src/page-content.ts` 的任务，改完必须跑 `bun run eval` 并核对 `git diff eval/results/`，无回归才算完成。
+
 ## Commit 风格
 
 GNU Emacs / ChangeLog 风格。需要时调 `emacs-commit` skill。不加 `Co-Authored-By` 等 trailer，除非用户明确要求。
