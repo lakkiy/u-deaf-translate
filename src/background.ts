@@ -2,6 +2,7 @@
 // Translator API 不能在 worker 上下文调用，所以 Chrome 内置翻译还是在 content script 做。
 
 const MENU_ID = 'tnyl-translate-page';
+const SELECTION_MENU_ID = 'tnyl-translate-selection';
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
@@ -9,11 +10,23 @@ chrome.runtime.onInstalled.addListener(() => {
     title: '翻译整页（沉浸式）',
     contexts: ['page'],
   });
+  chrome.contextMenus.create({
+    id: SELECTION_MENU_ID,
+    title: '翻译选中文本',
+    contexts: ['selection'],
+  });
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId !== MENU_ID || !tab?.id) return;
-  chrome.tabs.sendMessage(tab.id, { type: 'tnyl:translate-page' }).catch((err) => {
+  if (!tab?.id) return;
+  const message =
+    info.menuItemId === MENU_ID
+      ? { type: 'tnyl:translate-page' }
+      : info.menuItemId === SELECTION_MENU_ID
+        ? { type: 'tnyl:translate-selection', text: info.selectionText ?? '' }
+        : null;
+  if (!message) return;
+  chrome.tabs.sendMessage(tab.id, message).catch((err) => {
     // 用户在 chrome://、商店、PDF 等 content script 注入不到的页面右键时
     // sendMessage 会 reject —— 静默忽略，划词翻译那边的限制一样
     console.warn('[叫你翻译你聋吗] 当前页面无法翻译:', err);

@@ -1,5 +1,5 @@
 // 划词翻译扩展入口：监听选区 → 延迟 150ms 显示触发器 → 用户点击 → 翻译 → 气泡显示。
-// 整个扩展只有这一个 content script，没有 service worker、没有消息传递。
+// 也接收 background 转发的右键菜单消息（翻译整页 / 翻译选中文本）。
 
 import { type Anchor, hide, isEventInsideBubble, show } from './bubble';
 import { togglePageTranslation } from './page-translator';
@@ -22,6 +22,10 @@ let currentSessionId = 0;
 
 // mouseup → 防抖延迟 150ms 才显示触发器，避免快速选/取消造成闪烁
 let pendingShowTimer: ReturnType<typeof setTimeout> | null = null;
+
+// 记录最近一次右键点击的位置，供"翻译选中文本"菜单项做气泡锚点
+// （contextmenu 事件必然早于 background 转发的消息，届时这里总有值）
+let lastContextMenuPos: Anchor | null = null;
 
 interface SelectionInfo {
   text: string;
@@ -117,6 +121,10 @@ async function runTranslation(text: string, anchor: Anchor, session: number): Pr
   }
 }
 
+document.addEventListener('contextmenu', (event) => {
+  lastContextMenuPos = { x: event.clientX, y: event.clientY };
+});
+
 document.addEventListener('mouseup', (event) => {
   if (isEventInsideBubble(event)) return; // 用户在气泡内部交互，不重新触发
   scheduleShowTrigger({ x: event.clientX, y: event.clientY });
@@ -151,9 +159,16 @@ window.addEventListener('scroll', (event) => {
   hide();
 }, { passive: true, capture: true });
 
-// 右键菜单"翻译整页"由 background service worker 发来；再次触发即取消
+// 右键菜单消息由 background service worker 转发
 chrome.runtime.onMessage.addListener((message) => {
   if (message?.type === 'tnyl:translate-page') {
+    // 再次触发即取消
     togglePageTranslation();
+  } else if (message?.type === 'tnyl:translate-selection') {
+    // 选区可能已丢失（比如右键菜单本身会短暂改变焦点）：退回用菜单自带的
+    // selectionText 兜底，但它会丢换行，仅此一种情况下使用
+    const text = (getCurrentSelection()?.text ?? message.text ?? '').trim();
+    if (!text) return;
+    void runTranslation(text, lastContextMenuPos ?? { x: 0, y: 0 }, ++currentSessionId);
   }
 });
