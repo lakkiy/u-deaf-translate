@@ -115,6 +115,11 @@
 - **真相：** 按个数算占比对"多个短侧栏 p vs 少数长正文 p"不敏感：GitHub README 的 p 个数只占 58% 不达 80% 阈值；SO 的 answers 区 p 个数超 80%，"最深达标子树"恰好把问题区甩出去。
 - **修复：** 改按 `paragraphText` 字符量加权，再加"丢弃 > 500 字符（`ROOT_MAX_DROPPED_CHARS`）不许收窄"的绝对下限。实测 GitHub 收窄后只丢 250 字符侧栏碎片、SO 停在含问题+答案的 `#mainbar`。
 
+### 代码示例的 tab 栏（button 组）整行被当正文送翻
+- **现象：** docs.agora.io 文档页整页翻译，代码块顶部的 "Python SDK / TypeScript SDK / Go SDK / REST API" tab 栏旁边多出一行译文"Python SDK、TypeScript SDK、Go SDK、REST API"。
+- **真相：** tab 栏是 `<div role=tablist>` 包一组 `<button role=tab>`。`EXCLUDE_TAGS` 的 BUTTON 只查祖先（`closest`），管不了"候选**包含** button"；button 又不在 `BLOCK_SELECTOR` 里，这个 div 照样算"不含块级后代"的叶子块，四个按钮文字合计 38 字符也过了 `LEAF_MIN_CHARS`。
+- **修复：** `paragraphText()` 的跳过名单从 `style/script/noscript/template` 扩到 `button/select/textarea`——控件标注不是正文。tab 栏 div 的有效文本变空，被 `hasMeaningfulText` 挡掉。回归副产品全是改进：StackOverflow 样本里 75 个 "Copy link"（li 包 button）、约 20 个 "N Comments" 折叠开关、"Highest score / Trending" 排序 tab 栏一并消失，正文零损失。另注：该站是 JS 渲染，curl 只能抓到 4KB 空壳，样本用 `chrome --headless=new --virtual-time-budget=15000 --dump-dom` 抓取。
+
 ## 整页翻译 — 运行时
 
 ### 源语言检测的 rejected promise 被永久缓存，毒化整页

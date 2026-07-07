@@ -1,0 +1,53 @@
+Root descriptor: <main> id="" class="min-w-0.flex-1.bg-background"
+Total candidate paragraph count: 49
+
+--- Paragraphs ---
+1. [p] Managed mode lets you use supported ASR, LLM, and TTS providers with Agora-manag
+2. [h2] Prerequisites
+3. [p] Before you begin, ensure that you have:
+4. [li] An Agora account with Conversational AI Engine enabled.
+5. [li] A valid Agora app ID and app certificate.
+6. [li] A customer ID and customer secret, to use Basic HTTP authentication.
+7. [li] An RTC token generated from your app ID and app certificate, to use token authen
+8. [h2] Understand the tech
+9. [p] In managed mode, Agora supplies the credentials and endpoint configuration for t
+10. [p] You can enable managed mode independently for any combination of ASR, LLM, and T
+11. [h2] Start an agent using managed mode
+12. [p] The following example starts an agent using Deepgram for ASR, OpenAI for LLM, an
+13. [p] Set credential_mode to "managed" inside each provider block and include the requ
+14. [p] In this example:
+15. [li] credential_mode: "managed" is set on each provider block. Agora supplies the cre
+16. [li] The asr block uses Deepgram Nova 3 with a keyword hint.
+17. [li] The llm block uses OpenAI GPT-4.1 Mini with a system prompt, greeting, and histo
+18. [li] The tts block uses MiniMax Speech 2.6 Turbo with a voice selection override.
+19. [h2] Supported vendors
+20. [p] The following vendors and models are available in managed mode.
+21. [h2] Reference
+22. [p] For the full list of request parameters, see Start a conversational AI agent.
+23. [p] For provider-specific configuration options available within asr, llm, and tts f
+24. [h2] Contact Us
+25. [p] 2804 Mission College Blvd.Santa Clara, CA, USA 95054
+26. [div] Copyright © 2026 Agora|All rights reserved
+27. [p] Managed mode lets you use supported ASR, LLM, and TTS providers with Agora-manag
+28. [h2] Prerequisites
+29. [p] Before you begin, ensure that you have:
+30. [li] An Agora account with Conversational AI Engine enabled.
+31. [li] A valid Agora app ID and app certificate.
+32. [li] A customer ID and customer secret, to use Basic HTTP authentication.
+33. [li] An RTC token generated from your app ID and app certificate, to use token authen
+34. [h2] Understand the tech
+35. [p] In managed mode, Agora supplies the credentials and endpoint configuration for t
+36. [p] You can enable managed mode independently for any combination of ASR, LLM, and T
+37. [h2] Start an agent using managed mode
+38. [p] The following example starts an agent using Deepgram for ASR, OpenAI for LLM, an
+39. [p] Set credential_mode to "managed" inside each provider block and include the requ
+40. [p] In this example:
+41. [li] credential_mode: "managed" is set on each provider block. Agora supplies the cre
+42. [li] The asr block uses Deepgram Nova 3 with a keyword hint.
+43. [li] The llm block uses OpenAI GPT-4.1 Mini with a system prompt, greeting, and histo
+44. [li] The tts block uses MiniMax Speech 2.6 Turbo with a voice selection override.
+45. [h2] Supported vendors
+46. [p] The following vendors and models are available in managed mode.
+47. [h2] Reference
+48. [p] For the full list of request parameters, see Start a conversational AI agent.
+49. [p] For provider-specific configuration options available within asr, llm, and tts f

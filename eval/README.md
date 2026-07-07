@@ -12,7 +12,7 @@
 - `eval.ts` —— 评测 harness，用 [linkedom](https://github.com/WebReflection/linkedom)
   把 HTML 解析成 `document`，挂到 `globalThis.document`，再 import 项目里的
   `src/page-content.ts` 跑算法。
-- `pages/*.html` —— 页面样本（19 个）。
+- `pages/*.html` —— 页面样本（20 个）。
 - `results/*.txt` —— 每个样本对应的算法输出快照（checked in，作为基线）。
 
 ## 怎么跑
@@ -30,7 +30,7 @@ bun eval/eval.ts eval/pages/wikipedia_alan_turing.html
 
 跑完看 `git diff eval/results/`：
 
-- **diff 干净** —— 本次改动没有影响这 19 个样本的行为，没有引入回归。
+- **diff 干净** —— 本次改动没有影响这 20 个样本的行为，没有引入回归。
 - **有 diff** —— 逐条人工判断：这一行是新收进来的正文（改进）还是新泄漏的垃圾
   （回归）？是原来收的正文消失了（回归）还是原来的垃圾被过滤掉了（改进）？
   确认都是预期改动后，把新的 `results/*.txt` 一并提交。
@@ -67,7 +67,16 @@ bun eval/eval.ts eval/pages/wikipedia_alan_turing.html
 
    新样本（`pages/*.html`）和新基线（`results/*.txt`）随代码改动一起提交。
 
-5. 注意：JS 渲染的站点（例如新版 www.reddit.com）用 `curl` 抓不到真实渲染后的 DOM，
-   只能拿到反爬虫空壳或者客户端渲染前的骨架。这类站点需要在浏览器里打开页面、等
-   JS 渲染完成后，用 DevTools 的"另存为"或"Copy outerHTML"拿到渲染后的 HTML，
-   再存进 `eval/pages/`。
+5. 注意：JS 渲染的站点（例如新版 www.reddit.com、docs.agora.io）用 `curl` 抓不到
+   真实渲染后的 DOM，只能拿到反爬虫空壳或者客户端渲染前的骨架（几 KB 就是信号）。
+   这类站点优先用无头 Chrome 渲染后 dump（`--user-data-dir` 指向临时目录，避免和
+   正在运行的 Chrome 抢同一份 profile）：
+
+   ```bash
+   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+     --headless=new --disable-gpu --user-data-dir=/tmp/chrome-eval-profile \
+     --virtual-time-budget=15000 --dump-dom <url> > eval/pages/<站名_简述>.html
+   ```
+
+   有反爬虫拦截无头浏览器的站点，退回手动方案：浏览器里打开页面、等 JS 渲染完成后，
+   用 DevTools 的"另存为"或"Copy outerHTML"拿到渲染后的 HTML，再存进 `eval/pages/`。

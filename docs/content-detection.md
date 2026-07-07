@@ -48,10 +48,17 @@
   - form 仅当是**真表单**才排除：含非 `hidden` 的 `input/select/textarea/button`
     才算真表单。old.reddit.com 把每条评论包在 `<form class="usertext">` 里（服务端
     渲染出的 HTML 只有一个 hidden input），一刀切排除会把全站评论都吞掉。
-- **`paragraphText(el)`**：取候选文本一律用它而不是裸 `textContent`——跳过
-  `style/script/noscript/template` 后代。原因：`<style>` 的 `textContent` 在 DOM 规范
-  里是真实文本（浏览器只是不渲染），Wikipedia 的引用 `<li>` 内嵌 TemplateStyles
-  `<style>` 子元素时，裸 `textContent` 会把整段 CSS 当成引文文本一起翻译。
+- **`paragraphText(el)`**：取候选文本一律用它而不是裸 `textContent`——跳过两类后代：
+  - `style/script/noscript/template`：DOM 规范里它们的 `textContent` 是真实文本
+    （浏览器只是不渲染），Wikipedia 的引用 `<li>` 内嵌 TemplateStyles `<style>`
+    子元素时，裸 `textContent` 会把整段 CSS 当成引文文本一起翻译；
+  - `button/select/textarea`：控件标注不是正文。`EXCLUDE_TAGS` 的 BUTTON 只管
+    "候选在控件**里面**"（`closest` 查祖先），管不了"候选**包含**控件"——Agora 文档
+    的代码 tab 栏 `<div role=tablist><button>Python SDK</button>…</div>` 全部文字都
+    来自 button，又因 button 不在 `BLOCK_SELECTOR` 里照样通过叶子块门槛。跳过控件
+    文字后这类 div 有效文本为空，被 `hasMeaningfulText` 挡掉；正文段落里混着的
+    "Copy link" 之类按钮标注也不再随原文一起送翻。
+
   `page-translator.ts` 取待翻原文时也用这个函数，保证"评测看到的文本"和"实际发去
   翻译的文本"一致。
 
@@ -98,7 +105,7 @@ root 会偏宽，这部分交给第二步的过滤规则兜底，不在这一步
 
 这五个常量在 2026-07 的算法改进里全部取初始给定值、未做调参——用真实页面实测时
 GitHub/StackOverflow 的 root 收敛丢弃字符量分别是 250、190，离 500 的阈值有明显余量；
-`LEAF_MIN/MAX_CHARS` 在当前 19 页样本集里也没有出现"差一点点就该收/不该收"的边界
+`LEAF_MIN/MAX_CHARS` 在当前 20 页样本集里也没有出现"差一点点就该收/不该收"的边界
 抖动案例。如果以后新增页面样本触发了边界问题，应该先看是不是规则本身设计错了，
 而不是简单调常量掩盖。
 
@@ -186,7 +193,7 @@ GitHub/StackOverflow 的 root 收敛丢弃字符量分别是 250、190，离 500
 回归测试集在 `eval/`，用法见 `eval/README.md`（跑 `bun run eval`，看
 `git diff eval/results/` 判断改动是否引入回归；新页面的收录流程也在那份 README 里）。
 
-当前 19 页样本的结论快照（2026-07，均以 `eval/results/*.txt` 为准）：
+当前 20 页样本的结论快照（2026-07，均以 `eval/results/*.txt` 为准）：
 
 | 页面 | 结论 | 说明 |
 |---|---|---|
@@ -195,7 +202,7 @@ GitHub/StackOverflow 的 root 收敛丢弃字符量分别是 250、190，离 500
 | GitHub（vscode 仓库主页） | good | root 正确收窄到 README 的 `<article>`，侧栏噪声消失 |
 | Hacker News（评论页） | good | 嵌套 table 布局放行后评论全部收录，导航行被 mostly-links 挡住 |
 | Hacker News（首页列表） | partial | 列表页非强制核查范围，subtext 元数据行会混入 |
-| Stack Overflow（sorted array 问题） | partial | 问题正文和答案均已收录；仍有少量徽章类噪声（声誉徽章行）与底部 CTA 组件泄漏 |
+| Stack Overflow（sorted array 问题） | partial | 问题正文和答案均已收录；"Copy link"/"N Comments"/排序 tab 等按钮噪声已被控件文字跳过规则清掉，仍有少量徽章类噪声（声誉徽章行）与底部 CTA 组件泄漏 |
 | BBC（新闻文章） | good | 推荐卡标题被 `a` 祖先排除规则挡住，正文完整 |
 | BBC（新闻列表） | partial | 列表页非强制核查范围 |
 | Guardian（文章） | good | 与人工核对结果字节级一致 |
@@ -209,6 +216,7 @@ GitHub/StackOverflow 的 root 收敛丢弃字符量分别是 250、190，离 500
 | Astral Codex Ten（列表页） | partial | 首页几乎无正文段落，非强制核查范围，2 段属预期 |
 | old.reddit.com（评论页） | good | 98% 的 `.md p` 评论段落被正确收录，真表单判定放行评论 |
 | synthetic（手写覆盖用例） | good | 覆盖侧栏稀释、自链接标题、mostly-links、表格排除、li/p 去重等场景 |
+| Agora Docs（managed mode，headless Chrome 抓取的 JS 渲染站） | good | 代码示例 tab 栏（`<div role=tablist>` 包 button 组）被控件文字跳过规则挡住；页面自带的正文重复渲染（同段落出现两次）如实反映在输出里，属页面结构而非算法问题 |
 
 **已知不支持**：
 

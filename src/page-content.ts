@@ -45,14 +45,23 @@ const PARAGRAPH_TAGS = ['p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquo
 const PARAGRAPH_SELECTOR = PARAGRAPH_TAGS.join(',');
 const LEAF_CANDIDATE_SELECTOR = `${PARAGRAPH_SELECTOR},div,td`;
 
+// paragraphText 跳过的后代标签。两类：
+// - style/script/noscript/template：DOM 里有 textContent 但浏览器不渲染（Wikipedia
+//   引用 li 内嵌 TemplateStyles `<style>`，裸 textContent 会把 CSS 当引文带出来）；
+// - button/select/textarea：控件标注不是正文。EXCLUDE_TAGS 只管"候选在控件里面"
+//   （closest 查祖先），管不了"候选包含控件"——Agora 文档的代码 tab 栏
+//   `<div role=tablist><button>Python SDK</button>…</div>` 全部文字都来自 button，
+//   照样过叶子块门槛。跳过控件文字后该 div 有效文本为空，被 hasMeaningfulText 挡掉；
+//   正文段落里混着的复制按钮之类的标注文字也不再被送去翻译。
+const SKIPPED_DESCENDANT_SELECTOR = 'style,script,noscript,template,button,select,textarea';
+const SKIPPED_DESCENDANT_TAGS = new Set(['STYLE', 'SCRIPT', 'NOSCRIPT', 'TEMPLATE', 'BUTTON', 'SELECT', 'TEXTAREA']);
+
 /**
- * 元素可见文本：跳过 style/script/noscript/template 后代的 textContent。
- * 修复 Wikipedia 引用 li 内嵌 TemplateStyles `<style>` 子元素、其 CSS 文本
- * 被 textContent 一并带出的问题——`<style>` 的 textContent 在 DOM 规范里是真实文本，
- * 但浏览器不渲染，不应该被当正文送去翻译。
+ * 元素可见文本：跳过 SKIPPED_DESCENDANT_TAGS 后代的 textContent（不渲染的文本
+ * 与控件标注，理由见上方常量注释）。
  */
 export function paragraphText(el: Element): string {
-  if (!el.querySelector('style,script,noscript,template')) return el.textContent ?? '';
+  if (!el.querySelector(SKIPPED_DESCENDANT_SELECTOR)) return el.textContent ?? '';
   let out = '';
   const walk = (node: Element) => {
     for (const child of Array.from(node.childNodes)) {
@@ -60,10 +69,7 @@ export function paragraphText(el: Element): string {
         out += (child as unknown as CharacterData).data ?? '';
       } else if (child.nodeType === 1) { // Node.ELEMENT_NODE
         const childEl = child as Element;
-        if (childEl.tagName === 'STYLE' || childEl.tagName === 'SCRIPT'
-          || childEl.tagName === 'NOSCRIPT' || childEl.tagName === 'TEMPLATE') {
-          continue;
-        }
+        if (SKIPPED_DESCENDANT_TAGS.has(childEl.tagName)) continue;
         walk(childEl);
       }
     }
