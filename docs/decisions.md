@@ -142,7 +142,7 @@ LanguageDetector 对短文本置信度低或返回 `und`。直接按英语兜底
 菜单只有一项"翻译整页（沉浸式）"，行为是 toggle：未启动则翻译，已启动则停 observer、清队列、移除所有 `.tnyl-translation` 节点和 `data-tnyl-translated` 标记。in-flight 翻译没法 cancel（Translator.translate 不接 AbortSignal），用 `sessionId` 计数器：每次 start/stop 都 `++`，task 完成时 session 不匹配就 return，不写回 DOM。menu title 不动态切换（要让 background 知道 per-tab 状态太复杂），用户点两次自然就理解。
 
 ### 整页翻译暂不支持 SPA 路由重扫
-SPA 切路由后新加载的段落不会被自动翻译，需要再次右键触发——`data-tnyl-translated` 标记会让已翻译的跳过，只翻新内容。等用户反馈再考虑加 MutationObserver。
+SPA 切路由后不自动翻译新页面：监听 `currententrychange` 只做清场（清掉上一页残留的译文，见 pitfalls），新页面要再次右键触发。自动续翻需要 MutationObserver 盯内容替换，等用户反馈再考虑。
 
 ## 错误处理
 

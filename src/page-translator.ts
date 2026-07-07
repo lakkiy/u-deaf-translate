@@ -15,9 +15,17 @@ const MAX_CONCURRENT = 3;
 let started = false;
 
 // 启动整页翻译时的 URL。SPA（Next.js 等客户端路由）站内跳转不会重载 content script，
-// 模块级的 started/observer 会从上个页面残留下来。toggle 时拿它跟当前 URL 比，
-// 判断 started 是不是上个页面遗留的、对当前页面已经无效。
+// 模块级的 started/observer 会从上个页面残留下来，插进 DOM 的译文节点也会被
+// 框架复用的容器留在新页面上。下方的 currententrychange 监听拿它跟当前 URL 比，
+// 一换页就清掉旧 session；toggle 里再比一次只是监听没生效时的兜底。
 let startedHref = '';
+
+// 比较"是否还在同一个页面"时忽略 hash：点击页内锚点（docs 目录跳转）只改 hash、
+// 正文没变，不应把已有译文清掉。代价是纯 hash 路由（#/path）的 SPA 检测不到换页，
+// 这类站点如今很少，残留时再 toggle 一次即可清掉。
+function pageKey(href: string): string {
+  return href.split('#', 1)[0] ?? href;
+}
 
 // 每次 start / stop 都 ++。in-flight 翻译完成时 session 不匹配就丢弃，
 // 避免 stop 后 stale 回调把译文塞回页面、或 toggle 重启时旧 session 干扰新 session。
@@ -196,12 +204,24 @@ function stopPageTranslation(): void {
   console.log('[叫你翻译你聋吗] 整页翻译已取消');
 }
 
+// SPA 站内跳转不重载 content script，上个页面的译文节点会残留、叠在新页面上
+// （用户反馈的"翻到下一页，上一页的译文还在"）。Navigation API 的
+// currententrychange 覆盖 pushState / replaceState / 前进后退，一换页就清场。
+// Chrome 102+ 才有 navigation 对象；本扩展要求 138+，判空只为非浏览器环境。
+if (typeof navigation !== 'undefined') {
+  navigation.addEventListener('currententrychange', () => {
+    if (started && pageKey(location.href) !== pageKey(startedHref)) {
+      stopPageTranslation();
+    }
+  });
+}
+
 /** 右键菜单触发：未启动则开始，已启动则取消并清除译文。 */
 export function togglePageTranslation(): void {
-  // SPA 站内跳转后 started 会从上个页面残留：URL 已变就先清掉旧 session，
-  // 当作未启动重新开始。否则新页面第一次右键只是 stop 掉残留状态、看不到任何译文，
-  // 要点第二次才真正翻译（用户反馈的"第一次没翻译，再点才翻译"）。
-  if (started && location.href !== startedHref) {
+  // 兜底：currententrychange 没生效时（未知的路由方式），URL 已变就先清掉
+  // 旧 session，当作未启动重新开始。否则新页面第一次右键只是 stop 掉残留状态、
+  // 看不到任何译文，要点第二次才真正翻译。
+  if (started && pageKey(location.href) !== pageKey(startedHref)) {
     stopPageTranslation();
   }
 

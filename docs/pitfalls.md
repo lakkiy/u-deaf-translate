@@ -130,7 +130,12 @@
 ### SPA 站内跳转后 `started` 残留，新页面第一次右键不翻译
 - **现象：** 在一个页面右键"翻译整页"，然后跳到同站另一页再右键，第一次没反应，点第二次才翻译。
 - **真相：** ghostty.org 等 Next.js 站点站内跳转是客户端路由，**不重载 content script**，`page-translator.ts` 模块级的 `started` 从上个页面残留成 `true`。新页面第一次 `togglePageTranslation()` 因此走的是 `stopPageTranslation()`（清残留状态，新页面没译文可清，看不到效果），第二次才 `startPageTranslation()`。整页全量加载到别的站点时 content script 会重载、`started=false`，所以问题只在 SPA 站内跳转出现。
-- **修复：** 启动时记下 `startedHref = location.href`，`togglePageTranslation()` 里若 `started && location.href !== startedHref` 就先 `stopPageTranslation()` 清掉旧 session，再当未启动重新开始。（注：未监听导航事件——content script 在隔离世界 patch `history.pushState` 收不到页面自身的调用，故改成 toggle 时惰性比对 URL。代价是 A→B→A 回到同一 URL 的罕见情形仍会残留。）
+- **修复：** 启动时记下 `startedHref = location.href`，`togglePageTranslation()` 里若 `started && location.href !== startedHref` 就先 `stopPageTranslation()` 清掉旧 session，再当未启动重新开始。（注：当时未监听导航事件——content script 在隔离世界 patch `history.pushState` 收不到页面自身的调用，故改成 toggle 时惰性比对 URL。**后记（2026-07）：**发现 Navigation API 不用 patch 就能收到站内跳转（见下条），已改为主动清场，toggle 里的比对保留为兜底。）
+
+### SPA 站内跳转后上一页的译文节点残留、叠在新页面上
+- **现象：** docs.agora.io（Next.js 文档站）整页翻译后点侧栏进下一页，上一页的中文译文块还大片留在新页面正文里。
+- **真相：** 客户端路由换页不是整树替换：React diff 只增删自己创建的节点，扩展插进复用容器里的 `.tnyl-translation` div 被原样保留。上一条的修复只在用户**再次右键**时才清场，跳转后的残留在那之前一直可见。
+- **修复：** `page-translator.ts` 监听 Navigation API 的 `currententrychange`（Chrome 102+；覆盖 pushState / replaceState / 前进后退，且在 content script 隔离世界能直接收到，不必 patch `history.pushState`），URL 一变即 `stopPageTranslation()` 清场。比较 URL 时忽略 hash（`pageKey()`）：页内锚点跳转只改 hash、正文没变，不应清掉译文；代价是纯 hash 路由（`#/path`）的 SPA 检测不到换页，这类站点如今很少，残留时手动 toggle 兜底。
 
 ## DOM / CSS
 
