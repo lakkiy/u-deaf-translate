@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { basename, extname, join } from 'node:path';
 // 静态相对 import 是安全的：page-content.ts 模块顶层不碰 document，
 // 只有 findContentRoot/collectParagraphs 被调用时才读 globalThis.document。
-import { findContentRoot, collectParagraphs, paragraphText } from '../src/page-content';
+import { findContentRoot, collectParagraphs, paragraphText } from '../src/content/page-content';
 
 const PAGES_DIR = join(import.meta.dir, 'pages');
 const RESULTS_DIR = join(import.meta.dir, 'results');

@@ -127,7 +127,7 @@
       font-size: 13px; box-shadow: 1px 1px 0 var(--red-deep);
     }
     .backend-card.selected .check { display: flex; }
-    .deepseek-icon svg { width: 20px; height: 20px; display: block; border-radius: 50%; }
+    .deepseek-icon { width: 20px; height: 20px; flex: none; }
 
     /* 各后端设置面板 */
     .panel { display: none; }
@@ -260,7 +260,15 @@
         </button>
         <button class="backend-card" data-backend="deepseek" role="tab" type="button">
           <span class="check">✓</span>
-          <div class="bc-title"><span class="deepseek-icon" id="deepseek-icon"></span> DeepSeek <span class="badge">推荐</span></div>
+          <div class="bc-title">
+            <!-- 手写图标（不用外链 / 官方 logo）：品牌主色 #4D6BFE 圆底 + 一道白色波浪表达 "deep sea" -->
+            <svg class="deepseek-icon" viewBox="0 0 32 32" aria-hidden="true">
+              <circle cx="16" cy="16" r="16" fill="#4D6BFE"/>
+              <path d="M6 19 Q10 13 14 19 T22 19 T30 19" stroke="white" stroke-width="2"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            DeepSeek <span class="badge">推荐</span>
+          </div>
           <div class="bc-sub">云端 · 质量好</div>
         </button>
         <button class="backend-card" data-backend="custom" role="tab" type="button">
@@ -292,15 +300,15 @@
 
           <label>API Key <span class="hint">本地存，不上报 · 在 platform.deepseek.com 创建</span></label>
           <div class="input-eye">
-            <input id="deepseekApiKey" type="password" placeholder="sk-..." />
-            <button class="eye" type="button" data-eye="deepseekApiKey" title="显示 / 隐藏">👁</button>
+            <input id="deepseek-apiKey" type="password" placeholder="sk-..." />
+            <button class="eye" type="button" data-eye="deepseek-apiKey" title="显示 / 隐藏">👁</button>
           </div>
 
           <label>模型 <span class="hint">默认 flash，质量优先选 pro</span></label>
-          <select id="deepseekModel"></select>
+          <select id="deepseek-model"></select>
 
           <label>高级生成参数（JSON） <span class="hint">温度 / 最大 tokens 等，合法 JSON 对象 merge 进 body；thinking 已关</span></label>
-          <textarea id="deepseekExtraParams" class="short"></textarea>
+          <textarea id="deepseek-extraParams" class="short"></textarea>
 
           <div class="prompt-block">
             <div class="prompt-head">

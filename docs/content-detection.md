@@ -1,6 +1,6 @@
 # 正文识别算法设计文档
 
-本文档描述 `src/page-content.ts` 的 `findContentRoot` + `collectParagraphs` 两个函数，
+本文档描述 `src/content/page-content.ts` 的 `findContentRoot` + `collectParagraphs` 两个函数，
 即整页沉浸式翻译的正文识别算法。目标读者是以后要修改这个算法的人——写到能脱离代码
 复现的程度。
 
@@ -234,7 +234,7 @@ GitHub/StackOverflow 的 root 收敛丢弃字符量分别是 250、190，离 500
 
 ## 5. 维护约定
 
-- 改 `src/page-content.ts` 之后必须跑 `bun run eval`，人工核对
+- 改 `src/content/page-content.ts` 之后必须跑 `bun run eval`，人工核对
   `git diff eval/results/`：干净说明无回归；有 diff 要逐条确认是预期的改进还是
   意外的回归，确认后把新的 `results/*.txt` 一起提交。
 - 用户反馈某个页面正文识别有问题时，按 `eval/README.md` 里"如何收录新页面"一节

@@ -4,6 +4,9 @@
 
 ## 架构
 
+### 代码结构：`src/` 按运行上下文分一层文件夹，文件夹内平铺
+`content/`（注入网页的脚本：划词 `content.ts` + 气泡 `bubble.ts` + 整页 `page-translator.ts` + 正文识别 `page-content.ts`）、`translate/`（入口 `translate.ts` 分发到 `chrome.ts` / `llm.ts` 两个后端）、`options/`、`popup/`；`src/` 根只放 service worker `background.ts` 和两个全局共享的 `config.ts` / `languages.ts`。依赖只有一个方向：`content → translate → config/languages`，`options`、`popup → config/languages`，`background` 不 import 任何东西。约束：`config.ts` / `languages.ts` 必须保持无 DOM 副作用（options / popup 也要 import）；带顶层监听器的东西（`translate/chrome.ts` 的 pagehide/visibilitychange）只能被 content 侧引用。不追求分层架构，够读就行——新文件先想清楚属于哪个上下文再放。
+
 ### 翻译逻辑全在 content script；service worker 做菜单注册 + LLM fetch 代理
 Chrome Translator API 不能在 Worker 上下文调用，而 MV3 service worker 本质就是 worker——Chrome 内置翻译必须放 content script。早期不用 service worker（省消息传递开销），后来加"右键菜单整页翻译"被迫引入（`chrome.contextMenus` 只能在 background 注册），再后来加"自定义 LLM 后端"又借 service worker 代发 fetch（content script fetch 受页面 CORS 限制，绕不过用户配置的任意 endpoint）。`src/background.ts` 现在只做这两件事：菜单注册 + `tnyl:llm-fetch` 消息代理 fetch。
 
@@ -11,9 +14,9 @@ Chrome Translator API 不能在 Worker 上下文调用，而 MV3 service worker 
 `contextMenus.onClicked` → `chrome.tabs.sendMessage(tabId, { type: 'tnyl:translate-page' })` → content script 的 `chrome.runtime.onMessage` → `startPageTranslation()`。在 `chrome://`、商店页等没注入 content 的页面右键，sendMessage 会 reject——background 端 `catch` 后 `console.warn` 静默，跟划词翻译的限制一致。
 
 ### Popup「翻这一页」直接从扩展页发 `tnyl:translate-page` 到当前 tab，不经 background
-点图标弹出的 `src/popup.html`/`popup.ts` 运行在扩展页上下文（不是 content script），`chrome.tabs.query({active,currentWindow})` 拿到当前 tab 再 `chrome.tabs.sendMessage(tab.id, {type:'tnyl:translate-page'})`——和右键菜单走同一条消息、同一个 content 端 handler，行为完全一致（再点即取消）。复用现有 message type 而不新增，content.ts 那个 listener 不用动。无需新权限：`tabs.query/sendMessage` 在扩展页本就可用，`host_permissions` 覆盖 sendMessage。注入不到 content 的页面（chrome:// 等）sendMessage reject，`catch` 静默。popup 故意极简——按用户要求砍掉 stats（今日tokens/延迟/成本）、快捷键提示、提示词预设；只留「正在用 + 换后端（循环切 config.active）」「翻成（改全局 config.targetLanguage）」「翻这一页」「齿轮开 options」。
+点图标弹出的 `src/popup/popup.html`/`popup.ts` 运行在扩展页上下文（不是 content script），`chrome.tabs.query({active,currentWindow})` 拿到当前 tab 再 `chrome.tabs.sendMessage(tab.id, {type:'tnyl:translate-page'})`——和右键菜单走同一条消息、同一个 content 端 handler，行为完全一致（再点即取消）。复用现有 message type 而不新增，content.ts 那个 listener 不用动。无需新权限：`tabs.query/sendMessage` 在扩展页本就可用，`host_permissions` 覆盖 sendMessage。注入不到 content 的页面（chrome:// 等）sendMessage reject，`catch` 静默。popup 故意极简——按用户要求砍掉 stats（今日tokens/延迟/成本）、快捷键提示、提示词预设；只留「正在用 + 换后端（循环切 config.active）」「翻成（改全局 config.targetLanguage）」「翻这一页」「齿轮开 options」。
 
-### 整页翻译的正文选取算法（`src/page-content.ts`：`findContentRoot` + `collectParagraphs`，不引入 Readability.js）
+### 整页翻译的正文选取算法（`src/content/page-content.ts`：`findContentRoot` + `collectParagraphs`，不引入 Readability.js）
 两步启发式：`findContentRoot` 找最深的、保留 ≥80% 正文字符且丢弃 ≤500 字符的子树作为正文容器，`collectParagraphs` 在容器内两遍扫描挑出候选段落（排除规则筛一遍，"让位给更内层合格候选"再筛一遍）。不引入 Readability.js（70KB+ 太重），但借鉴其三个原理：class/id 负面词过滤、按文本量而非节点数衡量内容、区分数据表与布局表。完整设计、各常量论证、与 Readability 的详细对照、评测结论见 `docs/content-detection.md`。
 
 ### `<table>` 从"整张跳过"改为"仅数据表跳过"
@@ -91,28 +94,28 @@ PNG 直接 `import './trigger-icon.png?inline'` 内联进 JS。代价是 content
 ## 范围
 
 ### 三后端：Chrome / DeepSeek / 自定义，options 页卡片式互斥选择
-`config.active: 'chrome' | 'deepseek' | 'custom'` 决定 `translate()` 走哪条路径。DeepSeek 的 endpoint 仍在 `src/deepseek.ts` 写死（`DEEPSEEK_MODELS` 数组列可选 model，改模型只改这个数组），但 **system / prompt / 生成参数已从写死常量改成可在 options 编辑的 config 字段**（`deepseekSystem` / `deepseekPromptTemplate` / `deepseekExtraParams`），默认值取 config.ts 的 `DEEPSEEK_DEFAULT_*` 常量——既给新手一个能直接用的默认，又允许进阶用户调教（含系统提示词）。自定义后端在原有 5 字段基础上加了 `system`。三个后端的配置在 storage 各自独占字段，切后端不丢任何输入；所有字段都在 DOM 里渲染，切后端只调 `.selected`/`.active` class，state 天然 persist。options 用卡片网格替代旧 tab 栏（纯视觉），并在最上方增设「壹 翻译」语言区块。
+`config.active: 'chrome' | 'deepseek' | 'custom'` 决定 `translate()` 走哪条路径。DeepSeek 的 endpoint 在 `src/config.ts` 写死（`DEEPSEEK_ENDPOINT`；`DEEPSEEK_MODELS` 数组列可选 model，改模型只改这个数组，第一个是默认），但 **system / prompt / 生成参数已从写死常量改成可在 options 编辑的 config 字段**（`deepseekSystem` / `deepseekPromptTemplate` / `deepseekExtraParams`），默认值都在 config.ts 的 `DEFAULT_CONFIG` 一个对象里（也是「恢复默认」的来源）——既给新手一个能直接用的默认，又允许进阶用户调教（含系统提示词）。自定义后端在原有 5 字段基础上加了 `system`。三个后端的配置在 storage 各自独占字段，切后端不丢任何输入；所有字段都在 DOM 里渲染，切后端只调 `.selected`/`.active` class，state 天然 persist。options 用卡片网格替代旧 tab 栏（纯视觉），并在最上方增设「壹 翻译」语言区块。
 
 ### LLM 后端的 fetch 必须经 background 代理
 content script 直接 fetch 用户配置的 endpoint 受页面 CORS 影响（除非 endpoint 自己返了正确的 `Access-Control-Allow-Origin`，多数本地部署没设）。Service worker fetch 不受 CORS 限制，但需要 `host_permissions`——目前用 `["http://*/*", "https://*/*"]` 覆盖任意 endpoint。消息协议：content → `chrome.runtime.sendMessage({ type: 'tnyl:llm-fetch', url, headers, body })` → background fetch → `sendResponse({ ok, status, data | error })`，MV3 异步响应必须 `return true` 保持 channel。
 
-### DeepSeek tab 图标用 inline SVG，不用外链/字体图标
-避免外链：CSP 风险（manifest V3 img-src 默认收紧）+ 第三方品牌图片版权问题。`src/deepseek.ts` 的 `DEEPSEEK_ICON_SVG` 是手写 SVG 字符串（32x32 viewBox），tab 渲染时 `innerHTML` 注入——来源是项目源码不是用户输入，XSS 不构成风险。用品牌主色 `#4D6BFE` 圆底 + 白色波浪线（致意 "deep sea"），不像官方 logo 但传达意象。
+### DeepSeek 卡片图标是手写 inline SVG，不用外链/字体图标
+避免外链：CSP 风险（manifest V3 img-src 默认收紧）+ 第三方品牌图片版权问题。SVG 直接写在 `src/options/options.html` 的卡片标题里（32x32 viewBox），不再经 JS 常量 + `innerHTML` 注入——图标只有 options 一处用，写在 HTML 里少一层。用品牌主色 `#4D6BFE` 圆底 + 白色波浪线（致意 "deep sea"），不像官方 logo 但传达意象。
 
-### 旧 schema 一次性迁移到 `custom` tab
-0.x 阶段配置 schema 从扁平字段（`endpoint`/`apiKey`/`model`/...）变成 `{ active, deepseekApiKey, custom: {...} }`。`getConfig()` 第一次读到旧扁平字段（有 `endpoint` 但没有 `active`/`custom`）就 move 进 `custom` 子对象，`active` 设为 `'custom'`（用户之前配过 endpoint 肯定是想用自定义），写回后 remove 旧字段。代价 30 行代码，但旧用户的 prompt 模板、参数都不丢。
+### 扁平旧 schema 的迁移代码已删除
+早期 `getConfig()` 里有一段把扁平字段（`endpoint`/`apiKey`/`model`/...）move 进 `custom` 的一次性迁移。2026-10 清理时核对 git 历史：`config.ts` 首次提交（a2a9275）就已经是嵌套 schema，扁平 schema 从未出现在任何 commit 或打包产物里，只在当时的开发机上存在过，早已迁完——所以整段删掉。`getConfig()` 现在只做 `{ ...DEFAULT_CONFIG, ...stored, custom: { ...DEFAULT_CONFIG.custom, ...stored.custom } }` 的默认值合并：以后新增字段靠它透明升级；真要改字段形状（改名/挪位置）时再写迁移。
 
 ### Prompt 模板用 `{target_lang}` / `{source_text}` 占位符（单括号，故意不改双括号）
-`config.promptTemplate` 默认 Hy-MT2 推荐格式：`将以下文本翻译为 {target_lang}，注意只需要输出翻译后的结果，不要额外解释：\n\n{source_text}`。渲染用 `replaceAll`，不做转义——LLM 自身能处理特殊字符，用户填的模板我们尊重。Options 页面保存时如果模板缺占位符给软警告（仍允许保存）。一份 UI 设计稿把占位符画成 `{{text}}`/`{{target_lang}}`/`{{source_lang}}`（双括号 + 重命名 + 新增），**有意不采纳**：那只是设计稿的「样子」，改渲染会让所有用户已存的单括号模板失效（占位符不再被替换，译文里冒出裸 `{source_text}`），收益不抵破坏。`src/prompts.ts` 的预设文案也沿用单括号。
+DeepSeek 默认模板是 Hy-MT2 推荐格式：`将以下文本翻译为 {target_lang}，注意只需要输出翻译后的结果，不要额外解释：\n\n{source_text}`；自定义端点默认模板是 `请将以下文本翻译为{target_lang}，直接输出翻译结果，不要进行任何解释。\n\n{source_text}`（2026-10 用户给的截图里写的是 `{target-language}` / `{source-text}`，文案照搬、占位符按本条约定归一成渲染器认识的名字，否则原文根本不会被代入）。渲染用 `replaceAll`，不做转义——LLM 自身能处理特殊字符，用户填的模板我们尊重。Options 页面保存时如果模板缺占位符给软警告（仍允许保存）。一份 UI 设计稿把占位符画成 `{{text}}`/`{{target_lang}}`/`{{source_lang}}`（双括号 + 重命名 + 新增），**有意不采纳**：那只是设计稿的「样子」，改渲染会让所有用户已存的单括号模板失效（占位符不再被替换，译文里冒出裸 `{source_text}`），收益不抵破坏。`src/options/prompts.ts` 的预设文案也沿用单括号。
 
 ### System / User 双段 prompt：system 可选，空则退回单条 user
-`renderPrompt` 之外，`translateViaLlm` 在 `config.system` 非空时多发一条 `{role:'system'}`（同样走 renderPrompt，里面也能用占位符）；空 system 时只发一条 user。自定义后端默认 `custom.system` = `DEFAULT_SYSTEM_PROMPT`（约束保留专有名词、产品名、人名、代码标识符原文，别强行翻译），新装即带；DeepSeek 默认 `deepseekSystem=''` 维持只发 user。新增的 config 字段（语言、deepseek 三件套、custom.system）走 `getConfig` 的默认值合并：曾存过 5 字段 custom（无 `system` key）的老用户会被补上这条默认 system——属良性增强，其余已存配置不动。
+`renderPrompt` 之外，`translateViaLlm` 在 `config.system` 非空时多发一条 `{role:'system'}`（同样走 renderPrompt，里面也能用占位符）；空 system 时只发一条 user。两个 LLM 后端的默认 system 都是空（自定义端点曾默认一条"保留专有名词原文"的 system，2026-10 按用户要求清空）。已存过配置的用户不受默认值变化影响——`getConfig` 只给缺失的字段补默认。
 
-### 自定义后端默认 `max_tokens` 用 4096
-`config.ts` 的 `DEFAULT_EXTRA_PARAMS` 早期照搬 Hy-MT2 模型卡示例的 `max_tokens: 128`（约 90 汉字），太小：同一份 config 也供整页翻译，长段落会被截断。先提到 1024，仍偏紧，最终定 4096——整页长段落留足额度。DeepSeek 分支（`DEEPSEEK_DEFAULT_EXTRA_PARAMS`）有自己的调优（`max_tokens 1024` + `thinking` 关），不跟随这个值。
+### 自定义端点默认参数：`temperature 0` + 关 thinking，不设 `max_tokens`
+`DEFAULT_CONFIG.custom.extraParams` 默认 `{"temperature": 0, "chat_template_kwargs": {"enable_thinking": false}}`，取自用户在用的 Index-Translate 模型卡（贪心解码、关思考）；默认 User 模板也是该模型卡的格式。`chat_template_kwargs` 是 llama.cpp server 的请求级字段（实测本地 server 接受），不是 OpenAI 标准——端点换成会拒绝未知字段的服务时要在 options 里删掉。不设 `max_tokens`，用服务端默认（llama.cpp 默认不限生成长度）。历史：早期照搬 Hy-MT2 模型卡示例的 `max_tokens: 128`，整页翻译长段落被截断，先后提到 1024、4096，2026-10 去掉；教训保留——若要填 `max_tokens`，同一份配置也供整页翻译，别给小了。DeepSeek 分支有自己的调优（`max_tokens 1024` + `thinking` 关），不受影响。
 
 ### 自定义端点默认指向本地 llama.cpp，UI 去掉 Ollama 字样
-`DEFAULT_CUSTOM.endpoint` 默认 `http://127.0.0.1:8080/v1/chat/completions`（llama.cpp server 默认地址），新装即填好，本地起了服务就能直接用。options 文案与占位符里原先的 "Ollama" 提示、`11434` 端口、`qwen2.5:7b` 这类 ollama tag 写法全部移除（按用户要求弃用 Ollama），示例统一改成 llama.cpp 的 `8080` 与 `Qwen3-8B` 这类裸模型名。
+`DEFAULT_CONFIG.custom.endpoint` 默认 `http://127.0.0.1:8080/v1/chat/completions`（llama.cpp server 默认地址），新装即填好，本地起了服务就能直接用。options 文案与占位符里原先的 "Ollama" 提示、`11434` 端口、`qwen2.5:7b` 这类 ollama tag 写法全部移除（按用户要求弃用 Ollama），示例统一改成 llama.cpp 的 `8080` 与 `Qwen3-8B` 这类裸模型名。
 
 ### 语言中文名手写表 + Intl 兜底
 `src/languages.ts` 手写 37 种 Hy-MT2 支持语言的 BCP-47 → 中文名映射（从模型卡复制）。手写比 `Intl.DisplayNames` 可控——`Intl` 把 `zh` 译为"汉语"而表里固定"中文"；某些少数语言 `Intl` 译名也有差异。`getLanguageDisplayName()` 先查表，没命中退到主子标签（`zh-CN` → `zh`），最后兜底 `Intl.DisplayNames`。
@@ -121,13 +124,13 @@ content script 直接 fetch 用户配置的 endpoint 受页面 CORS 影响（除
 跨设备同步；条目都很小（prompt 模板 ≪ 8KB 限额）。content / background / options 三个上下文共享，options 页面改完 background/content 通过 `chrome.storage.onChanged` 收到事件后清模块缓存——下次 `getConfig()` 重新读。不用每次翻译都打 storage（虽然很快，但能少就少）。
 
 ### 互译：选中文本与目标语言同族 → 翻向「另一边」，否则 → 翻向目标
-目标语言现在是用户可配的 `config.targetLanguage`（默认 `zh-Hans`），不再写死。`pickTargetLanguage(source, primaryTarget)` 用 `sameLanguageFamily()` 比较 BCP-47 主子标签（`zh-Hans` / `zh-CN` / `zh-TW` 同族）：同族就翻向 `reverseTarget(primaryTarget)`（目标是英语族则回译中文，否则回译英文），否则翻向目标。这样选英文/法文/任意外语都翻成中文、选中文翻成英文的便利保留下来，目标可改。源语言同理由 `config.sourceLanguage` 配置（默认 `'auto'`）：`resolveSourceLanguage()` 在非 auto 时直接用用户指定值跳过检测，划词/整页两条路径共用。**注意：绝不能让 `source === target`**——会让 resolveSourceLanguage 锁死源、pickTargetLanguage 判同族强行反向，方向错乱（见 pitfalls 的 swap 坑）。
+目标语言现在是用户可配的 `config.targetLanguage`（默认 `zh-Hans`），不再写死。`pickTargetLanguage(source, primaryTarget)`（与 `reverseTarget` 一起放在无副作用的 `src/languages.ts`，options 的交换按钮也用它）用 `sameLanguageFamily()` 比较 BCP-47 主子标签（`zh-Hans` / `zh-CN` / `zh-TW` 同族）：同族就翻向 `reverseTarget(primaryTarget)`（目标是英语族则回译中文，否则回译英文），否则翻向目标。这样选英文/法文/任意外语都翻成中文、选中文翻成英文的便利保留下来，目标可改。源语言同理由 `config.sourceLanguage` 配置（默认 `'auto'`）：`resolveSourceLanguage()` 在非 auto 时直接用用户指定值跳过检测，划词/整页两条路径共用。**注意：绝不能让 `source === target`**——会让 resolveSourceLanguage 锁死源、pickTargetLanguage 判同族强行反向，方向错乱（见 pitfalls 的 swap 坑）。
 
 ### 检测置信度低 / `und` 时按英语兜底
 LanguageDetector 对短文本置信度低或返回 `und`。直接按英语兜底，气泡里加"（源语言不确定，按英语翻译）"小提示。比直接报错有用。
 
 ### LanguageDetector 不可用时用启发式兜底（让 LLM 后端脱离 Chrome 内置 AI）
-`detectLanguage()` 的唯一用途是 `pickTargetLanguage()` 二选一（译中 / 译英）。旧实现直接引用全局 `LanguageDetector`，浏览器没有 Chrome 内置 AI 时会抛 `ReferenceError`——DeepSeek/custom 这条本该独立于 Chrome 的后端路径反而走不通。改成 `typeof LanguageDetector === 'undefined'` 时走 `detectByHeuristic()`：含汉字按 `zh`、否则按 `en`，`uncertain: true`。粗略但够二选一；精确检测本来就依赖那个缺席的 API。Chrome 后端在 138+ 上行为不变（API 存在仍走 `LanguageDetector`）。
+`detectLanguage()` 的唯一用途是 `pickTargetLanguage()` 二选一（译中 / 译英）。旧实现直接引用全局 `LanguageDetector`，浏览器没有 Chrome 内置 AI 时会抛 `ReferenceError`——DeepSeek/custom 这条本该独立于 Chrome 的后端路径反而走不通。改成 `typeof LanguageDetector === 'undefined'` 时走启发式（`translate/chrome.ts` 的 `detectLanguage` 开头）：含汉字按 `zh`、否则按 `en`，`uncertain: true`。粗略但够二选一；精确检测本来就依赖那个缺席的 API。Chrome 后端在 138+ 上行为不变（API 存在仍走 `LanguageDetector`）。
 
 ### 无总长度限制，只有 60s 单次创建超时
 没有总文本长度上限。多段翻译靠换行切分逐段处理。`Translator.create()` 加 60s 超时（某些不支持的语言对会让 create 永远 hang）。
@@ -146,8 +149,8 @@ SPA 切路由后不自动翻译新页面：监听 `currententrychange` 只做清
 
 ## 错误处理
 
-### 错误信息用中文 + Intl.DisplayNames 显示语言名
-Chrome 原始错误是英文（"Unable to create translator..."）。捕获后用 `Intl.DisplayNames(['zh-Hans'], { type: 'language' })` 把 BCP 47 代码（`is`）转成中文（"冰岛语"），抛出"暂不支持「冰岛语」翻译为简体中文"。原始错误保留在 `console.error`。
+### 错误信息用中文，语言名走 `getLanguageDisplayName`
+Chrome 原始错误是英文（"Unable to create translator..."）。捕获后把 BCP 47 代码（`is`）转成中文名（"冰岛语"）再拼进中文错误，原始错误保留在 `console.error`。语言名统一用 `src/languages.ts` 的 `getLanguageDisplayName`（手写表优先、`Intl.DisplayNames` 兜底），不再在 Chrome 后端里另写一份只用 Intl 的版本——LLM prompt 和错误信息里的语言名因此一致。
 
 ### Session ID 取消失效请求
 每次选区/触发器创建都 `++currentSessionId`。异步操作开始时记下自己的 session，回调里 session 不等于当前就 return。避免快速连续操作时旧结果覆盖新结果。

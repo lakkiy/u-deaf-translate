@@ -1,26 +1,16 @@
-// LLM 翻译后端：通过 background service worker 代理 fetch（避免 content script 受页面 CORS 限制）。
-// 协议：OpenAI 兼容 chat completions。endpoint 是完整 URL（含 /v1/chat/completions）。
+// LLM 翻译后端：OpenAI 兼容 chat completions（DeepSeek / 自定义端点共用）。
+// endpoint 是完整 URL（含 /v1/chat/completions）。
+// 请求经 background service worker 代发（见 background.ts），避免 content script 受页面 CORS 限制。
 
-import type { CustomBackendFields } from './config';
-import { getLanguageDisplayName } from './languages';
+import type { CustomBackendFields } from '../config';
+import { getLanguageDisplayName } from '../languages';
 
-interface LlmFetchRequest {
-  type: 'tnyl:llm-fetch';
-  url: string;
-  headers: Record<string, string>;
-  body: string;
-}
-
+/** background 对 'tnyl:llm-fetch' 消息的应答 */
 interface LlmFetchResponse {
   ok: boolean;
   status?: number;
   data?: unknown;
   error?: string;
-}
-
-/** content script → background：发请求并 await 响应。background 端 return true 保持 channel 开放。 */
-async function proxyFetch(req: Omit<LlmFetchRequest, 'type'>): Promise<LlmFetchResponse> {
-  return chrome.runtime.sendMessage({ type: 'tnyl:llm-fetch', ...req });
 }
 
 function renderPrompt(template: string, targetLang: string, sourceText: string): string {
@@ -51,7 +41,7 @@ export async function translateViaLlm(
   // System / 角色设定：非空才发 system 消息（空则维持原先只发 user 单条的行为）。
   // system 也走 renderPrompt，里面想用 {target_lang} 之类占位符同样生效。
   const messages: Array<{ role: string; content: string }> = [];
-  if (config.system?.trim()) {
+  if (config.system.trim()) {
     messages.push({ role: 'system', content: renderPrompt(config.system, targetName, text) });
   }
   messages.push({ role: 'user', content: prompt });
@@ -75,9 +65,13 @@ export async function translateViaLlm(
       throw new Error(`额外参数不是合法 JSON：${err instanceof Error ? err.message : String(err)}`);
     }
   }
-  const body = JSON.stringify(bodyObj);
 
-  const resp = await proxyFetch({ url: config.endpoint, headers, body });
+  const resp: LlmFetchResponse = await chrome.runtime.sendMessage({
+    type: 'tnyl:llm-fetch',
+    url: config.endpoint,
+    headers,
+    body: JSON.stringify(bodyObj),
+  });
 
   if (!resp.ok) {
     const detail = resp.error ?? `HTTP ${resp.status ?? '?'}`;

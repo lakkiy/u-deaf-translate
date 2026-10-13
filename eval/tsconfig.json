@@ -14,5 +14,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["*.ts", "../src/page-content.ts"]
+  "include": ["*.ts", "../src/content/page-content.ts"]
 }

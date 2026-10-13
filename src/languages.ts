@@ -1,9 +1,12 @@
+// 语言相关的纯数据与纯函数（无副作用，任何上下文都能 import）：
+// 语言中文名、options / popup 的语言下拉选项、互译方向规则。
+
 // Hy-MT2 支持的 37 种语言：BCP-47 → 中文名映射。
 // 用途：LLM prompt 渲染时把 target_lang 替换为中文名（"中文" / "英语" 等），
 // 比 Intl.DisplayNames 更可控（譬如 'zh' 这里固定为"中文"而不是"汉语"）。
 // 数据来源：https://huggingface.co/mlx-community/Hy-MT2-1.8B-4bit Supported Languages 表。
 
-export const LANGUAGE_NAMES: Record<string, string> = {
+const LANGUAGE_NAMES: Record<string, string> = {
   zh: '中文',
   en: '英语',
   fr: '法语',
@@ -89,4 +92,22 @@ export function getLanguageDisplayName(code: string): string {
   } catch {
     return code;
   }
+}
+
+/** BCP-47 主子标签比较：`zh-Hans` / `zh-CN` / `zh-TW` 都算同一语族。 */
+function sameLanguageFamily(a: string, b: string): boolean {
+  return a.split('-')[0] === b.split('-')[0];
+}
+
+// 智能反向：源与目标同族时翻向「另一边」。回译语言取英语；若目标本身就是英语族，则回译中文。
+// （用户反馈：选中文要能得到英文、选英文要能得到中文。）
+export function reverseTarget(primaryTarget: string): string {
+  return sameLanguageFamily(primaryTarget, 'en') ? 'zh-Hans' : 'en';
+}
+
+// 选中文本与配置的目标语言同族 → 翻向回译语言；否则 → 翻向配置的目标语言。
+export function pickTargetLanguage(sourceLanguage: string, primaryTarget: string): string {
+  return sameLanguageFamily(sourceLanguage, primaryTarget)
+    ? reverseTarget(primaryTarget)
+    : primaryTarget;
 }

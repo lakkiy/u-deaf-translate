@@ -1,8 +1,8 @@
 // options 页「提示词」区的预设。点一下把 system + userTemplate 填进可编辑框（之后还能手改）。
-// 占位符沿用单括号 {target_lang} / {source_text}，与 llm-backend.ts 的 renderPrompt 一致。
+// 占位符沿用单括号 {target_lang} / {source_text}，与 translate/llm.ts 的 renderPrompt 一致。
 // 这些只是初版文案，给用户一个起点；DeepSeek / 自定义两个后端共用同一组预设。
 
-export interface PromptPreset {
+interface PromptPreset {
   id: string;
   label: string;
   system: string;

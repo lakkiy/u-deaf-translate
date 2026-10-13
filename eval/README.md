@@ -1,6 +1,6 @@
 # 正文识别算法回归测试集
 
-这是 `src/page-content.ts`（`findContentRoot` + `collectParagraphs`，整页沉浸式翻译的
+这是 `src/content/page-content.ts`（`findContentRoot` + `collectParagraphs`，整页沉浸式翻译的
 正文识别算法）的离线回归测试集。用真实网页样本固定当前行为，改算法后一眼看出有没有
 把原本收得好的页面搞坏。完整算法设计见 `docs/content-detection.md`。
 
@@ -11,7 +11,7 @@
 
 - `eval.ts` —— 评测 harness，用 [linkedom](https://github.com/WebReflection/linkedom)
   把 HTML 解析成 `document`，挂到 `globalThis.document`，再 import 项目里的
-  `src/page-content.ts` 跑算法。
+  `src/content/page-content.ts` 跑算法。
 - `pages/*.html` —— 页面样本（20 个）。
 - `results/*.txt` —— 每个样本对应的算法输出快照（checked in，作为基线）。
 
@@ -61,7 +61,7 @@ bun eval/eval.ts eval/pages/wikipedia_alan_turing.html
    把观察到的问题现象（哪个 root 错了、漏收了什么、多收了什么）记进 commit message，
    如果是有代表性的坑，记进 `docs/pitfalls.md`。
 
-4. 按需要修改 `src/page-content.ts`，重跑 `bun run eval`，确认：
+4. 按需要修改 `src/content/page-content.ts`，重跑 `bun run eval`，确认：
    - 新页面的问题确实改善了；
    - 其余 18 个老页面的 `results/*.txt` 没有产生非预期的 diff（无回归）。
 

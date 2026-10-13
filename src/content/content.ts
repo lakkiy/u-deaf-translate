@@ -3,17 +3,11 @@
 
 import { type Anchor, hide, isEventInsideBubble, show } from './bubble';
 import { togglePageTranslation } from './page-translator';
-import { isApiAvailable, resolveSourceLanguage, translate } from './translator';
+import { resolveSourceLanguage, translate } from '../translate/translate';
 
 const MIN_TEXT_LENGTH = 2;
 const SHOW_TRIGGER_DELAY_MS = 150;
 const SHOW_SPINNER_DELAY_MS = 200;
-
-if (!isApiAvailable()) {
-  console.warn(
-    '[叫你翻译你聋吗] Chrome Translator API 不可用。需要 Chrome 138+ 的桌面版。',
-  );
-}
 
 // 每次新选区 / 新点击翻译 都会 ++currentSessionId。
 // 异步过程（检测、翻译、下载进度）开始时记下自己的 session，
@@ -103,10 +97,7 @@ async function runTranslation(text: string, anchor: Anchor, session: number): Pr
     const detected = await resolveSourceLanguage(text);
     if (session !== currentSessionId) return;
 
-    const result = await translate(text, detected.language, (progress) => {
-      if (progress >= 1) return; // 模型已缓存时 Chrome 仍会触发 progress=1，过滤
-      console.log(`[叫你翻译你聋吗] 下载翻译模型: ${Math.round(progress * 100)}%`);
-    });
+    const result = await translate(text, detected.language);
     if (session !== currentSessionId) return;
 
     show({ kind: 'translated', text: result, uncertain: detected.uncertain }, anchor);

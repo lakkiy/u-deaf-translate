@@ -1,6 +1,6 @@
 // 整页沉浸式翻译的核心正文识别算法：findContentRoot 圈出正文容器，
 // collectParagraphs 在容器内挑出候选段落。纯 DOM 启发式，不依赖翻译状态；
-// 算法完整论证见 docs/decisions.md。
+// 算法完整论证见 docs/content-detection.md。
 
 const MIN_TEXT_LENGTH = 4;
 

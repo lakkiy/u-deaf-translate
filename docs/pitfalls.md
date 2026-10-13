@@ -41,12 +41,17 @@
 ### `mlx_lm.server` 收到不匹配的 `model` 字段会尝试 download 然后 404
 - **现象：** 配了本地 mlx_lm endpoint，翻译报 `HTTP 404: {"error": "[Errno 2] No such file or directory: 'config.json'"}`。启动参数：`mlx_lm.server --model mlx-community/Hy-MT2-1.8B-4bit`。
 - **真相：** mlx_lm.server 每个请求都检查 `model` 字段，跟当前加载的不一致就尝试重新 load——若 model 名不存在（或 placeholder 误导用户填错）就找不到 `config.json` → 404。问题不在 max_tokens 之类的生成参数，纯粹是 model 名问题。
-- **修复：** llm-backend 改成"model 留空就不发该字段"，让 server 直接用当前加载的；options 页面 placeholder 改成完整 model 名 `mlx-community/Hy-MT2-1.8B-4bit` 避免误导。
+- **修复：** `translate/llm.ts` 改成"model 留空就不发该字段"，让 server 直接用当前加载的；options 页面 placeholder 改成完整 model 名 `mlx-community/Hy-MT2-1.8B-4bit` 避免误导。
 
 ### `Translator.translate()` 对极短/无效输入抛 "Other generic failures occurred."
 - **现象：** 划词选了 "Thu"（星期缩写）/ 时间戳 / 单符号，气泡里直接显示原始英文 "Other generic failures occurred."。
 - **真相：** Chrome Translator API 的兜底错误信息。原本错误处理只包了 `Translator.create()` 的 catch，`translate()` 本身的异常直接 propagate 到气泡。
 - **修复：** `translate()` 内的循环加 try/catch，调 `friendlyTranslateError(rawMessage, sourceLanguage)` 把已知英文模式映射成中文（"无法翻译这段文本（可能太短或不是有效的英语内容）"），原始错误保留在 `console.error`。同时映射了 "not available / unavailable" → "翻译服务暂不可用"。
+
+### 浏览器没有 Translator API 时，气泡显示裸的 "Translator is not defined"
+- **现象：** （2026-10 代码审查时读出来的，未在真机复现）选了 Chrome 后端但浏览器没有内置 AI 时，气泡里会是一句英文 `Translator is not defined`；同时 content script 每个页面加载都 `console.warn` 一次"Chrome Translator API 不可用"，哪怕用户用的是 DeepSeek / 自定义端点。
+- **真相：** 可用性检查放在 content.ts 模块顶层，只打日志、不管当前后端；真正调用处 `Translator.create()` 没有判空，`ReferenceError` 的 message 原样进了气泡。
+- **修复：** 删掉顶层的 `isApiAvailable()` 警告，把判空挪到使用点 `translate/chrome.ts` 的 `createTranslator()`，抛一句可读的中文错误（提示可换用其他翻译服务）。教训：可用性检查放在使用点，别放在入口。
 
 ### Chrome service count 限制按"alive 实例数"算，不是按调用次数
 - **现象：** 翻几个网页之后，新页面所有翻译都失败。控制台出现 Chrome 黄色 warning `The translation service count exceeded the limitation.`，紧跟着 `NotSupportedError: Unable to create translator for the given source and target language.` 重启 Chrome 后又恢复。
@@ -218,8 +223,8 @@
 
 ### 源/目标语言「交换」按钮在源为 auto 时造出 source===target 自译退化态
 - **现象：** options 默认源「自动识别」、目标「简体中文」，点一下交换 ⇄ 按钮，保存后选任何文字都翻译方向错乱（英文也被当中文）。
-- **真相：** swapLang 把旧目标写进源、但「源是 auto」分支跳过了更新目标，结果 `source === target`。保存后 `resolveSourceLanguage()`（translator.ts）因源非 auto 而锁死源、对所有文本返回该语言，`pickTargetLanguage()` 判同族后强行 `reverseTarget`，于是源语言解析全错。审查时我一度判它「无害」，实际会悄无声息固化坏配置。
-- **修复：** `src/options.ts` 的 `swapLang()`：源为 auto 时交换取「从当前目标翻向它的反向」（`reverseLang(t)`，本地复制 translator 的 reverseTarget 逻辑，避免 import translator.ts 触发它顶层的 window 监听器）；并加兜底 `if (newSource === newTarget) newTarget = reverseLang(newSource)`，绝不产出自译态。
+- **真相：** swapLang 把旧目标写进源、但「源是 auto」分支跳过了更新目标，结果 `source === target`。保存后 `resolveSourceLanguage()`（translate/translate.ts）因源非 auto 而锁死源、对所有文本返回该语言，`pickTargetLanguage()` 判同族后强行 `reverseTarget`，于是源语言解析全错。审查时我一度判它「无害」，实际会悄无声息固化坏配置。
+- **修复：** `src/options/options.ts` 的 `swapLang()`：源为 auto 时交换取「从当前目标翻向它的反向」（`reverseTarget(t)`，来自无副作用的 `src/languages.ts`——options 不能 import `translate/chrome.ts`，那里顶层注册了 window 监听器）；并加兜底 `if (newTarget === t) newTarget = reverseTarget(t)`，绝不产出自译态。
 
 ## AI 模型行为
 

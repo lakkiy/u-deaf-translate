@@ -1,45 +1,33 @@
 // 配置页：壹「翻译」(源/目标语言) + 贰「模型」(卡片式三后端，各有可编辑的 prompt/参数)。
-// 字段全在 DOM 里，切后端只调 .selected/.active class，不丢任何 tab 的输入。
+// 字段全在 DOM 里，切后端只调 .selected/.active class，不丢任何后端的输入。
 // 「就这么定了」把所有字段一次性写回 storage，并把选中的卡片设为 active 后端。
+// 两个 LLM 后端的输入框 id 统一是 `${后端}-${字段}`（deepseek-apiKey / custom-endpoint …）。
 
 import {
-  DEEPSEEK_DEFAULT_EXTRA_PARAMS,
-  DEEPSEEK_DEFAULT_PROMPT_TEMPLATE,
-  DEEPSEEK_DEFAULT_SYSTEM,
+  BACKEND_LABEL,
+  DEEPSEEK_MODELS,
   DEFAULT_CONFIG,
-  DEFAULT_CUSTOM,
-  DEFAULT_EXTRA_PARAMS,
-  DEFAULT_PROMPT_TEMPLATE,
   type BackendConfig,
   type BackendKind,
   getConfig,
   saveConfig,
-} from './config';
-import { DEEPSEEK_ICON_SVG, DEEPSEEK_MODELS } from './deepseek';
+} from '../config';
 import {
   COMMON_TARGET_CODES,
-  getLanguageDisplayName,
+  reverseTarget,
   SOURCE_LANGUAGE_OPTIONS,
   TARGET_LANGUAGE_OPTIONS,
-} from './languages';
+} from '../languages';
 import { PROMPT_PRESETS } from './prompts';
-
-const BACKEND_LABEL: Record<BackendKind, string> = {
-  chrome: 'Chrome 自带',
-  deepseek: 'DeepSeek',
-  custom: '自定义端点',
-};
 
 function el<T extends HTMLElement = HTMLElement>(id: string): T {
   const e = document.getElementById(id);
   if (!e) throw new Error(`[options] missing element #${id}`);
   return e as T;
 }
-const input = (id: string) => el<HTMLInputElement>(id);
-const ta = (id: string) => el<HTMLTextAreaElement>(id);
-const sel = (id: string) => el<HTMLSelectElement>(id);
-const val = (id: string): string => (el(id) as HTMLInputElement).value;
-const setVal = (id: string, v: string): void => { (el(id) as HTMLInputElement).value = v; };
+// input / select / textarea 都有 .value，统一按 input 读写
+const val = (id: string): string => el<HTMLInputElement>(id).value;
+const setVal = (id: string, v: string): void => { el<HTMLInputElement>(id).value = v; };
 
 function setStatus(message: string, kind: '' | 'ok' | 'error' = ''): void {
   const status = el('status');
@@ -69,9 +57,9 @@ function activeBackend(): BackendKind {
   return (card?.dataset.backend as BackendKind) ?? 'chrome';
 }
 
-// ── 语言下拉 / chips ───────────────────────────────────────
+// ── 下拉 / 语言 chips ──────────────────────────────────────
 function fillSelect(id: string, opts: ReadonlyArray<{ code: string; label: string }>): void {
-  const s = sel(id);
+  const s = el(id);
   for (const o of opts) {
     const op = document.createElement('option');
     op.value = o.code;
@@ -80,28 +68,15 @@ function fillSelect(id: string, opts: ReadonlyArray<{ code: string; label: strin
   }
 }
 
-// 目标语言可能是常用下拉里没有的「冷门」语言（之前在别处设过）——补一个临时 option
-function ensureTargetOption(code: string): void {
-  const s = sel('targetLanguage');
-  if (![...s.options].some((o) => o.value === code)) {
-    const op = document.createElement('option');
-    op.value = code;
-    op.textContent = getLanguageDisplayName(code);
-    s.prepend(op);
-  }
-}
-
 function buildCommonChips(): void {
   const box = el('commonTargets');
   for (const code of COMMON_TARGET_CODES) {
-    const label = TARGET_LANGUAGE_OPTIONS.find((o) => o.code === code)?.label ?? getLanguageDisplayName(code);
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'chip';
     b.dataset.code = code;
-    b.textContent = label;
+    b.textContent = TARGET_LANGUAGE_OPTIONS.find((o) => o.code === code)?.label ?? code;
     b.addEventListener('click', () => {
-      ensureTargetOption(code);
       setVal('targetLanguage', code);
       syncChips();
     });
@@ -115,36 +90,17 @@ function syncChips(): void {
   }
 }
 
-// 与 translator.ts 的 reverseTarget 一致：同族文本翻向「另一边」（中↔英，其余 → 英）。
-// 在 options 本地复制这一行逻辑，避免 import translator.ts（它在模块顶层注册 window 监听器、引用 Translator 全局）。
-function reverseLang(target: string): string {
-  return target.split('-')[0] === 'en' ? 'zh-Hans' : 'en';
-}
-
 function swapLang(): void {
   const s = val('sourceLanguage');
   const t = val('targetLanguage');
   // 目标语言不接受 'auto'。源是 'auto' 时没有具体语言可放到目标侧，交换取「从当前目标翻向它的反向」。
-  const newSource = t;
-  let newTarget = s === 'auto' ? reverseLang(t) : s;
+  let newTarget = s === 'auto' ? reverseTarget(t) : s;
   // 兜底：绝不产出 source === target 的自译退化态——否则 resolveSourceLanguage 会锁死源语言、
   // pickTargetLanguage 判同族后把所有文本都按反向翻，方向错乱（见 docs/pitfalls.md）。
-  if (newSource === newTarget) newTarget = reverseLang(newSource);
-  setVal('sourceLanguage', newSource);
-  ensureTargetOption(newTarget);
+  if (newTarget === t) newTarget = reverseTarget(t);
+  setVal('sourceLanguage', t);
   setVal('targetLanguage', newTarget);
   syncChips();
-}
-
-// ── DeepSeek 模型下拉 ──────────────────────────────────────
-function populateDeepseekModels(): void {
-  const s = sel('deepseekModel');
-  for (const model of DEEPSEEK_MODELS) {
-    const op = document.createElement('option');
-    op.value = model;
-    op.textContent = model;
-    s.appendChild(op);
-  }
 }
 
 // ── 提示词预设 ─────────────────────────────────────────────
@@ -177,7 +133,7 @@ function wirePlaceholders(): void {
     if (!targetId) continue;
     for (const b of box.querySelectorAll<HTMLElement>('.ph-btn')) {
       const text = b.dataset.ph ?? '';
-      b.addEventListener('click', () => insertAtCursor(ta(targetId), text));
+      b.addEventListener('click', () => insertAtCursor(el<HTMLTextAreaElement>(targetId), text));
     }
   }
 }
@@ -196,39 +152,54 @@ function wireEyes(): void {
     const id = btn.dataset.eye;
     if (!id) continue;
     btn.addEventListener('click', () => {
-      const inp = input(id);
+      const inp = el<HTMLInputElement>(id);
       inp.type = inp.type === 'password' ? 'text' : 'password';
     });
   }
 }
 
-// ── 每后端「恢复默认」提示词 / 参数 ────────────────────────
+// ── 恢复默认 ───────────────────────────────────────────────
+// 只重置提示词 / 生成参数；Key / 端点 / 模型这类连接信息不动。
+function resetDeepseekPrompts(): void {
+  setVal('deepseek-system', DEFAULT_CONFIG.deepseekSystem);
+  setVal('deepseek-promptTemplate', DEFAULT_CONFIG.deepseekPromptTemplate);
+  setVal('deepseek-extraParams', DEFAULT_CONFIG.deepseekExtraParams);
+}
+function resetCustomPrompts(): void {
+  setVal('custom-system', DEFAULT_CONFIG.custom.system);
+  setVal('custom-promptTemplate', DEFAULT_CONFIG.custom.promptTemplate);
+  setVal('custom-extraParams', DEFAULT_CONFIG.custom.extraParams);
+}
+
+// 每个 LLM 后端面板里的「恢复默认」
 function wireResetPrompts(): void {
   for (const btn of document.querySelectorAll<HTMLElement>('.reset-prompt')) {
     btn.addEventListener('click', () => {
-      if (btn.dataset.reset === 'deepseek') {
-        setVal('deepseek-system', DEEPSEEK_DEFAULT_SYSTEM);
-        setVal('deepseek-promptTemplate', DEEPSEEK_DEFAULT_PROMPT_TEMPLATE);
-        setVal('deepseekExtraParams', DEEPSEEK_DEFAULT_EXTRA_PARAMS);
-      } else {
-        setVal('custom-system', DEFAULT_CUSTOM.system);
-        setVal('custom-promptTemplate', DEFAULT_PROMPT_TEMPLATE);
-        setVal('custom-extraParams', DEFAULT_EXTRA_PARAMS);
-      }
+      if (btn.dataset.reset === 'deepseek') resetDeepseekPrompts();
+      else resetCustomPrompts();
       setStatus('已恢复该后端的默认提示词与参数（还没保存）');
     });
   }
 }
 
+// 底部「恢复默认」：语言 + 两个后端的提示词/参数
+function handleResetAll(): void {
+  setVal('sourceLanguage', DEFAULT_CONFIG.sourceLanguage);
+  setVal('targetLanguage', DEFAULT_CONFIG.targetLanguage);
+  resetDeepseekPrompts();
+  resetCustomPrompts();
+  syncChips();
+  setStatus('已恢复语言与提示词默认（保留了 Key / 端点 / 模型；还没保存）');
+}
+
 // ── 加载 / 保存 ────────────────────────────────────────────
 function loadIntoForm(cfg: BackendConfig): void {
   setVal('sourceLanguage', cfg.sourceLanguage);
-  ensureTargetOption(cfg.targetLanguage);
   setVal('targetLanguage', cfg.targetLanguage);
 
-  setVal('deepseekApiKey', cfg.deepseekApiKey);
-  setVal('deepseekModel', cfg.deepseekModel);
-  setVal('deepseekExtraParams', cfg.deepseekExtraParams);
+  setVal('deepseek-apiKey', cfg.deepseekApiKey);
+  setVal('deepseek-model', cfg.deepseekModel);
+  setVal('deepseek-extraParams', cfg.deepseekExtraParams);
   setVal('deepseek-system', cfg.deepseekSystem);
   setVal('deepseek-promptTemplate', cfg.deepseekPromptTemplate);
 
@@ -267,27 +238,28 @@ function missingPlaceholders(active: BackendKind, tpl: string): string {
 }
 
 async function handleSave(): Promise<void> {
-  const dsErr = validateExtraParams(val('deepseekExtraParams'), 'DeepSeek');
+  const dsErr = validateExtraParams(val('deepseek-extraParams'), 'DeepSeek');
   if (dsErr) { setStatus(dsErr, 'error'); return; }
   const cuErr = validateExtraParams(val('custom-extraParams'), '自定义端点');
   if (cuErr) { setStatus(cuErr, 'error'); return; }
 
   const active = activeBackend();
+  // User 模板清空了就退回默认——空模板发出去等于没给模型任何原文
   const cfg: BackendConfig = {
     active,
     sourceLanguage: val('sourceLanguage'),
     targetLanguage: val('targetLanguage'),
-    deepseekApiKey: val('deepseekApiKey'),
-    deepseekModel: val('deepseekModel'),
+    deepseekApiKey: val('deepseek-apiKey'),
+    deepseekModel: val('deepseek-model'),
     deepseekSystem: val('deepseek-system'),
-    deepseekPromptTemplate: val('deepseek-promptTemplate') || DEEPSEEK_DEFAULT_PROMPT_TEMPLATE,
-    deepseekExtraParams: val('deepseekExtraParams'),
+    deepseekPromptTemplate: val('deepseek-promptTemplate') || DEFAULT_CONFIG.deepseekPromptTemplate,
+    deepseekExtraParams: val('deepseek-extraParams'),
     custom: {
       endpoint: val('custom-endpoint').trim(),
       apiKey: val('custom-apiKey'),
       model: val('custom-model').trim(),
       system: val('custom-system'),
-      promptTemplate: val('custom-promptTemplate') || DEFAULT_CUSTOM.promptTemplate,
+      promptTemplate: val('custom-promptTemplate') || DEFAULT_CONFIG.custom.promptTemplate,
       extraParams: val('custom-extraParams').trim(),
     },
   };
@@ -303,31 +275,14 @@ async function handleSave(): Promise<void> {
   }
 }
 
-// 底部「恢复默认」：重置语言与提示词/参数；保留 Key / 端点 / 模型这类连接信息。
-function handleResetAll(): void {
-  const d = DEFAULT_CONFIG;
-  setVal('sourceLanguage', d.sourceLanguage);
-  ensureTargetOption(d.targetLanguage);
-  setVal('targetLanguage', d.targetLanguage);
-  setVal('deepseekExtraParams', d.deepseekExtraParams);
-  setVal('deepseek-system', d.deepseekSystem);
-  setVal('deepseek-promptTemplate', d.deepseekPromptTemplate);
-  setVal('custom-extraParams', d.custom.extraParams);
-  setVal('custom-system', d.custom.system);
-  setVal('custom-promptTemplate', d.custom.promptTemplate);
-  syncChips();
-  setStatus('已恢复语言与提示词默认（保留了 Key / 端点 / 模型；还没保存）');
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   el<HTMLImageElement>('logo').src = chrome.runtime.getURL('icons/icon-48.png');
   el('version').textContent = `v${chrome.runtime.getManifest().version}`;
-  el('deepseek-icon').innerHTML = DEEPSEEK_ICON_SVG;
 
   fillSelect('sourceLanguage', SOURCE_LANGUAGE_OPTIONS);
   fillSelect('targetLanguage', TARGET_LANGUAGE_OPTIONS);
+  fillSelect('deepseek-model', DEEPSEEK_MODELS.map((m) => ({ code: m, label: m })));
   buildCommonChips();
-  populateDeepseekModels();
   buildPresets();
   wirePlaceholders();
   wireEyes();
@@ -337,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
     c.addEventListener('click', () => activate(c.dataset.backend as BackendKind));
   }
   el('swapLang').addEventListener('click', swapLang);
-  sel('targetLanguage').addEventListener('change', syncChips);
+  el('targetLanguage').addEventListener('change', syncChips);
   el('save').addEventListener('click', () => void handleSave());
   el('reset').addEventListener('click', handleResetAll);
 

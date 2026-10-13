@@ -1,9 +1,9 @@
 // 全页沉浸式翻译：识别正文段落 → 滚动到视口时翻译 → 译文插在原文下方。
-// 与划词翻译共存：复用 translator.ts 的实例缓存、语言检测。
+// 与划词翻译共存：复用 translate/ 的实例缓存、语言检测。
 // 一次 startPageTranslation() 只识别一次正文，IntersectionObserver 注册到所有候选段落。
 // 正文识别算法（findContentRoot / collectParagraphs）见 page-content.ts。
 
-import { resolveSourceLanguage, translate } from './translator';
+import { resolveSourceLanguage, translate } from '../translate/translate';
 import { findContentRoot, collectParagraphs, paragraphText } from './page-content';
 
 const MARKER_ATTR = 'data-tnyl-translated';
@@ -31,9 +31,6 @@ function pageKey(href: string): string {
 // 避免 stop 后 stale 回调把译文塞回页面、或 toggle 重启时旧 session 干扰新 session。
 let sessionId = 0;
 
-// 译文样式只 inject 一次
-let styleInjected = false;
-
 // 全页只检测一次源语言；toggle 关再开也复用，避免重复 detect
 let detectedLanguagePromise: Promise<string> | null = null;
 
@@ -41,11 +38,9 @@ let detectedLanguagePromise: Promise<string> | null = null;
 let inflight = 0;
 const queue: Array<() => void> = [];
 
+// 译文样式只 inject 一次
 function injectStyle(): void {
-  if (styleInjected || document.getElementById(STYLE_ID)) {
-    styleInjected = true;
-    return;
-  }
+  if (document.getElementById(STYLE_ID)) return;
   const style = document.createElement('style');
   style.id = STYLE_ID;
   // 用 inherit 让译文跟原文的字号/字体一致，颜色用 currentColor 跟随主题
@@ -67,7 +62,6 @@ function injectStyle(): void {
     }
   `;
   document.head.appendChild(style);
-  styleInjected = true;
 }
 
 function enqueue(task: () => Promise<void>): void {
